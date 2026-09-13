@@ -1,0 +1,70 @@
+:root {
+  --navy: #0f355d;
+  --navy-2: #17456f;
+  --navy-3: #0a2540;
+  --orange: #f58220;
+  --orange-2: #d96d12;
+  --gold: #e6a94a;
+  --ink: #11202f;
+  --paper: #faf8f5;
+  --surface: #ffffff;
+  --line: #e4e0d9;
+  --line-2: #f1ede6;
+  --muted: #6b7484;
+  --red: #c8102e;
+  --serif: Georgia, "Times New Roman", Times, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --wrap: 1140px;
+  --radius: 10px;
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 64px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3, h4, h5, h6 { font-weight: 700; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--space-md); }
+.band { position: relative; }
+section.band { padding: var(--space-xl) 0; }
+section[id] { scroll-margin-top: 80px; }
+.surface-section { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.surface-section--top { background: var(--surface); border-top: 1px solid var(--line); }
+.paper-section { background: var(--paper); }
+.site-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 11px 22px;
+  border: 1px solid var(--navy);
+  border-radius: 9px;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: .2s;
+}
+.button-primary { background: var(--orange); border-color: var(--orange); color: #fff; }
+.button-primary:hover { background: var(--orange-2); border-color: var(--orange-2); color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(245,130,32,.3); }
+.eyebrow { margin: 0 0 var(--space-xs); color: var(--orange); font-size: 11.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+.tit { margin: 0 0 6px; color: var(--navy); font-family: var(--serif); font-size: clamp(23px,2.9vw,31px); line-height: 1.2; }
+.section-lead { margin: 0 0 28px; color: var(--muted); font-size: 15px; }
+.section-heading { max-width: 680px; margin: 0 auto var(--space-lg); text-align: center; }
+.section-heading .section-lead { margin: 0 auto; }
+.content-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
