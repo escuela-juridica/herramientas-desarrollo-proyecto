@@ -152,4 +152,3 @@ En GitHub, entra al repositorio y crea el Pull Request de tu rama **hacia `devel
 - Nunca `git push` directo a `main` ni a `develop` — todo entra por Pull Request.
 - Nunca trabajar directamente sobre `develop` o `main` — siempre en tu `feature/*`.
 - `develop` se mergea a `main` solo cuando todo el equipo terminó y probó su parte, antes de cada sustentación.
-prueba enrique
