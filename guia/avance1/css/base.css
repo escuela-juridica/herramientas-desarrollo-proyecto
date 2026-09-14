@@ -1,3 +1,18 @@
+/* ============================================================
+   BASE.CSS
+   Estilos compartidos por TODAS las páginas del sitio
+   (inicio.html y login.html): variables de diseño, reset,
+   utilidades comunes, navbar y footer.
+   No pertenece a ningún feature de sección — un cambio aquí
+   afecta a todo el sitio, no solo a un bloque.
+
+   Índice de este archivo (en este mismo orden):
+     - Variables, reset y utilidades compartidas → de todos,
+       cualquier cambio aquí se coordina con el equipo.
+     1. NAVBAR → Enrique Prada (feature/base-navbar-footer)
+     2. FOOTER → Enrique Prada (feature/base-navbar-footer)
+   ============================================================ */
+
 :root {
   --navy: #0f355d;
   --navy-2: #17456f;
@@ -23,8 +38,16 @@
   --space-xl: 64px;
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+/* ----- Reset y base tipográfica ----- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   background: var(--paper);
@@ -33,17 +56,65 @@ body {
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
-img { max-width: 100%; }
-a { color: inherit; }
-h1, h2, h3, h4, h5, h6 { font-weight: 700; }
-.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--space-md); }
-.band { position: relative; }
-section.band { padding: var(--space-xl) 0; }
-section[id] { scroll-margin-top: 80px; }
-.surface-section { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.surface-section--top { background: var(--surface); border-top: 1px solid var(--line); }
-.paper-section { background: var(--paper); }
+
+img {
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
+
+/* ----- Utilidades de layout usadas por todas las secciones ----- */
+
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.band {
+  position: relative;
+}
+
+section.band {
+  padding: var(--space-xl) 0;
+}
+
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+.surface-section {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.surface-section--top {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+.paper-section {
+  background: var(--paper);
+}
+
+.page-header,
+main,
+.footer {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* ----- Componentes de texto y tarjeta compartidos ----- */
+
 .site-button {
   display: inline-flex;
   align-items: center;
@@ -60,11 +131,621 @@ section[id] { scroll-margin-top: 80px; }
   cursor: pointer;
   transition: .2s;
 }
-.button-primary { background: var(--orange); border-color: var(--orange); color: #fff; }
-.button-primary:hover { background: var(--orange-2); border-color: var(--orange-2); color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(245,130,32,.3); }
-.eyebrow { margin: 0 0 var(--space-xs); color: var(--orange); font-size: 11.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
-.tit { margin: 0 0 6px; color: var(--navy); font-family: var(--serif); font-size: clamp(23px,2.9vw,31px); line-height: 1.2; }
-.section-lead { margin: 0 0 28px; color: var(--muted); font-size: 15px; }
-.section-heading { max-width: 680px; margin: 0 auto var(--space-lg); text-align: center; }
-.section-heading .section-lead { margin: 0 auto; }
-.content-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+
+.button-primary {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+
+.button-primary:hover {
+  background: var(--orange-2);
+  border-color: var(--orange-2);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245,130,32,.3);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-xs);
+  color: var(--orange);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.tit {
+  margin: 0 0 6px;
+  color: var(--navy);
+  font-family: var(--serif);
+  /* clamp(mínimo, preferido, máximo): el tamaño de letra nunca baja de
+     23px ni sube de 31px, y en pantallas intermedias escala solo con el
+     ancho de ventana (2.9vw). Evita tener que fijar un tamaño distinto
+     en cada media query. */
+  font-size: clamp(23px,2.9vw,31px);
+  line-height: 1.2;
+}
+
+.section-lead {
+  margin: 0 0 28px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.section-heading {
+  max-width: 680px;
+  margin: 0 auto var(--space-lg);
+  text-align: center;
+}
+
+.section-heading .section-lead {
+  margin: 0 auto;
+}
+
+.content-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* Ajustes responsive de las utilidades genéricas de arriba (.wrap, .tit, .section-lead...) */
+@media (max-width: 560px) {
+  .wrap {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  section.band {
+    padding: 48px 0;
+  }
+}
+
+@media (max-width: 280px) {
+  .wrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  section.band {
+    padding: 40px 0;
+  }
+
+  .section-heading {
+    margin-bottom: 28px;
+  }
+
+  .tit {
+    font-size: 22px;
+  }
+
+  .section-lead {
+    font-size: 13.5px;
+  }
+}
+
+/* ============================================================
+   NAVBAR
+   Responsable: Enrique Prada (feature/base-navbar-footer)
+   Descripción: encabezado fijo (position: fixed) con el logo,
+   el menú de enlaces (Inicio/Servicios/Nosotros/Contacto) y el
+   botón "Administrador" que lleva a login.html. En pantallas
+   angostas (<900px) el menú se colapsa detrás de un botón de
+   hamburguesa (.menu-btn) usando el truco del checkbox oculto
+   (#navToggle / .nav-toggle): al marcarse, el menú (.site-nav)
+   se desliza desde la izquierda. js/inicio.js solo se encarga
+   de desmarcar ese checkbox cuando se hace clic en un enlace,
+   para cerrar el menú automáticamente en móvil.
+   .page-header le da al <header> un padding-top igual a la
+   altura de la barra (80px) para compensar que ésta es "fixed"
+   y no empuja el contenido de abajo.
+
+   Layout: Flexbox en todo (.head-row, .site-nav, .nav-auth) —
+   es una sola fila de elementos de ancho variable, no una
+   grilla. En móvil, .site-nav cambia a flex-direction:column.
+   Estilos más usados: position:fixed (barra), el truco del
+   checkbox (.nav-toggle:checked ~ .site-nav), y ::after con
+   width:0→100% para el subrayado animado de los links al hacer
+   hover.
+   ============================================================ */
+
+/* El navbar es position:fixed (ver .header abajo), así que sale del flujo
+   normal de la página y el contenido de abajo subiría tapándose con él.
+   Este padding-top reserva ese espacio a mano. Su valor (80px) debe ser
+   siempre igual a .head-row{height:80px}: si se cambia la altura del
+   navbar, hay que cambiar este número también. */
+.page-header {
+  padding-top: 80px;
+}
+
+.header {
+  background: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 100;
+  border-bottom: 1px solid rgba(15,53,93,.16);
+  box-shadow: 0 6px 20px rgba(10,20,35,.16);
+}
+
+.head-row {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.logo {
+  height: 44px;
+  width: auto;
+  flex: none;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: nowrap;
+}
+
+.site-nav-link {
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 8px 0;
+  position: relative;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: .25s;
+}
+
+.site-nav-link:hover,
+.site-nav-link.on {
+  color: var(--orange);
+}
+
+.site-nav-link:hover::after,
+.site-nav-link.on::after {
+  width: 100%;
+}
+
+.nav-auth {
+  display: flex;
+  gap: 10px;
+  flex: none;
+  margin-left: 6px;
+}
+
+.button-ghost {
+  background: transparent;
+  color: var(--navy);
+}
+
+.button-ghost:hover {
+  background: var(--navy);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.menu-btn {
+  display: none;
+  background: none;
+  border: 0;
+  font-size: 22px;
+  color: var(--navy);
+  cursor: pointer;
+  flex: none;
+}
+
+/* Checkbox invisible: "truco del checkbox" para abrir/cerrar el menú sin JS.
+   Se oculta visualmente pero sigue siendo clicable a través de su <label>. */
+.nav-toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .menu-btn {
+    display: block;
+  }
+
+  .site-nav {
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 80px);
+    background: var(--surface);
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 40px;
+    gap: 24px;
+    transition: .3s;
+    box-shadow: 0 10px 20px rgba(15,53,93,.1);
+    z-index: 99;
+    overflow: auto;
+  }
+
+  /* Aquí ocurre la magia: "~" selecciona cualquier hermano posterior de
+     .nav-toggle que tenga la clase .site-nav. Cuando el checkbox se marca
+     (:checked, al hacer clic en el label #navToggle del HTML), este menú
+     pasa de estar fuera de pantalla (left:-100% arriba) a visible
+     (left:0). Por eso el checkbox y .site-nav deben ser hermanos directos
+     en el HTML: si se separan, este selector deja de encontrarlos. */
+  .nav-toggle:checked ~ .site-nav {
+    display: flex;
+    left: 0;
+  }
+
+  .site-nav-link {
+    font-size: 17px;
+  }
+
+  .nav-auth {
+    flex-direction: column;
+    width: 80%;
+  }
+
+  .nav-auth .site-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .head-row {
+    gap: 12px;
+  }
+
+  .logo {
+    height: 38px;
+    max-width: calc(100vw - 82px);
+    object-fit: contain;
+  }
+}
+
+@media (max-width: 280px) {
+  .head-row {
+    height: 68px;
+    gap: 10px;
+  }
+
+  .page-header {
+    padding-top: 68px;
+  }
+
+  .logo {
+    height: 34px;
+    max-width: calc(100vw - 66px);
+  }
+
+  .menu-btn {
+    font-size: 20px;
+  }
+
+  .site-nav {
+    top: 68px;
+    height: calc(100vh - 68px);
+    padding-top: 28px;
+    gap: 18px;
+  }
+}
+
+/* ============================================================
+   FOOTER
+   Responsable: Enrique Prada (feature/base-navbar-footer)
+   Descripción: pie de página oscuro (#0B1E3B) con 3 columnas:
+   (1) logo + descripción + logo UTP + redes sociales,
+   (2) contacto (WhatsApp/correo/dirección) + personal,
+   (3) instituciones aliadas (CAL, CAL Sur, AMAG) con logos que
+   abren en pestaña nueva. En pantallas <900px las 3 columnas
+   pasan a apilarse en una sola.
+
+   Layout: Grid para las 3 columnas principales (.footer-grid),
+   Flexbox dentro de cada columna para alinear ícono+texto
+   (.footer-contact-info li, .social-links, .footer-ally-item).
+   Estilos más usados: transition + transform:translateY() en
+   :hover (íconos sociales y logos aliados "flotan" al pasar el
+   mouse), y opacity para atenuar/resaltar los logos aliados.
+   ============================================================ */
+
+.footer {
+  background: #0B1E3B;
+  color: #CFD8DC;
+  padding: 60px 0 20px;
+  border-top: 4px solid var(--orange);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-logo-box {
+  display: block;
+  width: min(100%,170px);
+  margin-bottom: 18px;
+  padding: 8px 10px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.footer-logo {
+  display: block;
+  width: 100%;
+  height: 40px;
+  object-fit: contain;
+}
+
+.footer-title {
+  font-family: var(--sans);
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.footer-desc {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.footer-utp-project {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+
+.footer-utp-project > span {
+  max-width: 62px;
+  color: #90A4AE;
+  font-size: 10px;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.utp-logo {
+  display: block;
+  width: 120px;
+  background: #fff;
+  border-radius: 3px;
+  padding: 6px 8px;
+  transition: .2s;
+}
+
+.utp-logo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+
+.utp-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.social-links {
+  display: flex;
+  gap: 12px;
+}
+
+.social-links a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+  transition: .3s;
+}
+
+.social-links a:hover {
+  background: var(--orange);
+  color: #0B1E3B;
+  transform: translateY(-3px);
+}
+
+.footer-contact-info {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-contact-info li {
+  font-size: 13px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-contact-info li i {
+  color: var(--orange);
+}
+
+.footer-contact-info a {
+  color: inherit;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: .3s;
+}
+
+.footer-contact-info a:hover {
+  color: var(--orange);
+}
+
+.footer-staff-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-staff-list li {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  margin-bottom: 10px;
+}
+
+.footer-staff-list li i {
+  color: var(--orange);
+}
+
+.footer-sub-title {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #90A4AE;
+  font-weight: 700;
+  margin: 26px 0 12px;
+}
+
+.footer-allies-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-ally-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  padding: 8px;
+  margin: 0 -8px;
+  border-radius: 8px;
+  transition: .2s;
+}
+
+.footer-ally-item:hover {
+  background: rgba(255,255,255,.08);
+}
+
+.footer-ally-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 40px;
+  flex: none;
+}
+
+.footer-ally-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  opacity: .9;
+  transition: .2s;
+}
+
+.footer-ally-item:hover .footer-ally-logo img {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.footer-ally-label {
+  flex: 1;
+  font-size: 12.5px;
+  color: #CFD8DC;
+  line-height: 1.35;
+  transition: .2s;
+}
+
+.footer-ally-item:hover .footer-ally-label {
+  color: #fff;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding-top: 20px;
+  text-align: center;
+  font-size: 12px;
+  color: #90A4AE;
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 560px) {
+  .footer {
+    padding-top: 48px;
+  }
+
+  .footer-grid {
+    gap: 28px;
+    margin-bottom: 32px;
+  }
+
+  .footer-contact-info li {
+    align-items: flex-start;
+  }
+
+  .footer-contact-info a,
+  .footer-ally-label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .footer-ally-item {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 280px) {
+  .footer {
+    padding-top: 40px;
+  }
+
+  .footer-utp-project {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .footer-utp-project > span {
+    max-width: none;
+  }
+
+  .footer-ally-item {
+    gap: 10px;
+  }
+}

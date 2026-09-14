@@ -13,6 +13,44 @@
 </head>
 <body class="login-page">
 
+<!-- ========================================
+     PÁGINA: login.html
+     Responsable: Maykol Calle (feature/login)
+     Descripción: pantalla de acceso a pantalla completa. Es un
+     grid de 2 columnas (1fr 1fr): la izquierda (.login-header)
+     es una foto de fondo con degradado oscuro + una tarjeta de
+     texto institucional; la derecha (.login-main + .login-footer)
+     es el formulario de correo/contraseña. En <820px el grid
+     pasa a una sola columna apilada (foto arriba, formulario
+     abajo). El formulario no envía datos a ningún backend
+     todavía (Avance 1: interfaz sin autenticación real), y no
+     tiene JS propio por ahora.
+
+     Estructura HTML:
+
+     body.login-page                     (grid 2 columnas)
+     ├─ header.login-header              (columna izq., ocupa las 2 filas)
+     │    ├─ nav.login-nav               (flex: logo | volver al sitio)
+     │    │    ├─ a.login-logo › img
+     │    │    └─ a.back-link
+     │    └─ section.login-visual        (foto + degradado de fondo)
+     │         └─ div.visual-body
+     │              └─ div.visual-card   (tarjeta "glass", blur de fondo)
+     │                   ├─ div.visual-top  (flex: ícono + badge)
+     │                   ├─ h1
+     │                   └─ p.sub
+     ├─ main.login-main                  (columna der., fila 1)
+     │    └─ section.login-form-area
+     │         └─ div.form-inner
+     │              ├─ p.eyebrow, h2, p.sub
+     │              └─ form
+     │                   ├─ div.field    (x2: correo, contraseña)
+     │                   ├─ button.site-button.button-primary
+     │                   └─ a.help-link
+     └─ footer.login-footer              (columna der., fila 2)
+          └─ p.copyright
+     ======================================== -->
+
 <header class="login-header">
   <nav class="login-nav" aria-label="Navegación de acceso">
     <a href="inicio.html" class="login-logo"><img src="img/identidad/logo.png" alt="Logo de Escuela Jurídica"></a>
@@ -60,6 +98,5 @@
   <p class="copyright">&copy; 2026 Escuela Jurídica · Área administrativa</p>
 </footer>
 
-<script src="js/login.js" defer></script>
 </body>
 </html>
