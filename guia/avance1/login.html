@@ -16,15 +16,21 @@
 <!-- ========================================
      PÁGINA: login.html
      Responsable: Maykol Calle (feature/login)
-     Descripción: pantalla de acceso a pantalla completa. Es un
-     grid de 2 columnas (1fr 1fr): la izquierda (.login-header)
-     es una foto de fondo con degradado oscuro + una tarjeta de
-     texto institucional; la derecha (.login-main + .login-footer)
-     es el formulario de correo/contraseña. En <820px el grid
-     pasa a una sola columna apilada (foto arriba, formulario
-     abajo). El formulario no envía datos a ningún backend
-     todavía (Avance 1: interfaz sin autenticación real), y no
-     tiene JS propio por ahora.
+     Descripción: en escritorio (≥821px) es un grid de 2 columnas
+     (1fr 1fr): la izquierda (.login-header) es una foto de fondo
+     con degradado oscuro + una tarjeta de texto institucional;
+     la derecha (.login-main + .login-footer) es el formulario de
+     correo/contraseña. En ≤820px la foto (.login-visual) NO se
+     encoge ni se reordena: desaparece por completo (display:none)
+     y el grid se desactiva, así que la página queda en un solo
+     flujo vertical: barra superior con el logo y "Volver al sitio
+     web" → formulario → pie de página. La info institucional de
+     la foto ("Panel administrativo", "Acceso restringido") no se
+     repite en mobile porque el propio formulario ya dice
+     "Administración / Iniciar sesión" — no hace falta duplicarla.
+     El formulario no envía datos a ningún backend todavía
+     (Avance 1: interfaz sin autenticación real), y no tiene JS
+     propio por ahora.
 
      Estructura HTML:
 

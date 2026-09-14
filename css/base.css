@@ -1,0 +1,690 @@
+/* ============================================================
+   BASE.CSS — compartido por inicio.html y login.html.
+   NAVBAR y FOOTER: Enrique Prada (feature/base-navbar-footer).
+   COMPLETO Y FUNCIONAL — no modificar.
+   (Explicación detallada de cómo funciona cada cosa: ver Avance 1)
+   ============================================================ */
+
+:root {
+  --navy: #0f355d;
+  --navy-2: #17456f;
+  --navy-3: #0a2540;
+  --orange: #f58220;
+  --orange-2: #d96d12;
+  --gold: #e6a94a;
+  --ink: #11202f;
+  --paper: #faf8f5;
+  --surface: #ffffff;
+  --line: #e4e0d9;
+  --line-2: #f1ede6;
+  --muted: #6b7484;
+  --red: #c8102e;
+  --serif: Georgia, "Times New Roman", Times, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --wrap: 1140px;
+  --radius: 10px;
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 64px;
+}
+
+/* ----- Reset y base tipográfica ----- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
+
+/* ----- Utilidades de layout usadas por todas las secciones ----- */
+
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.band {
+  position: relative;
+}
+
+section.band {
+  padding: var(--space-xl) 0;
+}
+
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+.surface-section {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.surface-section--top {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+.paper-section {
+  background: var(--paper);
+}
+
+.page-header,
+main,
+.footer {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* ----- Componentes de texto y tarjeta compartidos ----- */
+
+.site-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 11px 22px;
+  border: 1px solid var(--navy);
+  border-radius: 9px;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.button-primary {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+
+.button-primary:hover {
+  background: var(--orange-2);
+  border-color: var(--orange-2);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245,130,32,.3);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-xs);
+  color: var(--orange);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.tit {
+  margin: 0 0 6px;
+  color: var(--navy);
+  font-family: var(--serif);
+  font-size: clamp(23px,2.9vw,31px);
+  line-height: 1.2;
+}
+
+.section-lead {
+  margin: 0 0 28px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.section-heading {
+  max-width: 680px;
+  margin: 0 auto var(--space-lg);
+  text-align: center;
+}
+
+.section-heading .section-lead {
+  margin: 0 auto;
+}
+
+.content-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+@media (max-width: 560px) {
+  .wrap {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  section.band {
+    padding: 48px 0;
+  }
+}
+
+@media (max-width: 280px) {
+  .wrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  section.band {
+    padding: 40px 0;
+  }
+
+  .section-heading {
+    margin-bottom: 28px;
+  }
+
+  .tit {
+    font-size: 22px;
+  }
+
+  .section-lead {
+    font-size: 13.5px;
+  }
+}
+
+/* ============================================================
+   NAVBAR — Enrique Prada (feature/base-navbar-footer)
+   ============================================================ */
+
+.page-header {
+  padding-top: 80px;
+}
+
+.header {
+  background: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 100;
+  border-bottom: 1px solid rgba(15,53,93,.16);
+  box-shadow: 0 6px 20px rgba(10,20,35,.16);
+}
+
+.head-row {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.logo {
+  height: 44px;
+  width: auto;
+  flex: none;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: nowrap;
+}
+
+.site-nav-link {
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 8px 0;
+  position: relative;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: .25s;
+}
+
+.site-nav-link:hover,
+.site-nav-link.on {
+  color: var(--orange);
+}
+
+.site-nav-link:hover::after,
+.site-nav-link.on::after {
+  width: 100%;
+}
+
+.nav-auth {
+  display: flex;
+  gap: 10px;
+  flex: none;
+  margin-left: 6px;
+}
+
+.button-ghost {
+  background: transparent;
+  color: var(--navy);
+}
+
+.button-ghost:hover {
+  background: var(--navy);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.menu-btn {
+  display: none;
+  background: none;
+  border: 0;
+  font-size: 22px;
+  color: var(--navy);
+  cursor: pointer;
+  flex: none;
+}
+
+.nav-toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .menu-btn {
+    display: block;
+  }
+
+  .site-nav {
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 80px);
+    background: var(--surface);
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 40px;
+    gap: 24px;
+    transition: .3s;
+    box-shadow: 0 10px 20px rgba(15,53,93,.1);
+    z-index: 99;
+    overflow: auto;
+  }
+
+  .nav-toggle:checked ~ .site-nav {
+    display: flex;
+    left: 0;
+  }
+
+  .site-nav-link {
+    font-size: 17px;
+  }
+
+  .nav-auth {
+    flex-direction: column;
+    width: 80%;
+  }
+
+  .nav-auth .site-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .head-row {
+    gap: 12px;
+  }
+
+  .logo {
+    height: 38px;
+    max-width: calc(100vw - 82px);
+    object-fit: contain;
+  }
+}
+
+@media (max-width: 280px) {
+  .head-row {
+    height: 68px;
+    gap: 10px;
+  }
+
+  .page-header {
+    padding-top: 68px;
+  }
+
+  .logo {
+    height: 34px;
+    max-width: calc(100vw - 66px);
+  }
+
+  .menu-btn {
+    font-size: 20px;
+  }
+
+  .site-nav {
+    top: 68px;
+    height: calc(100vh - 68px);
+    padding-top: 28px;
+    gap: 18px;
+  }
+}
+
+/* ============================================================
+   FOOTER — Enrique Prada (feature/base-navbar-footer)
+   ============================================================ */
+
+.footer {
+  background: #0B1E3B;
+  color: #CFD8DC;
+  padding: 60px 0 20px;
+  border-top: 4px solid var(--orange);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-logo-box {
+  display: block;
+  width: min(100%,170px);
+  margin-bottom: 18px;
+  padding: 8px 10px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.footer-logo {
+  display: block;
+  width: 100%;
+  height: 40px;
+  object-fit: contain;
+}
+
+.footer-title {
+  font-family: var(--sans);
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.footer-desc {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.footer-utp-project {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+
+.footer-utp-project > span {
+  max-width: 62px;
+  color: #90A4AE;
+  font-size: 10px;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.utp-logo {
+  display: block;
+  width: 120px;
+  background: #fff;
+  border-radius: 3px;
+  padding: 6px 8px;
+  transition: .2s;
+}
+
+.utp-logo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+
+.utp-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.social-links {
+  display: flex;
+  gap: 12px;
+}
+
+.social-links a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+  transition: .3s;
+}
+
+.social-links a:hover {
+  background: var(--orange);
+  color: #0B1E3B;
+  transform: translateY(-3px);
+}
+
+.footer-contact-info {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-contact-info li {
+  font-size: 13px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-contact-info li i {
+  color: var(--orange);
+}
+
+.footer-contact-info a {
+  color: inherit;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: .3s;
+}
+
+.footer-contact-info a:hover {
+  color: var(--orange);
+}
+
+.footer-staff-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-staff-list li {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  margin-bottom: 10px;
+}
+
+.footer-staff-list li i {
+  color: var(--orange);
+}
+
+.footer-sub-title {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #90A4AE;
+  font-weight: 700;
+  margin: 26px 0 12px;
+}
+
+.footer-allies-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-ally-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  padding: 8px;
+  margin: 0 -8px;
+  border-radius: 8px;
+  transition: .2s;
+}
+
+.footer-ally-item:hover {
+  background: rgba(255,255,255,.08);
+}
+
+.footer-ally-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 40px;
+  flex: none;
+}
+
+.footer-ally-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  opacity: .9;
+  transition: .2s;
+}
+
+.footer-ally-item:hover .footer-ally-logo img {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.footer-ally-label {
+  flex: 1;
+  font-size: 12.5px;
+  color: #CFD8DC;
+  line-height: 1.35;
+  transition: .2s;
+}
+
+.footer-ally-item:hover .footer-ally-label {
+  color: #fff;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding-top: 20px;
+  text-align: center;
+  font-size: 12px;
+  color: #90A4AE;
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 560px) {
+  .footer {
+    padding-top: 48px;
+  }
+
+  .footer-grid {
+    gap: 28px;
+    margin-bottom: 32px;
+  }
+
+  .footer-contact-info li {
+    align-items: flex-start;
+  }
+
+  .footer-contact-info a,
+  .footer-ally-label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .footer-ally-item {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 280px) {
+  .footer {
+    padding-top: 40px;
+  }
+
+  .footer-utp-project {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .footer-utp-project > span {
+    max-width: none;
+  }
+
+  .footer-ally-item {
+    gap: 10px;
+  }
+}

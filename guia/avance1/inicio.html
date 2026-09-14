@@ -244,13 +244,24 @@
 <!-- FIN SECCIÓN: HERO + NOSOTROS -->
 
 <!-- ========================================
-     SECCIÓN: MISIÓN + PROGRAMAS
-     Responsable: Paolo Añorga (feature/mision-programas)
+     SECCIÓN: MISIÓN + CURSOS
+     Responsable: Paolo Añorga (feature/mision-cursos)
      Descripción: bloque "Misión y Visión" (2 tarjetas lado a
      lado) seguido de "Servicios": grilla de los 6 cursos
      académicos, cada uno con badge de tipo, horas, foto, texto
-     y botón "Más información" (enlaza a #contacto). Contenido
-     estático, sin JS propio. Estilos en css/inicio.css.
+     y botón "Más información" (enlaza a #contacto). Estilos en
+     css/inicio.css.
+
+     Misión y Visión es HTML estático. Servicios/Cursos YA NO
+     lleva las 6 tarjetas escritas a mano: #cursosGrid empieza
+     vacío y js/cursos.js las genera en tiempo de carga a partir
+     de un array de instancias de la clase Curso (tipo, duración,
+     imagen, título, descripción — el resto, como el color del
+     badge o el alt de la imagen, se calcula solo dentro de la
+     clase). Ese archivo es aparte de js/inicio.js (el de
+     Enrique) para que este bloque siga siendo solo de Paolo —
+     para agregar/editar un curso, se edita el array en
+     js/cursos.js, no este HTML.
 
      Nota de nombres: la escuela ofrece SERVICIOS (cursos,
      diplomados, seminarios), no "productos" — por eso ninguna
@@ -267,13 +278,13 @@
                     ├─ h3
                     └─ p
 
-     Estructura HTML — Servicios (Cursos):
+     Estructura HTML — Servicios (Cursos), generada por JS:
 
      section#servicios
      └─ div.wrap
           ├─ div.section-heading
-          └─ div.grid6                  (grid 3 columnas)
-               └─ article.content-card.curso   (x6, flex column)
+          └─ div.grid6#cursosGrid       (grid 3 columnas; vacío en el HTML)
+               └─ article.content-card.curso   (x6, inyectado por js/cursos.js)
                     ├─ div.curso-head    (flex, space-between: badge | horas)
                     ├─ div.curso-cover   (aspect-ratio 16/10)
                     │    └─ img          (img/cursos/curso-N-*.jpg)
@@ -309,90 +320,14 @@
       <h2 class="tit">Capacitación de Alto Nivel Académico</h2>
       <p class="section-lead">Descubre nuestros 6 cursos académicos principales diseñados para responder a las demandas del mercado legal moderno.</p>
     </div>
-    <div class="grid6">
-
-      <article class="content-card curso">
-        <div class="curso-head">
-          <span class="curso-badge badge-navy">Diplomado</span>
-          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 120 hrs</span>
-        </div>
-        <div class="curso-cover"><img src="img/cursos/curso-1-notarial.jpg" alt="Derecho Notarial y Registral"></div>
-        <div class="curso-body">
-          <h3>Diplomado en Derecho Notarial y Registral</h3>
-          <p>Especialízate en trámites de escrituras públicas, transferencias de propiedad y calificación registral en la SUNARP.</p>
-        </div>
-        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
-      </article>
-
-      <article class="content-card curso">
-        <div class="curso-head">
-          <span class="curso-badge badge-orange">Curso</span>
-          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 40 hrs</span>
-        </div>
-        <div class="curso-cover"><img src="img/cursos/curso-2-saneamiento.jpg" alt="Saneamiento de Predios"></div>
-        <div class="curso-body">
-          <h3>Saneamiento Físico Legal de Predios</h3>
-          <p>Aprende los procedimientos técnicos y legales para la regularización de inmuebles rústicos y urbanos.</p>
-        </div>
-        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
-      </article>
-
-      <article class="content-card curso">
-        <div class="curso-head">
-          <span class="curso-badge badge-burgundy">Seminario</span>
-          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 12 hrs</span>
-        </div>
-        <div class="curso-cover"><img src="img/cursos/curso-3-precedentes.jpg" alt="Precedentes Registrales"></div>
-        <div class="curso-body">
-          <h3>Precedentes de Observancia Obligatoria</h3>
-          <p>Análisis exhaustivo de los fallos y resoluciones del Tribunal Registral con carácter vinculante y obligatorio.</p>
-        </div>
-        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
-      </article>
-
-      <article class="content-card curso">
-        <div class="curso-head">
-          <span class="curso-badge badge-navy">Diplomado</span>
-          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 140 hrs</span>
-        </div>
-        <div class="curso-cover"><img src="img/cursos/curso-4-contratos.jpg" alt="Contratos Civiles"></div>
-        <div class="curso-body">
-          <h3>Derecho de Contratos y Obligaciones Civiles</h3>
-          <p>Redacción, interpretación y resolución de controversias en contratos típicos y atípicos en el ordenamiento civil.</p>
-        </div>
-        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
-      </article>
-
-      <article class="content-card curso">
-        <div class="curso-head">
-          <span class="curso-badge badge-orange">Curso</span>
-          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 48 hrs</span>
-        </div>
-        <div class="curso-cover"><img src="img/cursos/curso-5-administrativo.jpg" alt="Derecho Administrativo"></div>
-        <div class="curso-body">
-          <h3>Derecho Administrativo y Procedimiento Sancionador</h3>
-          <p>Estudio integral de la Ley N° 27444, actos administrativos y estrategias de defensa ante entidades estatales.</p>
-        </div>
-        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
-      </article>
-
-      <article class="content-card curso">
-        <div class="curso-head">
-          <span class="curso-badge badge-burgundy">Seminario</span>
-          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 16 hrs</span>
-        </div>
-        <div class="curso-cover"><img src="img/cursos/curso-6-garantias.jpg" alt="Garantías Reales"></div>
-        <div class="curso-body">
-          <h3>Garantías Reales y Ejecución de Hipotecas</h3>
-          <p>Constitución de hipotecas y anticresis, calificación registral y procesos judiciales de ejecución de garantías.</p>
-        </div>
-        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
-      </article>
-
-    </div>
+    <!-- Este contenedor empieza vacío: js/cursos.js lo llena en tiempo
+         de carga a partir del array "cursos" (uno por tarjeta). Si algo
+         no aparece, revisa la consola del navegador y ese archivo, no
+         este HTML. -->
+    <div class="grid6" id="cursosGrid"></div>
   </div>
 </section>
-<!-- FIN SECCIÓN: MISIÓN + PROGRAMAS -->
+<!-- FIN SECCIÓN: MISIÓN + CURSOS -->
 
 <!-- ========================================
      SECCIÓN: CLIENTES + VIDEO
@@ -724,5 +659,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <script src="js/inicio.js" defer></script>
+<script src="js/cursos.js" defer></script>
 </body>
 </html>

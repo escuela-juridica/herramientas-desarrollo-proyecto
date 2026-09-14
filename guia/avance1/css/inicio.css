@@ -8,7 +8,7 @@
 
    Índice de este archivo (en este mismo orden):
      1. HERO + NOSOTROS      → Joel Saldaña   (feature/hero-nosotros)
-     2. MISIÓN + PROGRAMAS   → Paolo Añorga   (feature/mision-programas)
+     2. MISIÓN + CURSOS      → Paolo Añorga   (feature/mision-cursos)
      3. CLIENTES + VIDEO     → Juan Morales   (feature/clientes-video)
      4. BLOG                 → Kelvin Acevedo (feature/blog)
    ============================================================ */
@@ -410,14 +410,17 @@
 }
 
 /* ============================================================
-   MISIÓN + PROGRAMAS
-   Responsable: Paolo Añorga (feature/mision-programas)
+   MISIÓN + CURSOS
+   Responsable: Paolo Añorga (feature/mision-cursos)
    Descripción: bloque "Misión y Visión" (2 tarjetas lado a lado)
    seguido de la sección "Servicios" con la grilla de los 6
    cursos académicos (diplomados/cursos/seminarios). Cada curso
    es una .content-card.curso con badge de tipo, horas, foto,
    texto y botón "Más información" que enlaza al footer
-   (#contacto). Contenido estático, sin JS propio.
+   (#contacto). Las 6 tarjetas de curso las genera js/cursos.js
+   a partir de un array (el HTML solo trae el contenedor vacío
+   #cursosGrid) — estas reglas de CSS se aplican igual, solo
+   cambia de dónde sale el HTML.
 
    Nota de nombres: la escuela ofrece SERVICIOS (cursos,
    diplomados, seminarios), no "productos" — por eso las clases

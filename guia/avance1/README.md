@@ -13,7 +13,8 @@ avance1/
 │   ├── inicio.css    (solo inicio.html: hero+nosotros, misión+cursos, clientes+video, blog)
 │   └── login.css     (solo login.html)
 ├── js/
-│   └── inicio.js     (cierre del menú móvil; login.js no existe todavía, ver Convenciones)
+│   ├── inicio.js     (cierre del menú móvil; login.js no existe todavía, ver Convenciones)
+│   └── cursos.js     (genera las 6 tarjetas de Servicios desde un array; solo de Paolo)
 ├── img/
 │   ├── identidad/    (logos institucionales, favicon)
 │   ├── portada/      (fondos del carrusel y del panel de login)
@@ -38,7 +39,7 @@ avance1/
 - No usar clases de grid, botones ni utilidades de Bootstrap. Bootstrap está reservado para los elementos `.carousel`.
 - Guardar cada imagen en la subcarpeta funcional correspondiente de `img/` (ver tabla arriba) y los videos en `video/`, siempre con rutas locales relativas.
 - La escuela ofrece **servicios** (cursos, diplomados, seminarios), no productos: por eso ninguna clase, carpeta ni archivo debe usar la palabra "producto"/"prod" — el prefijo correcto es `curso-*` y la carpeta de imágenes es `img/cursos/`.
-- Un archivo JavaScript por página. `inicio.js` contiene únicamente el cierre del menú móvil al seleccionar un enlace. `login.html` no tiene JS propio por ahora (Avance 1: el formulario no envía datos a ningún backend); cuando se implemente la lógica de acceso, se crea `js/login.js` y se referencia desde `login.html`. Bootstrap controla los carruseles mediante atributos `data-bs-*`, sin JS propio.
+- `inicio.js` contiene únicamente el cierre del menú móvil al seleccionar un enlace — es de Enrique, nadie más lo edita. Si una sección necesita su propio JS (como Servicios, ver `cursos.js`), va en un archivo aparte con su propio nombre, para que cada quien tenga su script y no se genere conflicto en un archivo compartido. `login.html` no tiene JS propio por ahora (Avance 1: el formulario no envía datos a ningún backend); cuando se implemente la lógica de acceso, se crea `js/login.js` y se referencia desde `login.html`. Bootstrap controla los carruseles mediante atributos `data-bs-*`, sin JS propio.
 
 ## Cómo está dividido el trabajo (Gitflow)
 
@@ -48,7 +49,7 @@ Cada bloque de `inicio.html` está delimitado con comentarios `<!-- SECCIÓN: ..
 |-----------------------------|------------------|----------------------------------------------------------|
 | `feature/base-navbar-footer`| Enrique Prada    | Navbar, footer y `base.css` (estructura/base del proyecto) |
 | `feature/hero-nosotros`     | Joel Saldaña     | Carrusel de portada + sección Nosotros |
-| `feature/mision-programas`  | Paolo Añorga     | Misión y Visión + sección Servicios (los 6 cursos) |
+| `feature/mision-cursos`     | Paolo Añorga     | Misión y Visión (HTML+CSS) + sección Servicios (los 6 cursos, generados desde `js/cursos.js`) |
 | `feature/clientes-video`    | Juan Morales     | Carrusel de Clientes + Video representativo |
 | `feature/blog`              | Kelvin Acevedo   | Sección Blog |
 | `feature/login`             | Maykol Calle     | `login.html` completo (página aparte, con su propio `login.css`) |

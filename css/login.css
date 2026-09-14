@@ -1,0 +1,20 @@
+/* ============================================================
+   LOGIN.CSS — PLANTILLA
+   Responsable: Maykol Calle (feature/login)
+   👉 Pega aquí todo el CSS de login.html (pantalla completa,
+   panel de foto + formulario, y su versión responsive).
+
+   Ejemplo de sintaxis esperada:
+
+   .login-page {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     min-height: 100vh;
+   }
+   ============================================================ */
+
+
+
+@media (max-width: 820px) {
+  /* 👉 Ajustes responsive de login.html (móvil) */
+}

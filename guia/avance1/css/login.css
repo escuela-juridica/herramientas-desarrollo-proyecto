@@ -1,11 +1,17 @@
 /* ============================================================
    LOGIN.CSS
    Responsable: Maykol Calle (feature/login)
-   Descripción: pantalla de acceso a pantalla completa, dividida
-   en un grid de 2 columnas: panel izquierdo (.login-visual) con
-   foto de fondo + tarjeta de texto institucional, panel derecho
-   (.login-main) con el formulario de correo/contraseña. En
-   pantallas <820px el grid pasa a una sola columna apilada.
+   Descripción: en escritorio (≥821px) es un grid de 2 columnas:
+   panel izquierdo (.login-visual) con foto de fondo + tarjeta de
+   texto institucional, panel derecho (.login-main) con el
+   formulario de correo/contraseña. En pantallas ≤820px el panel
+   de la foto (.login-visual) se oculta por completo con
+   display:none — no tendría sentido reducirlo, la foto y el
+   texto institucional no son indispensables para iniciar sesión.
+   El grid de 2 columnas también se desactiva (.login-page pasa a
+   display:block) para que el nav deje de ir position:absolute y
+   la página quede en flujo normal: barra superior (logo + volver)
+   → formulario → pie de página, una debajo de otra.
    El formulario no envía datos a ningún backend todavía
    (Avance 1: interfaz sin autenticación real).
    ============================================================ */
@@ -254,55 +260,41 @@ html, body {
 }
 
 @media (max-width: 820px) {
+  /* El banner con foto (.login-visual) desaparece por completo en
+     mobile — no se oculta con display:none sobre un layout de grid
+     que sigue activo (eso era lo que generaba el desorden anterior:
+     el nav quedaba position:absolute flotando encima de la foto).
+     Aquí .login-page se pasa a flujo normal de documento: header
+     (solo el nav, ya sin la foto) → main (formulario) → footer, uno
+     debajo del otro, sin grid ni position:absolute. */
   .login-page {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
+    display: block;
     overflow: auto;
   }
 
-  .login-header {
-    grid-column: 1;
-    grid-row: 1;
-    min-height: 320px;
-  }
-
   .login-nav {
-    justify-content: space-between;
+    position: static;
     width: 100%;
-    padding: 24px;
+    justify-content: space-between;
+    padding: 18px 20px;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
   }
 
   .login-logo {
     position: static;
-    padding: 8px 12px;
-    border-radius: 8px;
-    background: #fff;
   }
 
   .login-logo img {
     height: 30px;
   }
 
-  .back-link {
-    padding: 7px 10px;
-    border-radius: 7px;
-    background: #fff;
-    font-size: 12px;
-  }
-
   .login-visual {
-    padding: 90px 32px 50px;
-    min-height: 320px;
-  }
-
-  .login-main {
-    grid-column: 1;
-    grid-row: 2;
+    display: none;
   }
 
   .login-form-area {
-    padding: 70px 28px 60px;
+    padding: 36px 24px 40px;
   }
 
   .form-inner {
@@ -310,8 +302,6 @@ html, body {
   }
 
   .login-footer {
-    grid-column: 1;
-    grid-row: 3;
     padding: 0 24px 24px;
   }
 }

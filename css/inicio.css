@@ -1,0 +1,109 @@
+/* ============================================================
+   INICIO.CSS — PLANTILLA
+   Pega tu CSS en el bloque que tenga tu nombre. Respeta el orden
+   (es el mismo orden en que aparecen las secciones en el HTML).
+   No toques el bloque de otro compañero. Navbar/Footer están en
+   base.css (Enrique) y no se tocan aquí.
+
+   Índice:
+     1. HERO + NOSOTROS      → Joel Saldaña   (feature/hero-nosotros)
+     2. MISIÓN + CURSOS      → Paolo Añorga   (feature/mision-cursos)
+     3. CLIENTES + VIDEO     → Juan Morales   (feature/clientes-video)
+     4. BLOG                 → Kelvin Acevedo (feature/blog)
+   ============================================================ */
+
+/* ============================================================
+   HERO + NOSOTROS
+   Responsable: Joel Saldaña (feature/hero-nosotros)
+   👉 Pega aquí el CSS de tu carrusel de portada + sección Nosotros.
+
+   Ejemplo de sintaxis esperada:
+
+   .hero-carousel {
+     position: relative;
+     overflow: hidden;
+     background: var(--navy);
+   }
+   ============================================================ */
+
+
+
+@media (max-width: 900px) {
+  /* 👉 Ajustes responsive de Hero + Nosotros (tablet) */
+}
+
+@media (max-width: 560px) {
+  /* 👉 Ajustes responsive de Hero + Nosotros (móvil) */
+}
+
+/* ============================================================
+   MISIÓN + CURSOS
+   Responsable: Paolo Añorga (feature/mision-cursos)
+   👉 Pega aquí el CSS de Misión/Visión + la grilla de Servicios (Cursos).
+
+   Ejemplo de sintaxis esperada:
+
+   .mv-grid {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 24px;
+   }
+   ============================================================ */
+
+
+
+@media (max-width: 900px) {
+  /* 👉 Ajustes responsive de Misión + Cursos (tablet) */
+}
+
+@media (max-width: 560px) {
+  /* 👉 Ajustes responsive de Misión + Cursos (móvil) */
+}
+
+/* ============================================================
+   CLIENTES + VIDEO
+   Responsable: Juan Morales (feature/clientes-video)
+   👉 Pega aquí el CSS del carrusel de Clientes + la tarjeta de Video.
+
+   Ejemplo de sintaxis esperada:
+
+   .clientes-wrap {
+     display: flex;
+     align-items: center;
+     gap: 16px;
+   }
+   ============================================================ */
+
+
+
+@media (max-width: 900px) {
+  /* 👉 Ajustes responsive de Clientes + Video (tablet) */
+}
+
+@media (max-width: 560px) {
+  /* 👉 Ajustes responsive de Clientes + Video (móvil) */
+}
+
+/* ============================================================
+   BLOG
+   Responsable: Kelvin Acevedo (feature/blog)
+   👉 Pega aquí el CSS de la grilla de artículos del Blog.
+
+   Ejemplo de sintaxis esperada:
+
+   .blog-grid {
+     display: grid;
+     grid-template-columns: repeat(3,1fr);
+     gap: 22px;
+   }
+   ============================================================ */
+
+
+
+@media (max-width: 900px) {
+  /* 👉 Ajustes responsive de Blog (tablet) */
+}
+
+@media (max-width: 560px) {
+  /* 👉 Ajustes responsive de Blog (móvil) */
+}
