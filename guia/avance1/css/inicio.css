@@ -414,17 +414,22 @@
    Responsable: Paolo Añorga (feature/mision-programas)
    Descripción: bloque "Misión y Visión" (2 tarjetas lado a lado)
    seguido de la sección "Servicios" con la grilla de los 6
-   programas académicos (diplomados/cursos/seminarios). Cada
-   programa es una .content-card.prod con badge de tipo, horas,
-   foto, texto y botón "Más información" que enlaza al footer
+   cursos académicos (diplomados/cursos/seminarios). Cada curso
+   es una .content-card.curso con badge de tipo, horas, foto,
+   texto y botón "Más información" que enlaza al footer
    (#contacto). Contenido estático, sin JS propio.
+
+   Nota de nombres: la escuela ofrece SERVICIOS (cursos,
+   diplomados, seminarios), no "productos" — por eso las clases
+   de este bloque usan el prefijo .curso-*, nunca .prod-*, y las
+   imágenes viven en img/cursos/ (no img/productos/).
 
    Layout: Grid en .mv-grid y .grid6 (columnas iguales que se
    reducen en cada media query: 3→2→1). Flexbox dentro de cada
-   tarjeta .prod (flex-direction:column) para que el botón
+   tarjeta .curso (flex-direction:column) para que el botón
    "Más información" siempre quede pegado abajo aunque el texto
-   de arriba tenga distinto largo (flex:1 en .prod-body p).
-   Estilos más usados: aspect-ratio + object-fit en .prod-cover,
+   de arriba tenga distinto largo (flex:1 en .curso-body p).
+   Estilos más usados: aspect-ratio + object-fit en .curso-cover,
    y transform:translateY(-3px) + box-shadow en :hover para el
    efecto de "tarjeta que se levanta".
    ============================================================ */
@@ -465,26 +470,26 @@
   gap: 22px;
 }
 
-.prod {
+.curso {
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: .2s;
 }
 
-.prod:hover {
+.curso:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 32px rgba(15,53,93,.12);
 }
 
-.prod-head {
+.curso-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 14px 18px;
 }
 
-.prod-badge {
+.curso-badge {
   font-size: 10.5px;
   letter-spacing: .1em;
   text-transform: uppercase;
@@ -506,7 +511,7 @@
   background: #7A2337;
 }
 
-.prod-hours {
+.curso-hours {
   font-size: 12px;
   color: var(--muted);
   display: flex;
@@ -520,12 +525,12 @@
    adentro hace que la imagen llene ese marco recortando lo que sobre,
    sin deformarse. Mismo truco se repite en .blog-cover, .media-frame,
    .video-wrapper y .cliente-logo más abajo/arriba. */
-.prod-cover {
+.curso-cover {
   aspect-ratio: 16/10;
   overflow: hidden;
 }
 
-.prod-cover img {
+.curso-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -533,18 +538,18 @@
   transition: .3s;
 }
 
-.prod:hover .prod-cover img {
+.curso:hover .curso-cover img {
   transform: scale(1.05);
 }
 
-.prod-body {
+.curso-body {
   padding: 18px 22px 22px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.prod-body h3 {
+.curso-body h3 {
   font-family: var(--serif);
   font-size: 16.5px;
   margin: 0 0 7px;
@@ -552,18 +557,18 @@
   color: var(--navy);
 }
 
-.prod-body p {
+.curso-body p {
   margin: 0;
   font-size: 13.5px;
   color: var(--muted);
   flex: 1;
 }
 
-.prod-foot {
+.curso-foot {
   padding: 0 22px 22px;
 }
 
-.product-button {
+.curso-button {
   display: inline-block;
   width: 100%;
   text-align: center;
@@ -578,7 +583,7 @@
   transition: .2s;
 }
 
-.product-button:hover {
+.curso-button:hover {
   background: var(--navy);
   border-color: var(--navy);
   color: #fff;
@@ -603,17 +608,17 @@
     padding: 22px 20px;
   }
 
-  .prod-head {
+  .curso-head {
     flex-wrap: wrap;
     gap: 8px;
     padding: 13px 16px;
   }
 
-  .prod-body {
+  .curso-body {
     padding: 17px 18px 20px;
   }
 
-  .prod-foot {
+  .curso-foot {
     padding: 0 18px 20px;
   }
 }
@@ -623,15 +628,15 @@
     padding: 18px 16px;
   }
 
-  .prod-head {
+  .curso-head {
     padding: 12px 14px;
   }
 
-  .prod-body {
+  .curso-body {
     padding: 16px 14px 18px;
   }
 
-  .prod-foot {
+  .curso-foot {
     padding: 0 14px 18px;
   }
 }

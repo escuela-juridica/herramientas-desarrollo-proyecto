@@ -23,7 +23,7 @@
      ├─ main                    (todas las secciones de contenido)
      │    ├─ section#nosotros
      │    ├─ section            (Misión y Visión)
-     │    ├─ section#servicios  (Programas)
+     │    ├─ section#servicios  (Cursos)
      │    ├─ section#clientes
      │    ├─ section#video
      │    └─ section#blog
@@ -139,7 +139,7 @@
         <h2>Especialización y Excelencia en Derecho</h2>
         <p>Lleva tu carrera al siguiente nivel con diplomados y cursos diseñados por reconocidos juristas y magistrados del sector notarial y registral.</p>
         <div class="slide-actions">
-          <a href="#servicios" class="site-button button-primary">Explorar Programas</a>
+          <a href="#servicios" class="site-button button-primary">Explorar Cursos</a>
           <a href="#nosotros" class="button-light">Saber Más</a>
         </div>
       </div>
@@ -183,7 +183,7 @@
         <h2>Una comunidad jurídica en crecimiento</h2>
         <p>Cientos de profesionales del derecho ya se especializaron con nosotros y hoy ejercen en cortes, notarías y entidades públicas.</p>
         <div class="slide-actions">
-          <a href="#servicios" class="site-button button-primary">Ver Programas</a>
+          <a href="#servicios" class="site-button button-primary">Ver Cursos</a>
           <a href="#contacto" class="button-light">Escríbenos</a>
         </div>
       </div>
@@ -247,10 +247,15 @@
      SECCIÓN: MISIÓN + PROGRAMAS
      Responsable: Paolo Añorga (feature/mision-programas)
      Descripción: bloque "Misión y Visión" (2 tarjetas lado a
-     lado) seguido de "Servicios": grilla de los 6 programas
+     lado) seguido de "Servicios": grilla de los 6 cursos
      académicos, cada uno con badge de tipo, horas, foto, texto
      y botón "Más información" (enlaza a #contacto). Contenido
      estático, sin JS propio. Estilos en css/inicio.css.
+
+     Nota de nombres: la escuela ofrece SERVICIOS (cursos,
+     diplomados, seminarios), no "productos" — por eso ninguna
+     clase, carpeta de imagen ni archivo de este bloque debe
+     decir "prod"/"producto". Las imágenes viven en img/cursos/.
 
      Estructura HTML — Misión y Visión:
 
@@ -262,19 +267,19 @@
                     ├─ h3
                     └─ p
 
-     Estructura HTML — Servicios (Programas):
+     Estructura HTML — Servicios (Cursos):
 
      section#servicios
      └─ div.wrap
           ├─ div.section-heading
           └─ div.grid6                  (grid 3 columnas)
-               └─ article.content-card.prod   (x6, flex column)
-                    ├─ div.prod-head     (flex, space-between: badge | horas)
-                    ├─ div.prod-cover    (aspect-ratio 16/10)
-                    │    └─ img
-                    ├─ div.prod-body     (flex column, h3 + p)
-                    └─ div.prod-foot
-                         └─ a.product-button
+               └─ article.content-card.curso   (x6, flex column)
+                    ├─ div.curso-head    (flex, space-between: badge | horas)
+                    ├─ div.curso-cover   (aspect-ratio 16/10)
+                    │    └─ img          (img/cursos/curso-N-*.jpg)
+                    ├─ div.curso-body    (flex column, h3 + p)
+                    └─ div.curso-foot
+                         └─ a.curso-button
      ======================================== -->
 <section class="band surface-section">
   <div class="wrap">
@@ -300,88 +305,88 @@
 <section class="band surface-section" id="servicios">
   <div class="wrap">
     <div class="section-heading">
-      <p class="eyebrow">Nuestros Programas</p>
+      <p class="eyebrow">Nuestros Cursos</p>
       <h2 class="tit">Capacitación de Alto Nivel Académico</h2>
-      <p class="section-lead">Descubre nuestros 6 programas académicos principales diseñados para responder a las demandas del mercado legal moderno.</p>
+      <p class="section-lead">Descubre nuestros 6 cursos académicos principales diseñados para responder a las demandas del mercado legal moderno.</p>
     </div>
     <div class="grid6">
 
-      <article class="content-card prod">
-        <div class="prod-head">
-          <span class="prod-badge badge-navy">Diplomado</span>
-          <span class="prod-hours"><i class="fa-regular fa-clock"></i> 120 hrs</span>
+      <article class="content-card curso">
+        <div class="curso-head">
+          <span class="curso-badge badge-navy">Diplomado</span>
+          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 120 hrs</span>
         </div>
-        <div class="prod-cover"><img src="img/productos/prod-1-notarial.jpg" alt="Derecho Notarial y Registral"></div>
-        <div class="prod-body">
+        <div class="curso-cover"><img src="img/cursos/curso-1-notarial.jpg" alt="Derecho Notarial y Registral"></div>
+        <div class="curso-body">
           <h3>Diplomado en Derecho Notarial y Registral</h3>
           <p>Especialízate en trámites de escrituras públicas, transferencias de propiedad y calificación registral en la SUNARP.</p>
         </div>
-        <div class="prod-foot"><a href="#contacto" class="product-button">Más Información</a></div>
+        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
       </article>
 
-      <article class="content-card prod">
-        <div class="prod-head">
-          <span class="prod-badge badge-orange">Curso</span>
-          <span class="prod-hours"><i class="fa-regular fa-clock"></i> 40 hrs</span>
+      <article class="content-card curso">
+        <div class="curso-head">
+          <span class="curso-badge badge-orange">Curso</span>
+          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 40 hrs</span>
         </div>
-        <div class="prod-cover"><img src="img/productos/prod-2-saneamiento.jpg" alt="Saneamiento de Predios"></div>
-        <div class="prod-body">
+        <div class="curso-cover"><img src="img/cursos/curso-2-saneamiento.jpg" alt="Saneamiento de Predios"></div>
+        <div class="curso-body">
           <h3>Saneamiento Físico Legal de Predios</h3>
           <p>Aprende los procedimientos técnicos y legales para la regularización de inmuebles rústicos y urbanos.</p>
         </div>
-        <div class="prod-foot"><a href="#contacto" class="product-button">Más Información</a></div>
+        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
       </article>
 
-      <article class="content-card prod">
-        <div class="prod-head">
-          <span class="prod-badge badge-burgundy">Seminario</span>
-          <span class="prod-hours"><i class="fa-regular fa-clock"></i> 12 hrs</span>
+      <article class="content-card curso">
+        <div class="curso-head">
+          <span class="curso-badge badge-burgundy">Seminario</span>
+          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 12 hrs</span>
         </div>
-        <div class="prod-cover"><img src="img/productos/prod-3-precedentes.jpg" alt="Precedentes Registrales"></div>
-        <div class="prod-body">
+        <div class="curso-cover"><img src="img/cursos/curso-3-precedentes.jpg" alt="Precedentes Registrales"></div>
+        <div class="curso-body">
           <h3>Precedentes de Observancia Obligatoria</h3>
           <p>Análisis exhaustivo de los fallos y resoluciones del Tribunal Registral con carácter vinculante y obligatorio.</p>
         </div>
-        <div class="prod-foot"><a href="#contacto" class="product-button">Más Información</a></div>
+        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
       </article>
 
-      <article class="content-card prod">
-        <div class="prod-head">
-          <span class="prod-badge badge-navy">Diplomado</span>
-          <span class="prod-hours"><i class="fa-regular fa-clock"></i> 140 hrs</span>
+      <article class="content-card curso">
+        <div class="curso-head">
+          <span class="curso-badge badge-navy">Diplomado</span>
+          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 140 hrs</span>
         </div>
-        <div class="prod-cover"><img src="img/productos/prod-4-contratos.jpg" alt="Contratos Civiles"></div>
-        <div class="prod-body">
+        <div class="curso-cover"><img src="img/cursos/curso-4-contratos.jpg" alt="Contratos Civiles"></div>
+        <div class="curso-body">
           <h3>Derecho de Contratos y Obligaciones Civiles</h3>
           <p>Redacción, interpretación y resolución de controversias en contratos típicos y atípicos en el ordenamiento civil.</p>
         </div>
-        <div class="prod-foot"><a href="#contacto" class="product-button">Más Información</a></div>
+        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
       </article>
 
-      <article class="content-card prod">
-        <div class="prod-head">
-          <span class="prod-badge badge-orange">Curso</span>
-          <span class="prod-hours"><i class="fa-regular fa-clock"></i> 48 hrs</span>
+      <article class="content-card curso">
+        <div class="curso-head">
+          <span class="curso-badge badge-orange">Curso</span>
+          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 48 hrs</span>
         </div>
-        <div class="prod-cover"><img src="img/productos/prod-5-administrativo.jpg" alt="Derecho Administrativo"></div>
-        <div class="prod-body">
+        <div class="curso-cover"><img src="img/cursos/curso-5-administrativo.jpg" alt="Derecho Administrativo"></div>
+        <div class="curso-body">
           <h3>Derecho Administrativo y Procedimiento Sancionador</h3>
           <p>Estudio integral de la Ley N° 27444, actos administrativos y estrategias de defensa ante entidades estatales.</p>
         </div>
-        <div class="prod-foot"><a href="#contacto" class="product-button">Más Información</a></div>
+        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
       </article>
 
-      <article class="content-card prod">
-        <div class="prod-head">
-          <span class="prod-badge badge-burgundy">Seminario</span>
-          <span class="prod-hours"><i class="fa-regular fa-clock"></i> 16 hrs</span>
+      <article class="content-card curso">
+        <div class="curso-head">
+          <span class="curso-badge badge-burgundy">Seminario</span>
+          <span class="curso-hours"><i class="fa-regular fa-clock"></i> 16 hrs</span>
         </div>
-        <div class="prod-cover"><img src="img/productos/prod-6-garantias.jpg" alt="Garantías Reales"></div>
-        <div class="prod-body">
+        <div class="curso-cover"><img src="img/cursos/curso-6-garantias.jpg" alt="Garantías Reales"></div>
+        <div class="curso-body">
           <h3>Garantías Reales y Ejecución de Hipotecas</h3>
           <p>Constitución de hipotecas y anticresis, calificación registral y procesos judiciales de ejecución de garantías.</p>
         </div>
-        <div class="prod-foot"><a href="#contacto" class="product-button">Más Información</a></div>
+        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
       </article>
 
     </div>
