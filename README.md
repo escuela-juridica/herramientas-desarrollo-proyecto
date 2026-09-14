@@ -4,7 +4,7 @@ Sitio web de una institución real (Escuela Jurídica) con página de inicio y a
 
 ## Despliegue
 
-Cada push a `develop` despliega el sitio automáticamente a GitHub Pages (workflow en `.github/workflows/deploy.yml`, sin build ni dependencias — solo sube los archivos tal cual). No se despliega desde `main` ni desde ramas `feature/*`, así que la versión pública siempre es la integración más reciente en `develop` (lo que ya pasó por Pull Request de cada feature).
+Cada push a `main` **o** `develop` despliega el sitio automáticamente a GitHub Pages (workflow en `.github/workflows/deploy.yml`, sin build ni dependencias — solo sube los archivos tal cual). No se despliega desde ramas `feature/*`, así que la versión pública siempre refleja la última integración en `develop` o lo que ya llegó a `main`. Si ambas ramas reciben push casi al mismo tiempo, el sitio publicado queda con lo último que terminó de desplegar (no necesariamente en orden).
 
 URL del sitio: `https://escuela-juridica.github.io/herramientas-desarrollo-proyecto/`
 
