@@ -163,21 +163,65 @@
 <!-- FIN ZONA: VIDEO -->
 
 <!-- ========================================
-     ZONA: BLOG
-     Responsable: Kelvin Acevedo
-     Rama Gitflow: feature/blog
-     👉 ELIMINA este bloque completo y pon la grilla de artículos
-     del blog en su lugar. Debe desaparecer sí o sí.
+     SECCIÓN: BLOG
+     Responsable: Kelvin Acevedo (feature/blog)
+     Descripción: grilla de 3 artículos con imagen de portada,
+     fecha, título, extracto y enlace "Leer más". Sin carrusel,
+     sin JS propio: grilla estática que pasa a 1 columna en
+     pantallas angostas. Estilos en css/inicio.css.
+
+     Estructura HTML:
+
+     section#blog.paper-section
+     └─ div.wrap
+          ├─ div.section-heading
+          └─ div.blog-grid              (grid 3 columnas)
+               └─ article.content-card.blog-card   (x3)
+                    ├─ div.blog-cover    (aspect-ratio 16/10)
+                    │    └─ img
+                    └─ div.blog-body
+                         ├─ p.blog-date, h3.blog-title, p.blog-excerpt
+                         └─ a.blog-more
      ======================================== -->
-<section class="band" style="border:3px dashed #7C3AED;background:#F1EAFB;margin:16px;border-radius:10px;">
-  <div class="wrap" style="text-align:center;">
-    <p style="margin:0 0 8px;font:700 12px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#7C3AED;">AQUÍ VA: Blog — Kelvin</p>
-    <h2 style="margin:0 0 10px;font:700 24px/1.2 Georgia,serif;color:var(--navy);">Sección: Blog</h2>
-    <p style="margin:0 auto 16px;max-width:520px;font:15px/1.5 system-ui,sans-serif;color:#334;">Rama: feature/blog — este bloque de ejemplo se elimina por completo.</p>
-    <img src="img/blog/blog-1-normativa.jpg" alt="Imagen de ejemplo" style="max-width:280px;width:100%;border-radius:8px;display:block;margin:0 auto;">
+<section class="band paper-section" id="blog">
+  <div class="wrap">
+    <div class="section-heading">
+      <p class="eyebrow">Actualidad jurídica</p>
+      <h2 class="tit">Blog</h2>
+      <p class="section-lead">Artículos y novedades preparados por nuestra plana docente para mantenerte actualizado.</p>
+    </div>
+    <div class="blog-grid">
+      <article class="content-card blog-card">
+        <div class="blog-cover"><img src="img/blog/blog-1-normativa.jpg" alt="Actualización normativa registral"></div>
+        <div class="blog-body">
+          <p class="blog-date">12 de agosto, 2026</p>
+          <h3 class="blog-title">Cambios recientes en el reglamento de inscripciones del Registro de Predios</h3>
+          <p class="blog-excerpt">Un repaso de las modificaciones que impactan directamente en los trámites de saneamiento físico legal.</p>
+          <a href="#" class="blog-more">Leer más →</a>
+        </div>
+      </article>
+      <article class="content-card blog-card">
+        <div class="blog-cover"><img src="img/blog/blog-2-jurisprudencia.jpg" alt="Jurisprudencia del Tribunal Registral"></div>
+        <div class="blog-body">
+          <p class="blog-date">28 de julio, 2026</p>
+          <h3 class="blog-title">Cinco precedentes del Tribunal Registral que todo notario debe conocer</h3>
+          <p class="blog-excerpt">Análisis práctico de los criterios de observancia obligatoria más citados este año.</p>
+          <a href="#" class="blog-more">Leer más →</a>
+        </div>
+      </article>
+      <article class="content-card blog-card">
+        <div class="blog-cover"><img src="img/blog/blog-3-tramites.jpg" alt="Trámites notariales digitales"></div>
+        <div class="blog-body">
+          <p class="blog-date">05 de julio, 2026</p>
+          <h3 class="blog-title">Guía rápida para digitalizar trámites notariales sin perder validez legal</h3>
+          <p class="blog-excerpt">Recomendaciones prácticas para estudios y notarías que están migrando a plataformas digitales.</p>
+          <a href="#" class="blog-more">Leer más →</a>
+        </div>
+      </article>
+    </div>
   </div>
 </section>
-<!-- FIN ZONA: BLOG -->
+<!-- FIN SECCIÓN: BLOG -->
 
 </main>
 
