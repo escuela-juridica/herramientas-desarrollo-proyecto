@@ -60,19 +60,268 @@
   /* 👉 Ajustes responsive de Misión + Cursos (móvil) */
 }
 
-/* ============================================================
-   CLIENTES + VIDEO
-   Responsable: Juan Morales (feature/clientes-video)
-   👉 Pega aquí el CSS del carrusel de Clientes + la tarjeta de Video.
 
-   Ejemplo de sintaxis esperada:
+   /*CLIENTES + VIDEO Responsable: Juan Morales (feature/clientes-video)*/
+   
+.clientes-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 
-   .clientes-wrap {
-     display: flex;
-     align-items: center;
-     gap: 16px;
-   }
-   ============================================================ */
+.clientes-mobile {
+  display: none;
+}
+
+.clientes-carousel {
+  overflow: hidden;
+  flex: 1;
+}
+
+.clientes-slide {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 20px;
+  padding: 4px;
+}
+
+.cliente-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface);
+  transition: .25s;
+}
+
+.cliente-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px rgba(15,53,93,.14);
+  border-color: var(--line);
+}
+
+.cliente-logo {
+  aspect-ratio: 1/1;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+}
+
+.cliente-logo img {
+  width: 100%;
+  height: 100%;
+  max-width: 140px;
+  max-height: 140px;
+  object-fit: contain;
+}
+
+.cliente-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 68px;
+  padding: 14px 16px 18px;
+  text-align: center;
+  border-top: 1px solid var(--line-2);
+}
+
+.cliente-card strong {
+  display: block;
+  font-size: 13.5px;
+  color: var(--navy);
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.clientes-arrow {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--navy);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: .2s;
+  box-shadow: 0 2px 8px rgba(15,53,93,.08);
+}
+
+.clientes-arrow:hover {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+/* --- Video --- */
+
+.video-card--single {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.video-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.video-wrapper {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: var(--navy-3);
+}
+
+.video-wrapper iframe,
+.video-wrapper video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  background: var(--navy-3);
+}
+
+.video-info {
+  padding: 20px 22px 24px;
+}
+
+.video-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: #E1EAF3;
+  color: #134675;
+  margin-bottom: 10px;
+}
+
+.video-card-title {
+  font-family: var(--serif);
+  font-size: 16.5px;
+  margin: 0 0 7px;
+  line-height: 1.3;
+  color: var(--navy);
+}
+
+.video-card-desc {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .clientes-slide {
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .clientes-wrap {
+    position: relative;
+    display: block;
+  }
+
+  .clientes-desktop {
+    display: none;
+  }
+
+  .clientes-mobile {
+    display: block;
+  }
+
+  .clientes-carousel {
+    width: 100%;
+  }
+
+  .clientes-mobile .cliente-card {
+    width: min(100%,300px);
+    margin: 4px auto;
+  }
+
+  .clientes-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 4;
+    width: 36px;
+    height: 36px;
+    transform: translateY(-50%);
+  }
+
+  .clientes-prev {
+    left: max(7px,calc(50% - 164px));
+  }
+
+  .clientes-next {
+    right: max(7px,calc(50% - 164px));
+  }
+
+  .cliente-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cliente-logo {
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
+    padding: 20px;
+  }
+
+  .cliente-name {
+    height: 96px;
+    min-height: 96px;
+    padding: 12px 12px 14px;
+  }
+
+  .video-info {
+    padding: 18px;
+  }
+
+  .clientes-slide {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 280px) {
+  .clientes-arrow {
+    width: 32px;
+    height: 32px;
+  }
+
+  .clientes-prev {
+    left: 5px;
+  }
+
+  .clientes-next {
+    right: 5px;
+  }
+
+  .cliente-logo {
+    padding: 16px;
+  }
+
+  .cliente-name {
+    padding: 12px;
+  }
+
+  .video-info {
+    padding: 16px 14px 18px;
+  }
+
+  .clientes-slide {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
 
 
 
