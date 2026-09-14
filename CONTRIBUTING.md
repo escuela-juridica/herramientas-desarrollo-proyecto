@@ -4,6 +4,30 @@ Repositorio: https://github.com/escuela-juridica/herramientas-desarrollo-proyect
 
 Esta guía es para clonar el proyecto, crear tu rama y subir tu trabajo sin pisar el de los demás. Todo el mundo pasa por `develop`, nunca directo a `main`.
 
+## Diagrama de ramas
+
+```mermaid
+graph TD
+  main(["main"])
+  develop(["develop"])
+  f1["feature/base-navbar-footer<br/>Enrique"]
+  f2["feature/hero-nosotros<br/>Joel"]
+  f3["feature/mision-cursos<br/>Paolo"]
+  f4["feature/clientes-video<br/>Juan"]
+  f5["feature/blog<br/>Kelvin"]
+  f6["feature/login<br/>Maykol"]
+
+  f1 -->|Pull Request| develop
+  f2 -->|Pull Request| develop
+  f3 -->|Pull Request| develop
+  f4 -->|Pull Request| develop
+  f5 -->|Pull Request| develop
+  f6 -->|Pull Request| develop
+  develop -->|Pull Request, antes de cada sustentación| main
+```
+
+Cada `feature/*` sale de `develop` y vuelve a `develop` por Pull Request. `develop` solo pasa a `main` cuando todo el equipo ya integró y probó su parte.
+
 ## 1. Clonar el repositorio
 
 Solo la primera vez, en tu computadora:
