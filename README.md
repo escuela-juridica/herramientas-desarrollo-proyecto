@@ -103,4 +103,3 @@ herramientas-desarrollo-proyecto/
 ## Referencia opcional
 
 En `guia/avance1/` hay una versión previa ya terminada del sitio, con comentarios más detallados de cómo funciona cada mecanismo (el truco del checkbox del menú móvil, los atributos de Bootstrap, `aspect-ratio`, etc.). No es obligatorio abrirla para trabajar, pero puede servir de ejemplo si algo no queda claro.
-prueba enrique
