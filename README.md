@@ -2,6 +2,12 @@
 
 Sitio web de una institución real (Escuela Jurídica) con página de inicio y acceso administrativo. Este README es autosuficiente: no hace falta abrir nada más para saber qué hacer.
 
+## Despliegue
+
+Cada push a `develop` despliega el sitio automáticamente a GitHub Pages (workflow en `.github/workflows/deploy.yml`, sin build ni dependencias — solo sube los archivos tal cual). No se despliega desde `main` ni desde ramas `feature/*`, así que la versión pública siempre es la integración más reciente en `develop` (lo que ya pasó por Pull Request de cada feature).
+
+URL del sitio: `https://escuela-juridica.github.io/herramientas-desarrollo-proyecto/`
+
 ## Estructura de carpetas
 
 ```text
