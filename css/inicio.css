@@ -391,40 +391,474 @@
 /* ============================================================
    MISIÓN + CURSOS
    Responsable: Paolo Añorga (feature/mision-cursos)
-   👉 Pega aquí el CSS de Misión/Visión + la grilla de Servicios (Cursos).
-
-   Ejemplo de sintaxis esperada:
-
-   .mv-grid {
-     display: grid;
-     grid-template-columns: 1fr 1fr;
-     gap: 24px;
-   }
    ============================================================ */
 
+.mv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
 
+.mv-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--orange);
+  border-radius: var(--radius);
+  padding: 28px 30px;
+}
+
+.mv-box h3 {
+  font-family: var(--serif);
+  font-size: 15px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin: 0 0 12px;
+}
+
+.mv-box p {
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.grid6 {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 22px;
+}
+
+.curso {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: .2s;
+}
+
+.curso:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(15,53,93,.12);
+}
+
+.curso-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+}
+
+.curso-badge {
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: 99px;
+  color: #fff;
+}
+
+.badge-navy {
+  background: var(--navy);
+}
+
+.badge-orange {
+  background: var(--orange);
+}
+
+.badge-burgundy {
+  background: #7A2337;
+}
+
+.curso-hours {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.curso-cover {
+  aspect-ratio: 16/10;
+  overflow: hidden;
+}
+
+.curso-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: .3s;
+}
+
+.curso:hover .curso-cover img {
+  transform: scale(1.05);
+}
+
+.curso-body {
+  padding: 18px 22px 22px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.curso-body h3 {
+  font-family: var(--serif);
+  font-size: 16.5px;
+  margin: 0 0 7px;
+  line-height: 1.25;
+  color: var(--navy);
+}
+
+.curso-body p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--muted);
+  flex: 1;
+}
+
+.curso-foot {
+  padding: 0 22px 22px;
+}
+
+.curso-button {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  border-radius: 7px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--navy);
+  font-weight: 600;
+  font-size: 13.5px;
+  text-decoration: none;
+  transition: .2s;
+}
+
+.curso-button:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
 
 @media (max-width: 900px) {
-  /* 👉 Ajustes responsive de Misión + Cursos (tablet) */
+  /* Ajustes responsive de Misión + Cursos (tablet) */
+  .grid6 {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .mv-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 560px) {
-  /* 👉 Ajustes responsive de Misión + Cursos (móvil) */
+  /* Ajustes responsive de Misión + Cursos (móvil) */
+  .grid6 {
+    grid-template-columns: 1fr;
+  }
+
+  .mv-box {
+    padding: 22px 20px;
+  }
+
+  .curso-head {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 13px 16px;
+  }
+
+  .curso-body {
+    padding: 17px 18px 20px;
+  }
+
+  .curso-foot {
+    padding: 0 18px 20px;
+  }
 }
 
-/* ============================================================
-   CLIENTES + VIDEO
-   Responsable: Juan Morales (feature/clientes-video)
-   👉 Pega aquí el CSS del carrusel de Clientes + la tarjeta de Video.
+@media (max-width: 280px) {
+  .mv-box {
+    padding: 18px 16px;
+  }
 
-   Ejemplo de sintaxis esperada:
+  .curso-head {
+    padding: 12px 14px;
+  }
 
-   .clientes-wrap {
-     display: flex;
-     align-items: center;
-     gap: 16px;
-   }
-   ============================================================ */
+  .curso-body {
+    padding: 16px 14px 18px;
+  }
+
+  .curso-foot {
+    padding: 0 14px 18px;
+  }
+}
+
+
+
+   /*CLIENTES + VIDEO Responsable: Juan Morales (feature/clientes-video)*/
+   
+.clientes-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.clientes-mobile {
+  display: none;
+}
+
+.clientes-carousel {
+  overflow: hidden;
+  flex: 1;
+}
+
+.clientes-slide {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 20px;
+  padding: 4px;
+}
+
+.cliente-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface);
+  transition: .25s;
+}
+
+.cliente-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px rgba(15,53,93,.14);
+  border-color: var(--line);
+}
+
+.cliente-logo {
+  aspect-ratio: 1/1;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+}
+
+.cliente-logo img {
+  width: 100%;
+  height: 100%;
+  max-width: 140px;
+  max-height: 140px;
+  object-fit: contain;
+}
+
+.cliente-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 68px;
+  padding: 14px 16px 18px;
+  text-align: center;
+  border-top: 1px solid var(--line-2);
+}
+
+.cliente-card strong {
+  display: block;
+  font-size: 13.5px;
+  color: var(--navy);
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.clientes-arrow {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--navy);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: .2s;
+  box-shadow: 0 2px 8px rgba(15,53,93,.08);
+}
+
+.clientes-arrow:hover {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+/* --- Video --- */
+
+.video-card--single {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.video-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.video-wrapper {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: var(--navy-3);
+}
+
+.video-wrapper iframe,
+.video-wrapper video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  background: var(--navy-3);
+}
+
+.video-info {
+  padding: 20px 22px 24px;
+}
+
+.video-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: #E1EAF3;
+  color: #134675;
+  margin-bottom: 10px;
+}
+
+.video-card-title {
+  font-family: var(--serif);
+  font-size: 16.5px;
+  margin: 0 0 7px;
+  line-height: 1.3;
+  color: var(--navy);
+}
+
+.video-card-desc {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .clientes-slide {
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .clientes-wrap {
+    position: relative;
+    display: block;
+  }
+
+  .clientes-desktop {
+    display: none;
+  }
+
+  .clientes-mobile {
+    display: block;
+  }
+
+  .clientes-carousel {
+    width: 100%;
+  }
+
+  .clientes-mobile .cliente-card {
+    width: min(100%,300px);
+    margin: 4px auto;
+  }
+
+  .clientes-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 4;
+    width: 36px;
+    height: 36px;
+    transform: translateY(-50%);
+  }
+
+  .clientes-prev {
+    left: max(7px,calc(50% - 164px));
+  }
+
+  .clientes-next {
+    right: max(7px,calc(50% - 164px));
+  }
+
+  .cliente-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cliente-logo {
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
+    padding: 20px;
+  }
+
+  .cliente-name {
+    height: 96px;
+    min-height: 96px;
+    padding: 12px 12px 14px;
+  }
+
+  .video-info {
+    padding: 18px;
+  }
+
+  .clientes-slide {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 280px) {
+  .clientes-arrow {
+    width: 32px;
+    height: 32px;
+  }
+
+  .clientes-prev {
+    left: 5px;
+  }
+
+  .clientes-next {
+    right: 5px;
+  }
+
+  .cliente-logo {
+    padding: 16px;
+  }
+
+  .cliente-name {
+    padding: 12px;
+  }
+
+  .video-info {
+    padding: 16px 14px 18px;
+  }
+
+  .clientes-slide {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
 
 
 
@@ -450,12 +884,94 @@
    }
    ============================================================ */
 
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 22px;
+}
 
+.blog-card {
+  overflow: hidden;
+  transition: .2s;
+}
+
+.blog-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(15,53,93,.12);
+}
+
+.blog-cover {
+  aspect-ratio: 16/10;
+  overflow: hidden;
+}
+
+.blog-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: .3s;
+}
+
+.blog-card:hover .blog-cover img {
+  transform: scale(1.05);
+}
+
+.blog-body {
+  padding: 20px 22px 24px;
+}
+
+.blog-date {
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--orange);
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.blog-title {
+  font-family: var(--serif);
+  font-size: 16.5px;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  color: var(--navy);
+}
+
+.blog-excerpt {
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.blog-more {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--orange-2);
+  text-decoration: none;
+}
+
+.blog-more:hover {
+  color: var(--navy);
+}
 
 @media (max-width: 900px) {
   /* 👉 Ajustes responsive de Blog (tablet) */
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 560px) {
   /* 👉 Ajustes responsive de Blog (móvil) */
+  .blog-body {
+    padding: 18px;
+  }
 }
+
+@media (max-width: 280px) {
+  .blog-body {
+    padding: 16px 14px 18px;
+  }
+}
+
