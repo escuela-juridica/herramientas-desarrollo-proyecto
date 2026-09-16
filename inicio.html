@@ -62,48 +62,172 @@
     <!-- FIN NAVBAR -->
 
     <!-- ========================================
-       ZONA: BANNER / HERO (parte 1 de 2 de tu sección)
-       Responsable: Joel Saldaña
-       Rama Gitflow: feature/hero-nosotros
-       👉 ELIMINA este bloque completo (el <section> de ejemplo,
-       borde punteado incluido) y pon tu carrusel de portada en
-       su lugar. Esto NO es contenido final, es solo para marcar
-       la zona — debe desaparecer sí o sí.
+       SECCIÓN: HERO + NOSOTROS
+       Responsable: Joel Saldaña (feature/hero-nosotros)
+       Descripción: carrusel de portada de Bootstrap (5 slides,
+       avanza solo cada 4s o con las flechas/indicadores)
+       seguido de la sección "Nosotros": texto institucional +
+       2 tarjetas de estadística + foto con insignia. Sin JS
+       propio, Bootstrap controla el carrusel vía atributos
+       data-bs-*. Estilos en css/inicio.css.
+
+       Estructura HTML — Hero (carrusel de Bootstrap):
+
+       div.hero-carousel.carousel.slide#inicio
+       ├─ div.carousel-indicators        (flex, puntitos de abajo)
+       ├─ div.carousel-inner
+       │    └─ div.carousel-item.hero-slide.slide-N  (x5, grid, centra el texto)
+       │         └─ div.slide-cap
+       │              ├─ p.kicker
+       │              ├─ h2
+       │              ├─ p
+       │              └─ div.slide-actions          (flex, botones)
+       └─ button.cnav.cprev / button.cnav.cnext
+
+       Estructura HTML — Nosotros:
+
+       section#nosotros
+       └─ div.wrap
+            └─ div.b4                    (grid 2 columnas: texto | foto)
+                 ├─ div.empresa
+                 │    ├─ p.eyebrow, h2.tit, p (x5 párrafos)
+                 │    ├─ div.stats         (grid 2 columnas)
+                 │    │    └─ div.stat-card (x2)
+                 │    └─ a.text-link
+                 └─ div.media-frame        (aspect-ratio 4/5)
+                      ├─ img
+                      └─ div.media-badge   (flex)
        ======================================== -->
-    <section
-      style="border:3px dashed var(--orange);background:#FFF4E8;padding:56px 24px;text-align:center;margin:16px;border-radius:10px;">
-      <p
-        style="margin:0 0 8px;font:700 12px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);">
-        AQUÍ VA: Banner / Hero — Joel</p>
-      <h2 style="margin:0 0 10px;font:700 26px/1.2 Georgia,serif;color:var(--navy);">Sección: Banner / Hero</h2>
-      <p style="margin:0 auto 16px;max-width:520px;font:15px/1.5 system-ui,sans-serif;color:#334;">Rama:
-        feature/hero-nosotros — este bloque de ejemplo se elimina por completo.</p>
-      <a href="#"
-        style="display:inline-block;padding:10px 22px;background:var(--orange);color:#fff;border-radius:8px;font:600 14px/1 system-ui,sans-serif;text-decoration:none;">Ejemplo
-        (eliminar)</a>
-    </section>
-    <!-- FIN ZONA: BANNER / HERO -->
+    <!-- Todos los atributos data-bs-* de aquí en adelante los lee el JS de
+     Bootstrap (bootstrap.bundle.min.js, cargado al final del <body>), no
+     hay código propio: data-bs-ride="carousel" arranca el auto-avance,
+     data-bs-interval="4000" es cada cuánto (ms) cambia solo, y
+     data-bs-target="#inicio" le dice a cada botón/indicador sobre cuál
+     carrusel actuar (el que tiene id="inicio", justo aquí abajo). -->
+    <div class="hero-carousel carousel slide band" id="inicio" data-bs-ride="carousel" data-bs-interval="4000">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#inicio" data-bs-slide-to="0" class="active" aria-current="true"
+          aria-label="Imagen 1"></button>
+        <button type="button" data-bs-target="#inicio" data-bs-slide-to="1" aria-label="Imagen 2"></button>
+        <button type="button" data-bs-target="#inicio" data-bs-slide-to="2" aria-label="Imagen 3"></button>
+        <button type="button" data-bs-target="#inicio" data-bs-slide-to="3" aria-label="Imagen 4"></button>
+        <button type="button" data-bs-target="#inicio" data-bs-slide-to="4" aria-label="Imagen 5"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item hero-slide slide-1 active">
+          <div class="slide-cap">
+            <p class="kicker">Programas Especializados</p>
+            <h2>Especialización y Excelencia en Derecho</h2>
+            <p>Lleva tu carrera al siguiente nivel con diplomados y cursos diseñados por reconocidos juristas y
+              magistrados del sector notarial y registral.</p>
+            <div class="slide-actions">
+              <a href="#servicios" class="site-button button-primary">Explorar Cursos</a>
+              <a href="#nosotros" class="button-light">Saber Más</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide slide-2">
+          <div class="slide-cap">
+            <p class="kicker">Derecho Notarial y Registral</p>
+            <h2>Formación Académica con Propósito</h2>
+            <p>Obtén certificaciones de alto impacto académico que te preparan para afrontar los desafíos legales más
+              exigentes del ámbito público y privado.</p>
+            <div class="slide-actions">
+              <a href="#servicios" class="site-button button-primary">Ver Cursos</a>
+              <a href="#contacto" class="button-light">Consultar Admisiones</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide slide-3">
+          <div class="slide-cap">
+            <p class="kicker">Clases Virtuales en Vivo</p>
+            <h2>Aula Virtual de Última Generación</h2>
+            <p>Accede a nuestra plataforma de aprendizaje interactivo desde cualquier dispositivo, con sesiones grabadas
+              y biblioteca virtual permanente.</p>
+            <div class="slide-actions">
+              <a href="#servicios" class="site-button button-primary">Ver Seminarios</a>
+              <a href="#contacto" class="button-light">Solicitar Información</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide slide-4">
+          <div class="slide-cap">
+            <p class="kicker">Convenios Institucionales</p>
+            <h2>Respaldados por el CAL y el CAL Sur</h2>
+            <p>Nuestros diplomados y cursos están refrendados por el Colegio de Abogados de Lima y el Colegio de
+              Abogados de Lima Sur.</p>
+            <div class="slide-actions">
+              <a href="#clientes" class="site-button button-primary">Ver Clientes</a>
+              <a href="#nosotros" class="button-light">Conócenos</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide slide-5">
+          <div class="slide-cap">
+            <p class="kicker">Egresados en todo el Perú</p>
+            <h2>Una comunidad jurídica en crecimiento</h2>
+            <p>Cientos de profesionales del derecho ya se especializaron con nosotros y hoy ejercen en cortes, notarías
+              y entidades públicas.</p>
+            <div class="slide-actions">
+              <a href="#servicios" class="site-button button-primary">Ver Cursos</a>
+              <a href="#contacto" class="button-light">Escríbenos</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="cnav cprev" type="button" data-bs-target="#inicio" data-bs-slide="prev"
+        aria-label="Anterior">&#10094;</button>
+      <button class="cnav cnext" type="button" data-bs-target="#inicio" data-bs-slide="next"
+        aria-label="Siguiente">&#10095;</button>
+    </div>
+
   </header>
 
   <main>
 
-    <!-- ========================================
-     ZONA: NOSOTROS (parte 2 de 2 de tu sección)
-     Responsable: Joel Saldaña
-     Rama Gitflow: feature/hero-nosotros
-     👉 ELIMINA este bloque completo y pon tu sección Nosotros en
-     su lugar. Debe desaparecer sí o sí, no es contenido final.
-     ======================================== -->
-    <section class="band" style="border:3px dashed var(--orange);background:#FFF4E8;margin:16px;border-radius:10px;">
-      <div class="wrap" style="text-align:center;">
-        <p
-          style="margin:0 0 8px;font:700 12px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);">
-          AQUÍ VA: Nosotros — Joel</p>
-        <h2 style="margin:0 0 10px;font:700 24px/1.2 Georgia,serif;color:var(--navy);">Sección: Nosotros</h2>
-        <p style="margin:0 auto 16px;max-width:520px;font:15px/1.5 system-ui,sans-serif;color:#334;">Rama:
-          feature/hero-nosotros — este bloque de ejemplo se elimina por completo.</p>
-        <img src="img/institucional/nosotros-media.jpg" alt="Imagen de ejemplo"
-          style="max-width:280px;width:100%;border-radius:8px;display:block;margin:0 auto;">
+    <section class="band" id="nosotros">
+      <div class="wrap">
+        <div class="b4">
+
+          <div class="empresa">
+            <p class="eyebrow">¿Quiénes somos?</p>
+            <h2 class="tit">Excelencia en formación jurídica desde 2015</h2>
+            <p>Escuela Jurídica es una institución que, desde el año 2015, brinda capacitación y
+              actualización académica de calidad a profesionales, funcionarios y ejecutivos de los
+              sectores público y privado.</p>
+            <p>Su especialización está en el Derecho Registral, el Derecho Notarial, el Derecho
+              Inmobiliario y el Derecho Urbanístico y, de manera complementaria, en Derecho
+              Administrativo y en habilidades profesionales como la redacción y la argumentación jurídica.</p>
+            <p>Sus programas están dirigidos a abogados, arquitectos, ingenieros, agentes inmobiliarios
+              y economistas que se desempeñan en infraestructura, obras públicas y privadas,
+              habilitaciones urbanas, asesoría jurídica y gestión territorial.</p>
+            <p>La plana docente reúne a vocales del Tribunal Registral, notarios y funcionarios en
+              actividad, y las actividades académicas están refrendadas por el Colegio de Abogados de
+              Lima Sur (CAL Sur) y el Colegio de Abogados de Lima (CAL).</p>
+            <p>La institución opera con una modalidad mixta: cursos 100 % virtuales a través de su aula
+              virtual, sesiones en vivo y capacitaciones in house diseñadas a la medida de cada entidad.</p>
+
+            <div class="stats">
+              <div class="stat-card">
+                <span class="stat-num">2015</span>
+                <span class="stat-label">Inicio de actividades</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-num">CAL</span>
+                <span class="stat-label">Respaldo académico</span>
+              </div>
+            </div>
+
+            <a href="#nosotros" class="text-link">Conocer nuestra institución <i
+                class="fa-solid fa-arrow-right"></i></a>
+          </div>
+
+          <div class="media-frame">
+            <img src="img/institucional/nosotros-media.jpg" alt="Clase de Escuela Jurídica">
+            <div class="media-badge"><i class="fa-solid fa-award"></i> Excelencia académica</div>
+          </div>
+
+        </div>
       </div>
     </section>
     <!-- FIN ZONA: NOSOTROS -->
