@@ -1,37 +1,4 @@
-/* ============================================================
-   INICIO.CSS — PLANTILLA
-   Pega tu CSS en el bloque que tenga tu nombre. Respeta el orden
-   (es el mismo orden en que aparecen las secciones en el HTML).
-   No toques el bloque de otro compañero. Navbar/Footer están en
-   base.css (Enrique) y no se tocan aquí.
-
-   Índice:
-     1. HERO + NOSOTROS      → Joel Saldaña   (feature/hero-nosotros)
-     2. MISIÓN + CURSOS      → Paolo Añorga   (feature/mision-cursos)
-     3. CLIENTES + VIDEO     → Juan Morales   (feature/clientes-video)
-     4. BLOG                 → Kelvin Acevedo (feature/blog)
-   ============================================================ */
-
-/* ============================================================
-   HERO + NOSOTROS
-   Responsable: Joel Saldaña (feature/hero-nosotros)
-   Descripción: carrusel de portada (Bootstrap .carousel, 5
-   slides con imagen de fondo + degradado oscuro + texto +
-   botones) seguido de la sección "Nosotros" (texto institucional
-   a la izquierda con 2 tarjetas de estadística, foto con
-   insignia a la derecha). El carrusel avanza solo cada 4s
-   (data-bs-interval) y también con las flechas .cnav o los
-   indicadores; todo el comportamiento lo maneja Bootstrap vía
-   atributos data-bs-*, no hay JS propio.
-
-   Layout: Grid en .hero-slide (centra el texto encima de la
-   foto de fondo con place-items:center), Flexbox en
-   .slide-actions y .stats (filas de botones/tarjetas). Estilos
-   más usados: background-image con degradado + foto en un solo
-   valor (.slide-1..5), clamp() para tipografía fluida
-   (.slide-cap h2, .slide-cap p), y aspect-ratio + object-fit en
-   .media-frame para la foto de Nosotros.
-   ============================================================ */
+/* SECCIÓN: HERO + NOSOTROS */
 
 .hero-carousel {
   position: relative;
@@ -39,9 +6,6 @@
   background: var(--navy);
 }
 
-/* El cambio de slide en sí (mostrar/ocultar, deslizamiento) lo hace el
-   JS de Bootstrap moviendo la clase .active entre los .carousel-item;
-   nosotros solo controlamos qué tan rápido se ve esa transición. */
 .hero-carousel .carousel-item {
   transition-duration: .55s;
 }
@@ -64,7 +28,6 @@
   background-position: center;
 }
 
-/* Una imagen de fondo distinta por slide, con el mismo degradado oscuro para que el texto blanco siempre se lea bien encima */
 .slide-1 {
   background-image: linear-gradient(180deg, rgba(8, 18, 32, .62) 0%, rgba(8, 18, 32, .7) 55%, rgba(8, 18, 32, .82) 100%), url('../img/portada/slide-1.jpg');
 }
@@ -211,7 +174,7 @@
   border-color: #fff;
 }
 
-/* --- Nosotros --- */
+/* Nosotros */
 
 .b4 {
   display: grid;
@@ -408,10 +371,7 @@
   }
 }
 
-/* ============================================================
-   MISIÓN + CURSOS
-   Responsable: Paolo Añorga (feature/mision-cursos)
-   ============================================================ */
+/* SECCIÓN: MISIÓN + CURSOS */
 
 .mv-grid {
   display: grid;
@@ -564,8 +524,6 @@
 }
 
 @media (max-width: 900px) {
-
-  /* Ajustes responsive de Misión + Cursos (tablet) */
   .grid6 {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -576,8 +534,6 @@
 }
 
 @media (max-width: 560px) {
-
-  /* Ajustes responsive de Misión + Cursos (móvil) */
   .grid6 {
     grid-template-columns: 1fr;
   }
@@ -618,10 +574,7 @@
     padding: 0 14px 18px;
   }
 }
-
-
-
-/*CLIENTES + VIDEO Responsable: Juan Morales (feature/clientes-video)*/
+/* SECCIÓN: CLIENTES + VIDEO */
 
 .clientes-wrap {
   display: flex;
@@ -715,7 +668,7 @@
   border-color: var(--navy);
 }
 
-/* --- Video --- */
+/* Video */
 
 .video-card--single {
   max-width: 860px;
@@ -882,30 +835,7 @@
     gap: 14px;
   }
 }
-
-
-
-@media (max-width: 900px) {
-  /* 👉 Ajustes responsive de Clientes + Video (tablet) */
-}
-
-@media (max-width: 560px) {
-  /* 👉 Ajustes responsive de Clientes + Video (móvil) */
-}
-
-/* ============================================================
-   BLOG
-   Responsable: Kelvin Acevedo (feature/blog)
-   👉 Pega aquí el CSS de la grilla de artículos del Blog.
-
-   Ejemplo de sintaxis esperada:
-
-   .blog-grid {
-     display: grid;
-     grid-template-columns: repeat(3,1fr);
-     gap: 22px;
-   }
-   ============================================================ */
+/* SECCIÓN: BLOG */
 
 .blog-grid {
   display: grid;
@@ -979,16 +909,12 @@
 }
 
 @media (max-width: 900px) {
-
-  /* 👉 Ajustes responsive de Blog (tablet) */
   .blog-grid {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 560px) {
-
-  /* 👉 Ajustes responsive de Blog (móvil) */
   .blog-body {
     padding: 18px;
   }

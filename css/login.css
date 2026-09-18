@@ -1,3 +1,5 @@
+/* SECCIÓN: LOGIN */
+
 html, body {
   height: 100%;
 }
@@ -243,13 +245,6 @@ html, body {
 }
 
 @media (max-width: 820px) {
-  /* El banner con foto (.login-visual) desaparece por completo en
-     mobile — no se oculta con display:none sobre un layout de grid
-     que sigue activo (eso era lo que generaba el desorden anterior:
-     el nav quedaba position:absolute flotando encima de la foto).
-     Aquí .login-page se pasa a flujo normal de documento: header
-     (solo el nav, ya sin la foto) → main (formulario) → footer, uno
-     debajo del otro, sin grid ni position:absolute. */
   .login-page {
     display: block;
     overflow: auto;
