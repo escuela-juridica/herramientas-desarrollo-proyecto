@@ -48,7 +48,7 @@ class Curso {
           <h3>${this.titulo}</h3>
           <p>${this.descripcion}</p>
         </div>
-        <div class="curso-foot"><a href="#contacto" class="curso-button">Más Información</a></div>
+        <div class="curso-foot"><a href="#" class="curso-button">Más Información</a></div>
       </article>
     `;
   }
@@ -65,9 +65,8 @@ const cursos = [
 
 function renderCursos() {
   const cursosGrid = document.querySelector("#cursosGrid");
-  if (cursosGrid) {
-    cursosGrid.innerHTML = cursos.map((curso) => curso.render()).join("");
-  }
+  if (!cursosGrid) return;
+  cursosGrid.innerHTML = cursos.map((curso) => curso.render()).join("");
 }
 
 renderCursos();

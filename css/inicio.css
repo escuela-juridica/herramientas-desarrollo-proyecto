@@ -553,6 +553,7 @@
   font-weight: 600;
   font-size: 13.5px;
   text-decoration: none;
+  cursor: pointer;
   transition: .2s;
 }
 
