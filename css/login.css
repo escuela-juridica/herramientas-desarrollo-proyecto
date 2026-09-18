@@ -221,6 +221,7 @@ html, body {
   font-size: 13px;
   color: var(--muted);
   text-decoration: none;
+  cursor: pointer;
 }
 
 .help-link:hover {

@@ -8,3 +8,10 @@ siteNav?.addEventListener("click", (event) => {
     navToggle.checked = false;
   }
 });
+
+document.addEventListener("click", (event) => {
+  const link = event.target.closest('a[href="#"]');
+  if (link) {
+    event.preventDefault();
+  }
+});
