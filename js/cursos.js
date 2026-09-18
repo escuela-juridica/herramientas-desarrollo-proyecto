@@ -1,3 +1,4 @@
+// SECCIÓN: SERVICIOS / CURSOS
 class Curso {
   constructor(tipo, duracion, imagenUrl, titulo, descripcion) {
     this.tipo = tipo;
@@ -7,7 +8,6 @@ class Curso {
     this.descripcion = descripcion;
   }
 
-  // Deriva el color del badge a partir del tipo de curso.
   get badgeClase() {
     if (this.tipo === "Curso") return "badge-orange";
     if (this.tipo === "Seminario") return "badge-burgundy";
@@ -18,13 +18,10 @@ class Curso {
     return `${this.duracion} hrs`;
   }
 
-  // Alt genérico para todas las imágenes de curso (no se guarda por dato).
   get altImagen() {
     return "Portada del curso";
   }
 
-  // Arma el HTML de la tarjeta: misma estructura y clases que antes en
-  // el HTML (curso-head, curso-badge, curso-cover...).
   render() {
     return `
       <article class="content-card curso">

@@ -1,9 +1,4 @@
-/* ============================================================
-   BASE.CSS — compartido por inicio.html y login.html.
-   NAVBAR y FOOTER: Enrique Prada (feature/base-navbar-footer).
-   COMPLETO Y FUNCIONAL — no modificar.
-   (Explicación detallada de cómo funciona cada cosa: ver Avance 1)
-   ============================================================ */
+/* BASE.CSS — compartido por inicio.html y login.html. */
 
 :root {
   --navy: #0f355d;
@@ -211,9 +206,7 @@ main,
   }
 }
 
-/* ============================================================
-   NAVBAR — Enrique Prada (feature/base-navbar-footer)
-   ============================================================ */
+/* SECCIÓN: NAVBAR */
 
 .page-header {
   padding-top: 80px;
@@ -406,9 +399,7 @@ main,
   }
 }
 
-/* ============================================================
-   FOOTER — Enrique Prada (feature/base-navbar-footer)
-   ============================================================ */
+/* SECCIÓN: FOOTER */
 
 .footer {
   background: #0B1E3B;

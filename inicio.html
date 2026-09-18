@@ -17,28 +17,8 @@
 </head>
 
 <body>
-
-  <!-- ========================================
-     ESTRUCTURA GENERAL DE inicio.html
-
-     body
-     ├─ header.page-header      (navbar completo + banner placeholder)
-     ├─ main
-     │    ├─ Nosotros            → Joel
-     │    ├─ Misión y Visión     → Paolo
-     │    ├─ Servicios (Cursos)  → Paolo
-     │    ├─ Clientes            → Juan
-     │    ├─ Video               → Juan
-     │    └─ Blog                → Kelvin
-     └─ footer (completo)
-
-     Cada zona marcada con borde punteado y "AQUÍ VA: ..." es tuya
-     para reemplazar. No toques zonas de otro compañero ni el
-     navbar/footer (son de Enrique, base.css).
-     ======================================== -->
-
   <header class="page-header">
-    <!-- NAVBAR — Enrique Prada (feature/base-navbar-footer) — COMPLETO, no modificar. -->
+    <!-- NAVBAR -->
     <nav class="header" aria-label="Navegación principal">
       <div class="wrap head-row">
         <a href="inicio.html" class="brand">
@@ -61,49 +41,7 @@
     </nav>
     <!-- FIN NAVBAR -->
 
-    <!-- ========================================
-       SECCIÓN: HERO + NOSOTROS
-       Responsable: Joel Saldaña (feature/hero-nosotros)
-       Descripción: carrusel de portada de Bootstrap (5 slides,
-       avanza solo cada 4s o con las flechas/indicadores)
-       seguido de la sección "Nosotros": texto institucional +
-       2 tarjetas de estadística + foto con insignia. Sin JS
-       propio, Bootstrap controla el carrusel vía atributos
-       data-bs-*. Estilos en css/inicio.css.
-
-       Estructura HTML — Hero (carrusel de Bootstrap):
-
-       div.hero-carousel.carousel.slide#inicio
-       ├─ div.carousel-indicators        (flex, puntitos de abajo)
-       ├─ div.carousel-inner
-       │    └─ div.carousel-item.hero-slide.slide-N  (x5, grid, centra el texto)
-       │         └─ div.slide-cap
-       │              ├─ p.kicker
-       │              ├─ h2
-       │              ├─ p
-       │              └─ div.slide-actions          (flex, botones)
-       └─ button.cnav.cprev / button.cnav.cnext
-
-       Estructura HTML — Nosotros:
-
-       section#nosotros
-       └─ div.wrap
-            └─ div.b4                    (grid 2 columnas: texto | foto)
-                 ├─ div.empresa
-                 │    ├─ p.eyebrow, h2.tit, p (x5 párrafos)
-                 │    ├─ div.stats         (grid 2 columnas)
-                 │    │    └─ div.stat-card (x2)
-                 │    └─ a.text-link
-                 └─ div.media-frame        (aspect-ratio 4/5)
-                      ├─ img
-                      └─ div.media-badge   (flex)
-       ======================================== -->
-    <!-- Todos los atributos data-bs-* de aquí en adelante los lee el JS de
-     Bootstrap (bootstrap.bundle.min.js, cargado al final del <body>), no
-     hay código propio: data-bs-ride="carousel" arranca el auto-avance,
-     data-bs-interval="4000" es cada cuánto (ms) cambia solo, y
-     data-bs-target="#inicio" le dice a cada botón/indicador sobre cuál
-     carrusel actuar (el que tiene id="inicio", justo aquí abajo). -->
+    <!-- SECCIÓN: BANNER / HERO -->
     <div class="hero-carousel carousel slide band" id="inicio" data-bs-ride="carousel" data-bs-interval="4000">
       <div class="carousel-indicators">
         <button type="button" data-bs-target="#inicio" data-bs-slide-to="0" class="active" aria-current="true"
@@ -180,11 +118,13 @@
       <button class="cnav cnext" type="button" data-bs-target="#inicio" data-bs-slide="next"
         aria-label="Siguiente">&#10095;</button>
     </div>
+    <!-- FIN SECCIÓN: BANNER / HERO -->
 
   </header>
 
   <main>
 
+    <!-- SECCIÓN: NOSOTROS -->
     <section class="band" id="nosotros">
       <div class="wrap">
         <div class="b4">
@@ -230,12 +170,9 @@
         </div>
       </div>
     </section>
-    <!-- FIN ZONA: NOSOTROS -->
+    <!-- FIN SECCIÓN: NOSOTROS -->
 
-    <!-- ========================================
-     ZONA: MISIÓN Y VISIÓN (parte 1 de 2)
-     Responsable: Paolo Añorga (feature/mision-cursos)
-     ======================================== -->
+    <!-- SECCIÓN: MISIÓN Y VISIÓN -->
     <section class="band surface-section">
       <div class="wrap">
         <div class="section-heading">
@@ -256,13 +193,9 @@
         </div>
       </div>
     </section>
-    <!-- FIN ZONA: MISIÓN Y VISIÓN -->
+    <!-- FIN SECCIÓN: MISIÓN Y VISIÓN -->
 
-    <!-- ========================================
-     ZONA: SERVICIOS / CURSOS (parte 2 de 2)
-     Responsable: Paolo Añorga (feature/mision-cursos)
-     Las tarjetas las genera js/cursos.js — no escribir a mano.
-     ======================================== -->
+    <!-- SECCIÓN: SERVICIOS / CURSOS -->
     <section class="band surface-section" id="servicios">
       <div class="wrap">
         <div class="section-heading">
@@ -271,13 +204,12 @@
           <p class="section-lead">Descubre nuestros 6 cursos académicos principales diseñados para responder a las
             demandas del mercado legal moderno.</p>
         </div>
-        <!-- Este contenedor empieza vacío: js/cursos.js lo llena en tiempo
-         de carga a partir del array "cursos" (uno por tarjeta). -->
         <div class="grid6" id="cursosGrid"></div>
       </div>
     </section>
-    <!-- FIN ZONA: SERVICIOS / CURSOS -->
+    <!-- FIN SECCIÓN: SERVICIOS / CURSOS -->
 
+    <!-- SECCIÓN: CLIENTES -->
     <section class="band" id="clientes">
       <div class="wrap">
         <div class="section-heading">
@@ -404,7 +336,9 @@
         </div>
       </div>
     </section>
+    <!-- FIN SECCIÓN: CLIENTES -->
 
+    <!-- SECCIÓN: VIDEO -->
     <section class="band surface-section--top" id="video">
       <div class="wrap">
         <div class="section-heading">
@@ -429,28 +363,9 @@
         </div>
       </div>
     </section>
+    <!-- FIN SECCIÓN: VIDEO -->
 
-    <!-- ========================================
-     SECCIÓN: BLOG
-     Responsable: Kelvin Acevedo (feature/blog)
-     Descripción: grilla de 3 artículos con imagen de portada,
-     fecha, título, extracto y enlace "Leer más". Sin carrusel,
-     sin JS propio: grilla estática que pasa a 1 columna en
-     pantallas angostas. Estilos en css/inicio.css.
-
-     Estructura HTML:
-
-     section#blog.paper-section
-     └─ div.wrap
-          ├─ div.section-heading
-          └─ div.blog-grid              (grid 3 columnas)
-               └─ article.content-card.blog-card   (x3)
-                    ├─ div.blog-cover    (aspect-ratio 16/10)
-                    │    └─ img
-                    └─ div.blog-body
-                         ├─ p.blog-date, h3.blog-title, p.blog-excerpt
-                         └─ a.blog-more
-     ======================================== -->
+    <!-- SECCIÓN: BLOG -->
     <section class="band paper-section" id="blog">
       <div class="wrap">
         <div class="section-heading">
@@ -499,7 +414,7 @@
 
   </main>
 
-  <!-- FOOTER — Enrique Prada (feature/base-navbar-footer) — COMPLETO, no modificar. -->
+  <!-- FOOTER -->
   <footer class="footer band" id="contacto">
     <div class="wrap">
       <div class="footer-grid">
