@@ -1,14 +1,3 @@
-// Responsable: Paolo Añorga (feature/mision-cursos)
-// Genera las 6 tarjetas de la sección "Servicios" (#servicios) a partir
-// de instancias de la clase Curso, en vez de tenerlas escritas a mano en
-// el HTML. Vive en su propio archivo (no en js/inicio.js, que es de
-// Enrique) para que nadie más tenga que tocar este script ni al revés.
-
-// Cada Curso solo guarda los datos que cambian de uno a otro (tipo,
-// duración, imagen, título, descripción). Todo lo demás — el color del
-// badge según el tipo, el texto "N hrs", el alt de la imagen y el HTML
-// final de la tarjeta — se resuelve por lógica dentro de la clase, para
-// no repetirlo a mano en cada objeto del array.
 class Curso {
   constructor(tipo, duracion, imagenUrl, titulo, descripcion) {
     this.tipo = tipo;
