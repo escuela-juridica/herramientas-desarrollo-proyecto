@@ -1,5 +1,4 @@
-// NAVBAR — Enrique Prada (feature/base-navbar-footer)
-// COMPLETO Y FUNCIONAL — no modificar.
+// SECCIÓN: NAVBAR
 const navToggle = document.querySelector("#navToggle");
 const siteNav = document.querySelector("#mainNav");
 
@@ -9,6 +8,7 @@ siteNav?.addEventListener("click", (event) => {
   }
 });
 
+// GLOBAL
 document.addEventListener("click", (event) => {
   const link = event.target.closest('a[href="#"]');
   if (link) {
