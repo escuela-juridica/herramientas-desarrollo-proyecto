@@ -16,6 +16,6 @@ public class CursoService {
   }
 
   public List<Curso> obtenerDestacados() {
-    return cursoRepository.findTop6ByDestacadoTrueAndEstadoOrderByIdCursoAsc(Constantes.ESTADO_ACTIVO);
+    return cursoRepository.findByDestacadoTrueAndEstadoOrderByIdCursoAsc(Constantes.ESTADO_ACTIVO);
   }
 }

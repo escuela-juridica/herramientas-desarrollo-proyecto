@@ -6,5 +6,5 @@ import pe.edu.escuela.app.model.Curso;
 
 public interface CursoRepository extends JpaRepository<Curso, Integer> {
 
-  List<Curso> findTop6ByDestacadoTrueAndEstadoOrderByIdCursoAsc(String estado);
+  List<Curso> findByDestacadoTrueAndEstadoOrderByIdCursoAsc(String estado);
 }
