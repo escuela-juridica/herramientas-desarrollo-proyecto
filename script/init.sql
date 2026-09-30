@@ -75,7 +75,7 @@ CREATE TABLE curso (
 -- Login por correo, no por usuario separado. Clave: 1234 (ya hasheada con BCrypt).
 -- Cambiar esta clave despues del primer login.
 INSERT INTO administrador (nombres, apellidos, correo, telefono, clave) VALUES
-  ('Enrique', 'Prada Guerra', 'admin@escuelajuridica.edu.pe', '912016161', '$2b$10$IwXX67uMmtk0O2/4UqsS9uIopSTunMPAfUCzskIT3hrbaWAjw/d.i');
+  ('Maykol Adán', 'Calle Paredes', 'admin@escuelajuridica.edu.pe', '912016161', '$2b$10$IwXX67uMmtk0O2/4UqsS9uIopSTunMPAfUCzskIT3hrbaWAjw/d.i');
 
 INSERT INTO tipo_curso (nombre, descripcion) VALUES
   ('Diplomado', 'Programa de certificación extendida respaldado por instituciones del sector jurídico.'),
