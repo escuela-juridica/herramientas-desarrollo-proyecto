@@ -14,6 +14,8 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "curso")
@@ -36,7 +38,8 @@ public class Curso {
   @Column(name = "institucion", length = 100)
   private String institucion = "Escuela Jurídica";
 
-  @Column(name = "modalidad", columnDefinition = "CHAR(1)")
+  @JdbcTypeCode(SqlTypes.CHAR)
+  @Column(name = "modalidad", length = 1)
   private String modalidad;
 
   @Column(name = "duracion_horas")
@@ -60,7 +63,8 @@ public class Curso {
   @Column(name = "destacado", nullable = false)
   private boolean destacado = false;
 
-  @Column(name = "estado", nullable = false, columnDefinition = "CHAR(1)")
+  @JdbcTypeCode(SqlTypes.CHAR)
+  @Column(name = "estado", nullable = false, length = 1)
   private String estado = "A";
 
   @Column(name = "fecha_creacion", nullable = false, updatable = false)

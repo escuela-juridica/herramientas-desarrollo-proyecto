@@ -9,6 +9,8 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "administrador")
@@ -34,7 +36,8 @@ public class Administrador {
   @Column(name = "clave", nullable = false, length = 255)
   private String clave;
 
-  @Column(name = "estado", nullable = false, columnDefinition = "CHAR(1)")
+  @JdbcTypeCode(SqlTypes.CHAR)
+  @Column(name = "estado", nullable = false, length = 1)
   private String estado = "A";
 
   @Column(name = "fecha_creacion", nullable = false, updatable = false)

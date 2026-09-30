@@ -243,6 +243,12 @@
   gap: 6px;
 }
 
+.curso-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .curso-cover {
   aspect-ratio: 16/10;
   overflow: hidden;

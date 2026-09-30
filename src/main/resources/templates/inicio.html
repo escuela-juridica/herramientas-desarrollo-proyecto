@@ -163,16 +163,34 @@
     </section>
     <!-- FIN SECCIÓN: MISIÓN Y VISIÓN -->
 
-    <!-- SECCIÓN: SERVICIOS / CURSOS -->
+    <!-- SECCIÓN: DESTACADOS -->
     <section class="band surface-section" id="servicios">
       <div class="wrap">
         <div class="section-heading">
-          <p class="eyebrow">Nuestros Cursos</p>
+          <p class="eyebrow">Destacados</p>
           <h2 class="tit">Capacitación de Alto Nivel Académico</h2>
-          <p class="section-lead">Descubre nuestros 6 cursos académicos principales diseñados para responder a las
+          <p class="section-lead">Descubre nuestros cursos destacados, diseñados para responder a las
             demandas del mercado legal moderno.</p>
         </div>
-        <div class="grid6" id="cursosGrid"></div>
+        <div class="grid6" id="cursosGrid">
+          <article th:each="curso : ${destacados}" class="content-card curso">
+            <div class="curso-head">
+              <span class="curso-badge"
+                th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
+                th:text="${curso.tipoCurso.nombre}"></span>
+              <div class="curso-meta">
+                <span class="curso-hours"><i class="fa-solid fa-sack-dollar"></i> <span th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 0)}"></span></span>
+                <span class="curso-hours"><i class="fa-regular fa-clock"></i> <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
+              </div>
+            </div>
+            <div class="curso-cover"><img th:src="@{${curso.imagen}}" alt="Portada del curso"></div>
+            <div class="curso-body">
+              <h3 th:text="${curso.nombre}"></h3>
+              <p th:text="${curso.descripcion}"></p>
+            </div>
+            <div class="curso-foot"><a href="/catalogo" class="curso-button">Más Información</a></div>
+          </article>
+        </div>
       </div>
     </section>
     <!-- FIN SECCIÓN: SERVICIOS / CURSOS -->
@@ -381,9 +399,6 @@
 
   </main>
 
-  <th:block layout:fragment="js">
-    <script src="js/cursos.js" defer></script>
-  </th:block>
 </body>
 
 </html>
