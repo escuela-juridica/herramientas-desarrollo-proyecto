@@ -5,10 +5,13 @@
 
 <head>
   <title>Inicio</title>
+  <th:block layout:fragment="css">
+    <link rel="stylesheet" href="css/inicio.css">
+  </th:block>
 </head>
 
 <body>
-  <div layout:fragment="content">
+  <main layout:fragment="content">
 
     <!-- SECCIÓN: BANNER / HERO -->
     <div class="hero-carousel carousel slide band" id="inicio" data-bs-ride="carousel" data-bs-interval="4000">
@@ -376,7 +379,7 @@
     </section>
     <!-- FIN SECCIÓN: BLOG -->
 
-  </div>
+  </main>
 
   <th:block layout:fragment="js">
     <script src="js/cursos.js" defer></script>

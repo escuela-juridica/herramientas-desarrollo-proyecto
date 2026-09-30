@@ -5,11 +5,91 @@
 
 <head>
   <title>Cursos</title>
+  <th:block layout:fragment="css">
+    <link rel="stylesheet" href="css/catalogo.css">
+  </th:block>
 </head>
 
 <body>
-  <div layout:fragment="content">
-    <section class="band">
+  <main layout:fragment="content">
+
+    <!-- SECCIÓN: BANNER / CURSOS -->
+    <div class="hero-carousel carousel slide band" id="cursos" data-bs-ride="carousel" data-bs-interval="4000">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#cursos" data-bs-slide-to="0" class="active" aria-current="true"
+          aria-label="Imagen 1"></button>
+        <button type="button" data-bs-target="#cursos" data-bs-slide-to="1" aria-label="Imagen 2"></button>
+        <button type="button" data-bs-target="#cursos" data-bs-slide-to="2" aria-label="Imagen 3"></button>
+        <button type="button" data-bs-target="#cursos" data-bs-slide-to="3" aria-label="Imagen 4"></button>
+        <button type="button" data-bs-target="#cursos" data-bs-slide-to="4" aria-label="Imagen 5"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item hero-slide curso-slide-2 active">
+          <div class="slide-cap">
+            <p class="kicker">Certificación Reconocida</p>
+            <h2>Conviértete en un especialista</h2>
+            <p>Egresa con un diploma respaldado por instituciones del sector jurídico, listo para tu línea de
+              carrera.</p>
+            <div class="slide-actions">
+              <a href="#catalogo" class="site-button button-primary">Ver Diplomados</a>
+              <a href="#catalogo" class="button-light">Ver Catálogo</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide curso-slide-1">
+          <div class="slide-cap">
+            <p class="kicker">Modalidad Flexible</p>
+            <h2>Aprende a tu propio ritmo</h2>
+            <p>Cursos 100% virtuales con material descargable, para que avances cuando tengas tiempo, sin dejar de
+              lado tu trabajo.</p>
+            <div class="slide-actions">
+              <a href="#catalogo" class="site-button button-primary">Explorar Cursos</a>
+              <a href="#catalogo" class="button-light">Ver Catálogo</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide curso-slide-3">
+          <div class="slide-cap">
+            <p class="kicker">Respaldo Institucional</p>
+            <h2>Formación con solidez académica</h2>
+            <p>Programas diseñados junto a especialistas del Derecho Registral, Notarial e Inmobiliario.</p>
+            <div class="slide-actions">
+              <a href="#catalogo" class="site-button button-primary">Ver Programas</a>
+              <a href="#catalogo" class="button-light">Ver Catálogo</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide curso-slide-4">
+          <div class="slide-cap">
+            <p class="kicker">Contenido Actualizado</p>
+            <h2>Material práctico y vigente</h2>
+            <p>Casos reales, normativa actualizada y ejercicios pensados para tu ejercicio profesional diario.</p>
+            <div class="slide-actions">
+              <a href="#catalogo" class="site-button button-primary">Ver Cursos</a>
+              <a href="#catalogo" class="button-light">Ver Catálogo</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide curso-slide-5">
+          <div class="slide-cap">
+            <p class="kicker">Plana Docente</p>
+            <h2>Aprende de quienes ejercen el derecho</h2>
+            <p>Clases dictadas por notarios, vocales y funcionarios en actividad, con experiencia real del sector.</p>
+            <div class="slide-actions">
+              <a href="#catalogo" class="site-button button-primary">Ver Seminarios</a>
+              <a href="#catalogo" class="button-light">Ver Catálogo</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="cnav cprev" type="button" data-bs-target="#cursos" data-bs-slide="prev"
+        aria-label="Anterior">&#10094;</button>
+      <button class="cnav cnext" type="button" data-bs-target="#cursos" data-bs-slide="next"
+        aria-label="Siguiente">&#10095;</button>
+    </div>
+    <!-- FIN SECCIÓN: BANNER / CURSOS -->
+
+    <section class="band" id="catalogo">
       <div class="wrap">
         <div class="section-heading">
           <p class="eyebrow">Nuestros Cursos</p>
@@ -18,7 +98,8 @@
         </div>
       </div>
     </section>
-  </div>
+
+  </main>
 </body>
 
 </html>
