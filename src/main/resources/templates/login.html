@@ -40,14 +40,14 @@
       <h2>Iniciar sesión</h2>
       <p class="sub">Ingresa tus credenciales para acceder al panel.</p>
 
-      <form>
+      <form action="/admin" method="get">
         <div class="field">
           <label for="l-mail"><i class="fa-solid fa-envelope"></i> Correo electrónico</label>
-          <input id="l-mail" type="email" required placeholder="tucorreo@ejemplo.com" autocomplete="username">
+          <input id="l-mail" type="text" placeholder="tucorreo@ejemplo.com" autocomplete="username">
         </div>
         <div class="field">
           <label for="l-pass"><i class="fa-solid fa-key"></i> Contraseña</label>
-          <input id="l-pass" type="password" required minlength="8" placeholder="••••••••" autocomplete="current-password">
+          <input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password">
         </div>
         <button type="submit" class="site-button button-primary"><i class="fa-solid fa-right-to-bracket"></i> Ingresar</button>
         <a class="help-link">¿Necesitas recuperar el acceso?</a>
