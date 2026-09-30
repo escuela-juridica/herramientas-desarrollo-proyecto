@@ -2,155 +2,36 @@
 
 ## Qué vas a lograr
 
-En `/catalogo`, agregar un buscador con dos comportamientos:
-- **Dinámica**: mientras escribes, las tarjetas se filtran solas, sin recargar la página ni apretar nada.
-- **Estática**: un botón "Buscar" que hace lo mismo pero solo cuando lo presionas.
-
-Las dos consultan la base de datos (no se hace el filtro en el navegador con JavaScript puro, sino pidiéndole al servidor).
-
-**Importante:** necesitas que Kelvin ya haya armado la grilla de tarjetas en `catalogo.html` antes de empezar (la guía de él explica cómo). Tu trabajo parte de ahí.
+En `/catalogo`, dos formas de buscar: **estática** (botón, busca cuando lo presionas) y **dinámica** (busca mientras escribes, sin recargar). Las dos consultan la base de datos — necesitas que Kelvin ya haya armado la grilla de tarjetas antes de empezar.
 
 ## Archivos que vas a tocar
 
-1. `CursoRepository.java` (agregar una línea)
-2. `CursoService.java` (agregar un método)
-3. `CatalogoController.java` (agregar un método — **archivo compartido con Kelvin, avísale antes de editarlo**)
-4. `catalogo.html` (agregar el input de búsqueda + convertir la grilla en un fragmento — **compartido con Kelvin**)
-5. `catalogo.js` (nuevo)
+- `CursoRepository.java` — un método de búsqueda por nombre.
+- `CursoService.java` — la lógica de "si no hay texto, muestra todo; si hay, filtra".
+- `CatalogoController.java` — un endpoint nuevo (compartido con Kelvin, coordina antes de tocarlo).
+- `catalogo.html` — el input de búsqueda + convertir la grilla en un fragmento reusable.
+- `catalogo.js` (nuevo).
 
-## Paso 1 — `CursoRepository.java`
+## Cómo pensarlo
 
-Agrega esta línea dentro de la interfaz (junto a las que ya dejó Kelvin):
+**La idea central, antes de escribir nada**: la tarjeta de un curso (el HTML que arma Kelvin) no debería existir en dos lugares — una vez en Thymeleaf y otra vez armada a mano en JavaScript. Si la construyes dos veces, en algún momento se van a desincronizar. La forma correcta acá es que **el servidor siga siendo el único que arma el HTML de las tarjetas**, y que JavaScript solo le pida al servidor ese HTML ya listo y lo pegue en la página — nunca que JavaScript intente construir las tarjetas por su cuenta.
 
-```java
-List<Curso> findByNombreContainingIgnoreCaseAndEstado(String texto, String estado);
-```
+**En el repositorio**: necesitas un método que busque por nombre, sin importar mayúsculas/minúsculas, y que además respete el estado activo. Piensa en el nombre del método como una frase: "encuéntrame por nombre que contenga esto, y que el estado sea tal" — Spring Data lo traduce solo si el nombre está bien armado (mismo mecanismo que ya usan los métodos existentes).
 
-**¿Qué hace?** `Containing` = que el nombre "contenga" ese texto en cualquier parte (no que sea exactamente igual). `IgnoreCase` = no importa mayúscula/minúscula. Entonces si alguien escribe "civil", va a encontrar "Diplomado en Derecho Civil Patrimonial" aunque no haya escrito la palabra completa ni con mayúscula.
+**En el servicio**: un método que reciba el texto escrito. Si viene vacío o nulo, no tiene sentido "buscar nada" — en ese caso, mejor devolver lo mismo que ya devuelve tu método de "todos los activos" (el que hizo Kelvin). Si viene con texto, ahí sí usa el método de búsqueda del repositorio.
 
-## Paso 2 — `CursoService.java`
+**En el controlador**: agrega una ruta nueva (pueden llamarla `/catalogo/buscar`) que reciba el texto como parámetro de la URL y llame a tu método del servicio. La parte importante: **no le devuelvas la página completa** — Thymeleaf permite devolver solo un pedacito marcado de una vista, usando la notación `nombreDeVista :: nombreDelFragmento`. Investiga cómo se usa (`th:fragment` del lado del HTML, y el `::` del lado del controlador) — es exactamente lo que necesitas para que el buscador no recargue todo.
 
-Agrega este método (no borres los que ya están):
+**En la vista**: envuelve las tarjetas (el `th:each` que hizo Kelvin) en un fragmento con nombre, pero **dejando el contenedor de afuera sin tocar** (el `div` con el `id` que le pusieron). La razón: ese `div` tiene que seguir existiendo siempre — es donde tu JavaScript va a meter los resultados nuevos. Solo lo de adentro cambia.
 
-```java
-  public List<Curso> buscar(String texto) {
-    if (texto == null || texto.isBlank()) {
-      return obtenerActivos();
-    }
-    return cursoRepository.findByNombreContainingIgnoreCaseAndEstado(texto, Constantes.ESTADO_ACTIVO);
-  }
-```
-
-**¿Por qué el `if`?** Si el campo de búsqueda está vacío (la persona borró todo lo que había escrito), no tiene sentido buscar "nada" — en ese caso simplemente mostramos todos los cursos otra vez, reusando el método `obtenerActivos()` que ya armó Kelvin.
-
-## Paso 3 — `CatalogoController.java`
-
-Este archivo ya lo modificó Kelvin (le agregó el constructor con `CursoService`). Tú le agregas un método nuevo al final, **sin borrar lo que él ya puso**:
-
-```java
-  @GetMapping("/catalogo/buscar")
-  public String buscar(@RequestParam(required = false) String texto, Model model) {
-    model.addAttribute("cursos", cursoService.buscar(texto));
-    return "catalogo :: tarjetas";
-  }
-```
-
-**¿Qué es `"catalogo :: tarjetas"`?** Normalmente un controlador devuelve el nombre de una página completa (como `"catalogo"`, que renderiza todo `catalogo.html`). Con `::` le dices "no me devuelvas la página entera, solo el pedacito marcado con el nombre `tarjetas`". Ese pedacito lo vas a marcar tú mismo en el Paso 4. Esto es clave para que el buscador no recargue toda la página — el navegador solo recibe las tarjetas nuevas, no el HTML completo otra vez.
-
-`@RequestParam(required = false) String texto` — recibe el texto que el usuario escribió, desde la URL (`/catalogo/buscar?texto=civil`). `required = false` es importante: si en algún momento se llama a esta ruta sin el parámetro `texto`, no debe explotar, simplemente `texto` llega como `null` (por eso el `if` del Paso 2 revisa `null`).
-
-## Paso 4 — `catalogo.html`
-
-Busca el bloque que armó Kelvin:
-
-```html
-<div class="grid6" id="cursosGrid">
-  <article th:each="curso : ${cursos}" class="content-card curso">
-    ...
-  </article>
-</div>
-```
-
-Tienes que marcar **solo las tarjetas** (no el `div` que las contiene) como el fragmento `"tarjetas"`, usando un `<th:block>` — que es una etiqueta invisible, no genera ningún HTML propio, solo agrupa:
-
-```html
-<div class="grid6" id="cursosGrid">
-  <th:block th:fragment="tarjetas">
-    <article th:each="curso : ${cursos}" class="content-card curso">
-      ...
-    </article>
-  </th:block>
-</div>
-```
-
-(Todo lo que va adentro del `<article>` se queda exactamente igual — no lo toques, solo agrega las dos líneas del `<th:block>` envolviendo el `<article th:each...>`.)
-
-**¿Por qué el `<div id="cursosGrid">` queda AFUERA del fragmento?** Porque ese `div` tiene que seguir existiendo siempre en la página — es el "contenedor fijo" donde tu JavaScript va a ir metiendo las tarjetas nuevas cada vez que alguien busca algo. Si el `div` mismo formara parte de lo que se reemplaza, se complica más de la cuenta. Dejándolo afuera, tu JS solo tiene que cambiar lo que hay *adentro* del `div`, nunca el `div` en sí.
-
-Ahora agrega el buscador, justo antes del `<div id="cursosGrid">`:
-
-```html
-<div class="buscador-cursos">
-  <input type="text" id="buscarCurso" placeholder="Buscar curso por nombre...">
-  <button type="button" id="botonBuscar" class="site-button button-primary">Buscar</button>
-</div>
-```
-
-## Paso 5 — `catalogo.js` (nuevo archivo)
-
-Créalo en `src/main/resources/static/js/catalogo.js`:
-
-```javascript
-const input = document.querySelector('#buscarCurso');
-const boton = document.querySelector('#botonBuscar');
-const grid = document.querySelector('#cursosGrid');
-
-function buscarCursos() {
-  const texto = input.value;
-  fetch('/catalogo/buscar?texto=' + encodeURIComponent(texto))
-    .then(function (respuesta) {
-      return respuesta.text();
-    })
-    .then(function (html) {
-      grid.innerHTML = html;
-    });
-}
-
-// Búsqueda ESTÁTICA: solo busca cuando se presiona el botón.
-boton.addEventListener('click', buscarCursos);
-
-// Búsqueda DINÁMICA: busca mientras se escribe, esperando un poquito
-// después de la última tecla para no saturar al servidor.
-let temporizador;
-input.addEventListener('input', function () {
-  clearTimeout(temporizador);
-  temporizador = setTimeout(buscarCursos, 300);
-});
-```
-
-**Explicación de cada parte:**
-
-- `document.querySelector('#cursosGrid')` — agarra el `div` que ya existe en el HTML (el que Kelvin armó), para poder cambiarlo después.
-- `fetch('/catalogo/buscar?texto=...')` — le pide al navegador que haga una petición HTTP a esa ruta, sin recargar la página. Es justo el endpoint que creaste en el Paso 3.
-- `.then(respuesta => respuesta.text())` — la respuesta llega como texto plano (el HTML del fragmento `tarjetas`), hay que "leerla" antes de usarla.
-- `grid.innerHTML = html` — reemplaza todo lo que hay adentro del `div#cursosGrid` por las tarjetas nuevas que llegaron del servidor.
-- `setTimeout(buscarCursos, 300)` + `clearTimeout(temporizador)` — esto es el "debounce": cada vez que escribes una letra, cancela la búsqueda anterior (si todavía no se había disparado) y programa una nueva para dentro de 300 milisegundos. Si sigues escribiendo rápido, nunca llega a completarse la búsqueda vieja — solo se ejecuta la última, cuando dejas de escribir un momentito. Sin esto, cada tecla generaría una petición al servidor, lo cual es innecesario y lento.
-
-Ahora agrega el script al final de `catalogo.html`, dentro del bloque de JS (revisa cómo está estructurado, cerca de donde dice `layout:fragment="js"` si existe, o agrégalo si no existe — mira `inicio.html` como referencia de cómo se agrega un script propio de una página):
-
-```html
-<th:block layout:fragment="js">
-  <script src="js/catalogo.js" defer></script>
-</th:block>
-```
-
-## Cómo probar que funciona
-
-1. Entra a `/catalogo`.
-2. Escribe algo en el buscador (ej. "civil") y espera un momento sin tocar nada más — las tarjetas deberían cambiar solas (dinámica).
-3. Borra el texto y presiona el botón "Buscar" — deberían volver a aparecer los 20 cursos (estática, con texto vacío).
-4. Si no pasa nada, abre las herramientas de desarrollador del navegador (F12), pestaña "Console" o "Network", para ver si el `fetch` está fallando y por qué.
+**En el JavaScript**: vas a necesitar `fetch()` para pedirle al servidor el resultado de la búsqueda, y reemplazar el contenido del contenedor con lo que llegue. Dos detalles importantes:
+1. Para la búsqueda dinámica, no quieres mandar una petición por cada tecla — investiga la técnica de "debounce" (esperar un ratito después de la última tecla antes de buscar).
+2. Para la estática, es el mismo `fetch`, pero disparado por el evento de click de un botón en vez del evento de escritura.
 
 ## Coordinación con Kelvin
 
-No cambies la estructura interna de la tarjeta (`<article class="content-card curso">...`) que él armó — solo la envuelves con el `<th:block th:fragment="tarjetas">`. Si necesitas ajustar algo del diseño de la tarjeta, avísale primero.
+Necesitas que la estructura de la tarjeta ya esté definida por él antes de envolverla en un fragmento — no cambies el diseño de la tarjeta en sí, solo agrégale el fragmento alrededor.
+
+## Cómo probar
+
+Escribe algo en el buscador y espera un momento sin tocar nada más — las tarjetas deberían cambiar solas. Borra el texto y usa el botón — deberían volver a aparecer los 20 cursos. Si el `fetch` falla, revísalo con las herramientas de desarrollador del navegador (pestaña "Network").

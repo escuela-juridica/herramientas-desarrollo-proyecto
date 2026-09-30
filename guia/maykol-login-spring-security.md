@@ -2,255 +2,42 @@
 
 ## Qué vas a lograr
 
-Ahora mismo, el botón "Ingresar" de `/login` simplemente te manda a `/admin` sin revisar nada (era una maqueta, a propósito). Tu trabajo es que valide de verdad contra la tabla `administrador`, y que nadie pueda entrar a `/admin` sin haber iniciado sesión.
+El botón "Ingresar" de `/login` hoy solo redirige a `/admin` sin validar nada (era una maqueta). Tiene que autenticar de verdad contra la tabla `administrador`, y que nadie entre a `/admin` sin haber iniciado sesión.
 
-Vas a crear 4 archivos nuevos y modificar 2 que ya existen:
+## Archivos que vas a crear
 
-1. `pom.xml` (agregar una dependencia)
-2. `AdministradorRepository.java` (nuevo)
-3. `AdminUserDetailsService.java` (nuevo)
-4. `AdminAuthenticationSuccessHandler.java` (nuevo)
-5. `SecurityConfig.java` (nuevo)
-6. `login.html` (modificar el formulario)
+- `AdministradorRepository.java` — para buscar un admin por correo.
+- Un `UserDetailsService` propio — la clase que le explica a Spring Security cómo es "un usuario" en este proyecto.
+- Un `AuthenticationSuccessHandler` — para actualizar `fecha_ultimo_login` cuando alguien entra con éxito.
+- Una clase de configuración de seguridad (`SecurityConfig`).
+- Ajustar `login.html` (el formulario).
 
-## Paso 1 — Agregar Spring Security al proyecto
+## Cómo pensarlo
 
-Abre `pom.xml`, y dentro de `<dependencies>` agrega:
+Esta parte usa piezas específicas de Spring Security que no se adivinan por lógica — hay que buscarlas en la documentación oficial (busca "Spring Security 6 form login" o revisa la guía oficial de Spring). Pero la idea general de cada pieza es esta:
 
-```xml
-<dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-starter-security</artifactId>
-</dependency>
-```
+**`AdministradorRepository`**: es igual de simple que `CursoRepository` — una interfaz con un método para buscar por correo. El login de este proyecto es por correo (revisa la entidad `Administrador`, no tiene campo `usuario` separado).
 
-Ponla junto a las otras (cerca de `spring-boot-starter-data-jpa`, por ejemplo). Después de guardar, si usas IntelliJ, dale click a "Load Maven Changes" (o el icono del elefantito azul que aparece arriba a la derecha) para que descargue la dependencia.
+**El `UserDetailsService`**: Spring Security no sabe nada de tu tabla `administrador` — esta clase es la que le enseña. Tiene un solo método que recibe el correo escrito en el login, busca al admin con tu repositorio, y arma un objeto que Spring Security entiende (`UserDetails`). Ahí es donde decides: qué contraseña usar para comparar (la que ya está hasheada con BCrypt en la base de datos — nunca la compares tú a mano), si la cuenta está habilitada según el campo `estado`, y qué permiso darle (como en este proyecto todo el que está en esa tabla es administrador, el permiso puede ser fijo, no necesitas una columna de rol nueva).
 
-## Paso 2 — `AdministradorRepository.java` (nuevo)
+**La `SecurityConfig`**: es donde defines qué rutas son públicas (el sitio entero: inicio, catálogo, nosotros, contacto, login, css/imágenes) y cuáles exigen sesión iniciada (`/admin/**` y todo lo que cuelgue de ahí). También configuras que la página de login sea la tuya (`login.html`, no la genérica de Spring Security), y qué pasa después de un login exitoso.
 
-Créalo en `src/main/java/pe/edu/escuela/app/repository/AdministradorRepository.java`:
+**El `AuthenticationSuccessHandler`**: se ejecuta justo después de que alguien inicia sesión correctamente. Ahí es donde buscas al admin de nuevo, le pones la fecha/hora actual en `fecha_ultimo_login`, lo guardas, y recién ahí rediriges a `/admin`.
 
-```java
-package pe.edu.escuela.app.repository;
+**`login.html`**: el formulario necesita que el `method` sea `post` (no `get`, como está ahora de prueba), que la acción apunte a la ruta que procesa el login, y que los campos de correo/contraseña tengan un `name` que coincida con lo que configures en `SecurityConfig` (por defecto Spring Security espera `username`/`password`, pero se puede decirle que use otros nombres — investiga cómo).
 
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
-import pe.edu.escuela.app.model.Administrador;
+**Sobre CSRF**: Spring Security por defecto exige un token anti-falsificación en los formularios POST. Conectar eso correctamente con Thymeleaf requiere una dependencia adicional. Para este proyecto, la alternativa más simple es desactivar esa protección (investiga cómo se hace en la configuración) — es una simplificación razonable para un trabajo de curso, no la harías así en un sistema real en producción. Coméntalo si te preguntan en la sustentación, no lo escondas.
 
-public interface AdministradorRepository extends JpaRepository<Administrador, Integer> {
+**No necesitas tocar `LoginController.java`** — su único trabajo (mostrar la página) se queda igual. El envío del formulario lo intercepta Spring Security directamente, no pasa por tu controlador.
 
-  Optional<Administrador> findByCorreo(String correo);
-}
-```
+## Cómo probar
 
-**¿Qué es `Optional`?** En vez de devolver `null` cuando no encuentra a nadie con ese correo (lo cual puede causar errores si te olvidas de revisarlo), `Optional` te obliga a manejar explícitamente el caso "no encontré nada" — lo vas a ver usado en el siguiente paso con `.orElseThrow(...)`.
-
-## Paso 3 — `AdminUserDetailsService.java` (nuevo)
-
-Este archivo es el que le explica a Spring Security **cómo buscar un usuario y qué significa su contraseña/estado** en nuestro proyecto (Spring Security no sabe nada de tu tabla `administrador` — tienes que decírselo tú).
-
-Créalo en `src/main/java/pe/edu/escuela/app/security/AdminUserDetailsService.java` (vas a crear la carpeta `security` nueva):
-
-```java
-package pe.edu.escuela.app.security;
-
-import java.util.List;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import pe.edu.escuela.app.model.Administrador;
-import pe.edu.escuela.app.repository.AdministradorRepository;
-import pe.edu.escuela.app.util.Constantes;
-
-@Service
-public class AdminUserDetailsService implements UserDetailsService {
-
-  private final AdministradorRepository administradorRepository;
-
-  public AdminUserDetailsService(AdministradorRepository administradorRepository) {
-    this.administradorRepository = administradorRepository;
-  }
-
-  @Override
-  public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
-    Administrador admin = administradorRepository.findByCorreo(correo)
-        .orElseThrow(() -> new UsernameNotFoundException("No existe un administrador con ese correo"));
-
-    return User.builder()
-        .username(admin.getCorreo())
-        .password(admin.getClave())
-        .disabled(!Constantes.ESTADO_ACTIVO.equals(admin.getEstado()))
-        .authorities(List.of(new SimpleGrantedAuthority("ROLE_ADMIN")))
-        .build();
-  }
-}
-```
-
-**Explicación:**
-
-- `implements UserDetailsService` — es la interfaz que Spring Security reconoce automáticamente. Al ponerle `@Service`, Spring la detecta sola y la usa cuando alguien intenta iniciar sesión.
-- `loadUserByUsername(String correo)` — Spring Security llama a este método pasándole lo que la persona escribió en el campo de correo. Tú buscas al admin, y si no existe, lanzas `UsernameNotFoundException` (Spring Security la captura y muestra "credenciales incorrectas", sin decir si fue el correo o la clave lo que falló — por seguridad).
-- `.password(admin.getClave())` — le pasas la clave **ya hasheada con BCrypt** tal como está guardada en la base de datos (revisa `script/init.sql`, la clave semilla ya viene así). Spring Security se encarga de comparar lo que la persona escribió contra este hash, tú nunca comparas contraseñas a mano.
-- `.disabled(!Constantes.ESTADO_ACTIVO.equals(admin.getEstado()))` — si el admin tiene `estado = 'I'`, esta cuenta queda deshabilitada automáticamente, sin que tengas que escribir lógica aparte para bloquear el login.
-- `.authorities(List.of(new SimpleGrantedAuthority("ROLE_ADMIN")))` — le da a cualquier fila de `administrador` el permiso fijo `ROLE_ADMIN`. No hace falta una columna de rol en la base de datos porque en este proyecto **todo el que está en esa tabla es administrador**, no hay otro tipo de usuario.
-
-## Paso 4 — `AdminAuthenticationSuccessHandler.java` (nuevo)
-
-Esto es lo que actualiza `fecha_ultimo_login` cada vez que alguien entra con éxito. Créalo en `src/main/java/pe/edu/escuela/app/security/AdminAuthenticationSuccessHandler.java`:
-
-```java
-package pe.edu.escuela.app.security;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-import pe.edu.escuela.app.repository.AdministradorRepository;
-
-@Component
-public class AdminAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
-  private final AdministradorRepository administradorRepository;
-
-  public AdminAuthenticationSuccessHandler(AdministradorRepository administradorRepository) {
-    this.administradorRepository = administradorRepository;
-  }
-
-  @Override
-  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-      Authentication authentication) throws IOException {
-
-    administradorRepository.findByCorreo(authentication.getName()).ifPresent(admin -> {
-      admin.setFechaUltimoLogin(LocalDateTime.now());
-      administradorRepository.save(admin);
-    });
-
-    response.sendRedirect("/admin");
-  }
-}
-```
-
-**Explicación:** `authentication.getName()` te da el correo de la persona que acaba de iniciar sesión (Spring Security lo guarda ahí). Buscas de nuevo al admin, le pones la fecha actual, lo guardas, y al final rediriges manualmente a `/admin` con `response.sendRedirect(...)` — esto reemplaza lo que en Spring Security normalmente se llama `defaultSuccessUrl`, porque acá además necesitas ejecutar tu propio código (guardar la fecha) antes de redirigir.
-
-## Paso 5 — `SecurityConfig.java` (nuevo)
-
-Este es el archivo central: le dice a Spring Security qué rutas son públicas, cuáles requieren estar logueado, y cómo es la pantalla de login. Créalo en `src/main/java/pe/edu/escuela/app/config/SecurityConfig.java`:
-
-```java
-package pe.edu.escuela.app.config;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import pe.edu.escuela.app.security.AdminAuthenticationSuccessHandler;
-
-@Configuration
-@EnableWebSecurity
-public class SecurityConfig {
-
-  private final AdminAuthenticationSuccessHandler successHandler;
-
-  public SecurityConfig(AdminAuthenticationSuccessHandler successHandler) {
-    this.successHandler = successHandler;
-  }
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
-
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-      .csrf(csrf -> csrf.disable())
-      .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/admin/**").hasRole("ADMIN")
-        .anyRequest().permitAll()
-      )
-      .formLogin(form -> form
-        .loginPage("/login")
-        .usernameParameter("correo")
-        .passwordParameter("clave")
-        .successHandler(successHandler)
-        .permitAll()
-      )
-      .logout(logout -> logout
-        .logoutUrl("/logout")
-        .logoutSuccessUrl("/inicio")
-        .permitAll()
-      );
-
-    return http.build();
-  }
-}
-```
-
-**Explicación de cada parte:**
-
-- `.csrf(csrf -> csrf.disable())` — Spring Security por defecto exige un "token" anti-falsificación en cada formulario POST. Para no complicar el formulario de login con eso (necesitaría una dependencia extra de integración con Thymeleaf), lo desactivamos para este proyecto. **Esto es una simplificación válida para un proyecto de curso, no es lo que harías en una aplicación real en producción** — coméntalo si te preguntan.
-- `.requestMatchers("/admin/**").hasRole("ADMIN")` — cualquier ruta que empiece con `/admin/` (incluyendo `/admin/cursos`, y todo lo que Joel/Juan agreguen debajo) exige estar logueado como admin.
-- `.anyRequest().permitAll()` — todo lo demás (el sitio público: inicio, catálogo, nosotros, contacto, los CSS/imágenes, etc.) queda libre, sin login.
-- `.loginPage("/login")` — le dice a Spring Security que use tu página (`login.html`, la que ya existe) en vez de una genérica fea que trae por defecto.
-- `.usernameParameter("correo")` / `.passwordParameter("clave")` — por defecto Spring Security espera que el formulario tenga campos llamados `username`/`password`; con esto le dices que en tu HTML se llaman `correo`/`clave` (coincide con el Paso 6).
-- `.successHandler(successHandler)` — usa el que hiciste en el Paso 4 en vez del comportamiento por defecto.
-
-## Paso 6 — Modificar `login.html`
-
-Busca el `<form>` (creado como maqueta, con `action="/admin" method="get"`):
-
-```html
-<form action="/admin" method="get">
-  <div class="field">
-    <label for="l-mail"><i class="fa-solid fa-envelope"></i> Correo electrónico</label>
-    <input id="l-mail" type="text" placeholder="tucorreo@ejemplo.com" autocomplete="username">
-  </div>
-  <div class="field">
-    <label for="l-pass"><i class="fa-solid fa-key"></i> Contraseña</label>
-    <input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password">
-  </div>
-  <button type="submit" class="site-button button-primary"><i class="fa-solid fa-right-to-bracket"></i> Ingresar</button>
-  <a class="help-link">¿Necesitas recuperar el acceso?</a>
-</form>
-```
-
-Cámbialo por esto (fíjate bien en los `name="correo"` y `name="clave"` que se agregan — sin eso, Spring Security no puede leer lo que la persona escribió):
-
-```html
-<form action="/login" method="post">
-  <div class="field">
-    <label for="l-mail"><i class="fa-solid fa-envelope"></i> Correo electrónico</label>
-    <input id="l-mail" name="correo" type="text" placeholder="tucorreo@ejemplo.com" autocomplete="username">
-  </div>
-  <div class="field">
-    <label for="l-pass"><i class="fa-solid fa-key"></i> Contraseña</label>
-    <input id="l-pass" name="clave" type="password" placeholder="••••••••" autocomplete="current-password">
-  </div>
-  <button type="submit" class="site-button button-primary"><i class="fa-solid fa-right-to-bracket"></i> Ingresar</button>
-  <a class="help-link">¿Necesitas recuperar el acceso?</a>
-</form>
-```
-
-**No necesitas tocar `LoginController.java`** — su único método (`@GetMapping("/login")`, que muestra la página) se queda igual. El `POST` que procesa el login lo intercepta Spring Security automáticamente, no pasa por tu controlador.
-
-## Cómo probar que funciona
-
-1. Corre la app.
-2. Entra a `/admin` directo, **sin** haber iniciado sesión — te debería redirigir solo a `/login` (eso confirma que la protección funciona).
-3. En `/login`, usa el correo y clave semilla: `admin@escuelajuridica.edu.pe` / `1234` (revisa `script/init.sql` si cambiaste algo).
-4. Debería llevarte a `/admin` y mostrar el panel.
-5. Ve a `/logout` — debería cerrar la sesión y mandarte a `/inicio`. Si intentas entrar de nuevo a `/admin`, te debería volver a pedir login.
-6. Revisa en la base de datos (`SELECT fecha_ultimo_login FROM administrador;`) que la fecha se haya actualizado después de un login exitoso.
+1. Entra a `/admin` sin haber iniciado sesión — debería mandarte solo a `/login`.
+2. Inicia sesión con el correo y clave semilla (revisa `script/init.sql`).
+3. Deberías llegar a `/admin`.
+4. Busca una ruta de "salir"/logout — confirma que después de usarla, `/admin` te vuelve a pedir login.
+5. Revisa en la base de datos que `fecha_ultimo_login` se haya actualizado.
 
 ## Nota para el equipo
 
-Una vez que esto esté andando, **Joel y Juan ya no necesitan preocuparse por proteger `/admin/cursos` manualmente** — la regla `.requestMatchers("/admin/**").hasRole("ADMIN")` ya cubre automáticamente cualquier ruta que ellos agreguen bajo `/admin/`.
+Una vez que esto funcione, Joel y Juan **no necesitan proteger `/admin/cursos` por su cuenta** — la regla que pongas sobre `/admin/**` ya cubre cualquier ruta nueva que ellos agreguen debajo. Avísales cuando esté listo, porque además van a necesitar reemplazar un apaño temporal que van a dejar (usan "el primer admin que exista" en vez del admin realmente logueado, hasta que tu parte esté integrada).
