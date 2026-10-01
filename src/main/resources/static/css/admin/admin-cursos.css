@@ -1,0 +1,28 @@
+/* CRUD DE CURSOS (/admin/cursos) — estilos propios de esta página. */
+
+.admin-construccion {
+  background: #fff;
+  border: 1px dashed var(--line);
+  border-radius: 16px;
+  padding: 60px 30px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.admin-construccion i {
+  font-size: 30px;
+  color: var(--orange);
+  margin-bottom: 14px;
+}
+
+.admin-construccion h2 {
+  margin: 0 0 8px;
+  font-family: var(--serif);
+  font-size: 19px;
+  color: var(--navy);
+}
+
+.admin-construccion p {
+  margin: 0;
+  font-size: 13.5px;
+}
