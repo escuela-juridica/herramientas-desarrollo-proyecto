@@ -1,93 +1,119 @@
 # Escuela Jurídica — Proyecto (Herramientas de Desarrollo, UTP)
 
-Sitio web de una institución real (Escuela Jurídica): página de inicio y acceso administrativo. Este README es autosuficiente: no hace falta abrir nada más para saber qué hay y cómo está organizado.
+Sitio web de una institución jurídica real: catálogo de cursos, página institucional y panel administrativo con base de datos. Avance 2 del curso — la versión anterior (solo HTML/CSS/JS estático) quedó atrás; esto ya es **Spring Boot + Thymeleaf + PostgreSQL**.
 
 ## Composición del proyecto
 
-- **Frontend puro**: HTML5 + CSS3 + JavaScript sin frameworks (no React, no Vue, nada que compilar).
-- **Bootstrap 5.3.8** (CDN) — usado únicamente para los `.carousel` (portada y clientes).
+- **Spring Boot 3.3.5** + **Java 21** + **Maven**.
+- **Thymeleaf** + **Thymeleaf Layout Dialect** — dos layouts compartidos: uno para el sitio público (`layout.html`) y otro para el panel administrativo (`admin/layout.html`).
+- **Spring Data JPA + Hibernate** sobre **PostgreSQL**. El esquema de la base de datos **no lo crea Hibernate** (`ddl-auto=validate`) — lo crea el script `script/init.sql`, a mano.
+- **Lombok** está en el `pom.xml` como dependencia, pero las entidades actuales usan getters/setters escritos a mano a propósito, para que cualquiera del equipo los entienda sin conocer Lombok.
+- **Bootstrap 5.3.8** (CDN) — solo para los `.carousel` (portadas y clientes).
 - **Font Awesome 6.4.0** (CDN) — íconos.
-- **Sin backend ni base de datos todavía** — el login es solo interfaz, no autentica a nadie de verdad.
-- **Sin build ni dependencias que instalar** — se abre `inicio.html` directo en el navegador, o se sirve tal cual desde GitHub Pages.
-- **Hosting**: GitHub Pages, desplegado por GitHub Actions (ver "Despliegue" abajo).
+- **Sin build de frontend** — nada de npm/webpack, los estilos y JS son planos.
 
-## Despliegue
+## Cómo correrlo
 
-Cada push a `main` **o** `develop` despliega el sitio automáticamente a GitHub Pages (workflow en `.github/workflows/deploy.yml`, sin build ni dependencias — solo sube los archivos tal cual). No se despliega desde ramas `feature/*`.
+1. Tener una base de datos PostgreSQL accesible (local o el VPS del equipo).
+2. Ejecutar **`script/init.sql`** completo contra esa base — crea las tablas y las siembra con datos (20 cursos, 11 docentes, 1 administrador). El script empieza con `DROP TABLE IF EXISTS`, así que se puede correr las veces que haga falta para resetear todo.
+3. Completar `spring.datasource.*` en `src/main/resources/application-dev.properties` (o `application-local.properties` si usas tu propio Postgres local) con la URL/usuario/clave reales.
+4. Levantar la app desde IntelliJ (`EscuelaJuridicaApplication`) o con `mvnw spring-boot:run`. Por defecto corre el perfil **`dev`** (`spring.profiles.active=dev` en `application.properties`); para usar el local: `-Dspring-boot.run.profiles=local`.
+5. Abrir `http://localhost:8500` — redirige a `/inicio`.
 
-URL del sitio: `https://escuela-juridica.github.io/herramientas-desarrollo-proyecto/`
+**Login de prueba** (sembrado por `init.sql`): correo `admin@escuelajuridica.edu.pe`, clave `1234`. El login todavía **no valida contra la base de datos** (ver "Pendiente" abajo) — el botón solo redirige a `/admin`.
 
 ## Estructura de carpetas
 
 ```text
 herramientas-desarrollo-proyecto/
-├── index.html            redirige a inicio.html (lo exige GitHub Pages)
-├── inicio.html            página de inicio
-├── login.html             acceso administrativo
-├── css/
-│   ├── base.css           compartido: variables, navbar, footer
-│   ├── inicio.css         estilos de inicio.html, por sección
-│   └── login.css          estilos de login.html
-├── js/
-│   ├── inicio.js          cierre del menú móvil + enlaces href="#" inertes
-│   └── cursos.js          genera las 6 tarjetas de Servicios (clase Curso)
-├── img/
-│   ├── identidad/         logos institucionales, favicon
-│   ├── portada/           fondos del carrusel y del panel de login
-│   ├── institucional/     foto de Nosotros, poster del video
-│   ├── cursos/             portadas de los 6 cursos/diplomados/seminarios
-│   ├── clientes/           logos de clientes
-│   ├── blog/               portadas de artículos
-│   └── aliados/             logos de instituciones aliadas (CAL, CAL Sur, AMAG)
-├── video/
-│   └── video-institucional.mp4
-└── guia/                  material de referencia del curso
+├── pom.xml
+├── script/
+│   └── init.sql                  DROP + CREATE + INSERT, en un solo archivo
+├── uploads/
+│   └── cursos/                   imágenes de los cursos (semilla + las que suba el admin)
+└── src/main/
+    ├── java/pe/edu/escuela/app/
+    │   ├── EscuelaJuridicaApplication.java
+    │   ├── config/WebConfig.java        mapea /uploads/cursos/** a la carpeta externa
+    │   ├── controller/                  InicioController, CatalogoController, NosotrosController,
+    │   │                                 ContactoController, LoginController, AdminController,
+    │   │                                 AdminCursoController
+    │   ├── model/                       Administrador, TipoCurso, Docente, Curso (entidades JPA)
+    │   ├── repository/                  CursoRepository (JpaRepository + queries derivadas)
+    │   ├── service/                     CursoService (capa entre controller y repository)
+    │   └── util/Constantes.java         ESTADO_ACTIVO / ESTADO_INACTIVO ('A'/'I')
+    └── resources/
+        ├── application.properties       común + perfil activo por defecto (dev)
+        ├── application-dev.properties   conexión al Postgres remoto (VPS del equipo)
+        ├── application-local.properties conexión a Postgres en tu propia máquina
+        ├── templates/
+        │   ├── layout.html               layout público (navbar + footer)
+        │   ├── inicio.html, catalogo.html, nosotros.html, contacto.html   decoran layout.html
+        │   ├── login.html                 standalone, no usa ningún layout
+        │   └── admin/
+        │       ├── layout.html            layout del panel (sidebar + topbar + hamburguesa en mobile)
+        │       └── cursos.html             decora admin/layout.html
+        └── static/
+            ├── css/
+            │   ├── base.css               SOLO lo global (reset, navbar, footer, banner compartido)
+            │   ├── inicio.css, catalogo.css, nosotros.css, contacto.css, login.css
+            │   └── admin/
+            │       ├── admin.css           shell del panel (sidebar, topbar, nav, responsive)
+            │       └── admin-cursos.css    específico de /admin/cursos
+            ├── js/                         inicio.js, cursos.js (cursos.js ya no se usa, quedó suelto)
+            └── img/                        identidad/, portada/, institucional/, clientes/, blog/, aliados/
 ```
 
-## Cómo está repartido el trabajo (Gitflow)
+## Rutas
 
-| Rama                          | Responsable      | Qué construyó |
-|--------------------------------|------------------|----------------|
-| `feature/base-navbar-footer`   | Enrique Prada    | Navbar + footer + `base.css` |
-| `feature/hero-nosotros`        | Joel Saldaña     | Banner/carrusel de portada + sección Nosotros |
-| `feature/mision-cursos`        | Paolo Añorga     | Misión y Visión + sección Servicios (6 cursos) |
-| `feature/clientes-video`       | Juan Morales     | Carrusel de Clientes + Video representativo |
-| `feature/blog`                 | Kelvin Acevedo   | Sección Blog (3 artículos) |
-| `feature/login`                | Maykol Calle     | `login.html` completo |
+| Ruta | Qué muestra |
+|---|---|
+| `/` | Redirige a `/inicio` |
+| `/inicio` | Página de inicio (hero, nosotros, misión/visión, destacados desde la BD, clientes, video, blog) |
+| `/catalogo` | Banner de 5 slides; el catálogo real de cursos todavía es un placeholder |
+| `/nosotros`, `/contacto` | Placeholders ("página en construcción") |
+| `/login` | Formulario de acceso (todavía no autentica, solo redirige a `/admin`) |
+| `/admin` | Redirige a `/admin/cursos` |
+| `/admin/cursos` | Panel del CRUD de cursos — hoy es un placeholder ("en construcción") |
 
-Todas las secciones ya están integradas en `develop`. Para el flujo completo de ramas (clonar, crear rama, commit, push, Pull Request, resolver conflictos) ver **[CONTRIBUTING.md](CONTRIBUTING.md)**.
+## Base de datos
 
-`main` y `develop` están protegidas (ruleset): no se puede hacer push directo, todo entra por Pull Request.
+4 tablas, todas creadas por `script/init.sql`:
 
-## Qué incluye el sitio
+- **`administrador`** — login por `correo` (no hay campo `usuario` separado), `clave` ya hasheada con BCrypt, `estado` (`A`/`I`).
+- **`tipo_curso`** — catálogo de referencia: Diplomado, Curso Corto, Seminario, Programa.
+- **`docente`** — 11 docentes sembrados (4 con nombres reales del equipo/footer, el resto inventados para cubrir más áreas del derecho).
+- **`curso`** — 20 cursos sembrados, con `codigo` (visible, tipo `EJ-2026-001`) distinto de `id_curso` (interno), `precio`, `modalidad` (`V`/`P`, hoy todos `V`), `destacado` (6 marcados `true`, se muestran en `/inicio`), `estado` (borrado lógico — el CRUD nunca hace `DELETE` real).
 
-**Hero + Nosotros** — carrusel de portada (5 slides) + sección institucional (quiénes somos, especialización, respaldo).
+Relaciones: `administrador` (1) —registra→ (N) `curso`, `tipo_curso` (1) —clasifica→ (N) `curso`, `docente` (1) —dicta→ (N) `curso`.
 
-**Misión + Cursos** — Misión y Visión + grilla de 6 cursos/diplomados/seminarios (tipo, duración, imagen, título, descripción, botón). Las tarjetas las genera `js/cursos.js` a partir de la clase `Curso`, no están escritas a mano en el HTML.
-
-**Clientes + Video** — carrusel de logos de clientes (cortes, notarías, SUNARP, etc.) + video institucional con la etiqueta nativa `<video controls>` (no iframe de YouTube).
-
-**Blog** — grilla de 3 artículos con imagen, fecha, título, extracto y enlace "Leer más".
-
-**Login** — pantalla de acceso: en escritorio, panel con foto institucional + formulario de correo/contraseña; en móvil, el panel de la foto se oculta y solo queda el formulario. El formulario no envía datos a ningún backend todavía (es solo interfaz).
+Las imágenes de los 20 cursos semilla viven en `uploads/cursos/` (no en `static/`, porque esa carpeta se empaqueta dentro del `.jar` y no se puede escribir ahí en tiempo de ejecución) — la columna `curso.imagen` guarda la ruta completa (`/uploads/cursos/curso-01.jpg`), así que cuando el admin reemplace una foto no importa si viene de la semilla o de una subida nueva.
 
 ## Convenciones de código
 
-- Clases en minúsculas y con guiones (`cliente-card`, `curso-cover`). Usar `--` para una variante del mismo componente (`surface-section--top`).
-- No usar estilos inline ni bloques `<style>`/`<script>` dentro del HTML.
-- Mantener el orden semántico `<header>`, `<main>`, `<footer>`. El `<nav>` y el banner van dentro del `<header>`.
-- Bootstrap (cargado por CDN) está reservado para los elementos `.carousel` — no usar sus clases de grid, botones ni utilidades para otra cosa.
-- Cada imagen va en la subcarpeta funcional que le corresponde dentro de `img/` (ver tabla arriba), y los videos en `video/`, siempre con rutas relativas.
-- La escuela ofrece **servicios** (cursos, diplomados, seminarios), no productos — ninguna clase, carpeta ni archivo dice "producto"/"prod".
-- Reglas compartidas por varias páginas van en `base.css`; lo que solo usa una vista va en el CSS de esa página.
-- Los comentarios en HTML/CSS/JS son mínimos: solo marcan a qué sección corresponde cada bloque (`SECCIÓN: X`), sin explicar comportamiento.
+- **Un CSS por página, `base.css` solo para lo global** (navbar, footer, banner de héroe compartido). Si una regla es específica de una sola vista, va en el CSS de esa vista, no en `base.css`.
+- **`ddl-auto=validate`** — nunca cambiar a `create`/`update`. El esquema se modifica editando `script/init.sql`, no dejando que Hibernate lo intente generar.
+- Los campos `CHAR(1)` de Postgres (`estado`, `modalidad`) se mapean en las entidades con `@JdbcTypeCode(SqlTypes.CHAR)` — sin eso, Hibernate espera `VARCHAR` y la app no arranca (`Schema-validation: wrong column type`).
+- Controladores → `Service` → `Repository`. Los controladores no llaman al repositorio directo.
+- Inyección de dependencias por **constructor con `private final`**, no `@Autowired` en campos.
+- Estados usan las constantes de `util/Constantes.java` (`ESTADO_ACTIVO`/`ESTADO_INACTIVO`), nunca el string `"A"`/`"I"` suelto.
+- Las páginas bajo `/admin/**` usan rutas de asset **absolutas** (`/css/...`, `/img/...`), no relativas — como esas URLs tienen más de un segmento (`/admin/cursos`), una ruta relativa como `css/admin.css` se resuelve mal.
 
-## Antes de abrir un Pull Request
+## Estado actual (Avance 2)
 
-- Verificar `inicio.html`/`login.html` en el navegador, en escritorio y en una ventana angosta (menú móvil, carruseles, tarjetas).
-- No dejar clases, ids o imágenes sin usar.
-- No renombrar clases o ids de una sección que no es la propia sin avisar a su responsable.
+**Hecho:**
+- Esquema de base de datos completo + 20 cursos semilla.
+- Entidades JPA + repositorio/servicio de `Curso`.
+- `/inicio` ya lista los cursos destacados desde la base de datos (ya no usa `cursos.js`).
+- Estructura y diseño del panel administrativo (`/admin/cursos`), con su propio layout reutilizable.
+- Conexión a PostgreSQL configurada (perfiles `dev`/`local`), pool de conexiones ajustado.
 
-## Referencia opcional
+**Pendiente:**
+- Login real con Spring Security (autenticación contra `administrador`, proteger `/admin/**`).
+- `/catalogo` (o donde termine viviendo el listado): traer los 20 cursos desde la base de datos + búsqueda estática y dinámica.
+- CRUD completo en `/admin/cursos` (crear, editar, eliminar, buscar) — hoy solo muestra el placeholder.
+- Subida de imágenes nuevas desde el CRUD (el `WebConfig`/`uploads/cursos` ya están listos para recibirlas).
 
-En `guia/avance1/` hay una versión previa del sitio con comentarios más detallados de cómo funciona cada mecanismo (el truco del checkbox del menú móvil, los atributos de Bootstrap, `aspect-ratio`, etc.).
+## Nota sobre `CONTRIBUTING.md`
+
+Ese archivo documenta el reparto de ramas del **Avance 1** (sitio estático, estructura de archivos vieja: `inicio.html`, `css/inicio.css` en la raíz). Con la migración a Spring Boot esa distribución quedó obsoleta — el flujo de Git en sí (`checkout` → `pull` → rama → commit → push → PR hacia `develop`) sigue siendo válido, pero la tabla de integrantes/ramas/archivos hay que rehacerla para esta fase.
