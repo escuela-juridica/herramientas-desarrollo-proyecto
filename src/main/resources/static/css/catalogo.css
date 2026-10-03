@@ -181,3 +181,36 @@
     padding: 0 14px 18px;
   }
 }
+
+/* MODAL DE DETALLE DE CURSO */
+.curso-modal-title {
+  font-family: var(--serif);
+  color: var(--navy);
+}
+
+.curso-modal-body {
+  color: var(--navy);
+}
+
+.curso-modal-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.curso-modal-desc {
+  font-size: 14.5px;
+}
+
+.curso-modal-datos {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.curso-modal-comprar {
+  background-color: var(--orange);
+  color: #fff;
+  border: none;
+}
