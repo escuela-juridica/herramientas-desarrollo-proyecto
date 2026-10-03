@@ -18,4 +18,8 @@ public class CursoService {
   public List<Curso> obtenerDestacados() {
     return cursoRepository.findByDestacadoTrueAndEstadoOrderByIdCursoAsc(Constantes.ESTADO_ACTIVO);
   }
+
+  public List<Curso> obtenerActivos() {
+    return cursoRepository.findByEstadoOrderByIdCursoAsc(Constantes.ESTADO_ACTIVO);
+  }
 }

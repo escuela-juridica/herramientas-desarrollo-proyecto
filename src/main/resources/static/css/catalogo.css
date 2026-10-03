@@ -19,3 +19,198 @@
 .curso-slide-5 {
   background-image: linear-gradient(180deg, rgba(8, 18, 32, .62) 0%, rgba(8, 18, 32, .7) 55%, rgba(8, 18, 32, .82) 100%), url('../img/portada/cursos/curso-slide-5.jpg');
 }
+
+/* TARJETAS DE CURSO (Reutilizadas de inicio.css) */
+.grid6 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.curso {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: .2s;
+}
+
+.curso:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(15, 53, 93, .12);
+}
+
+.curso-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+}
+
+.curso-badge {
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: 99px;
+  color: #fff;
+}
+
+.badge-navy {
+  background: var(--navy);
+}
+
+.badge-orange {
+  background: var(--orange);
+}
+
+.badge-burgundy {
+  background: #7A2337;
+}
+
+.curso-hours {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.curso-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.curso-cover {
+  aspect-ratio: 16/10;
+  overflow: hidden;
+}
+
+.curso-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: .3s;
+}
+
+.curso:hover .curso-cover img {
+  transform: scale(1.05);
+}
+
+.curso-body {
+  padding: 18px 22px 22px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.curso-body h3 {
+  font-family: var(--serif);
+  font-size: 16.5px;
+  margin: 0 0 7px;
+  line-height: 1.25;
+  color: var(--navy);
+}
+
+.curso-body p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--muted);
+  flex: 1;
+}
+
+.curso-foot {
+  padding: 0 22px 22px;
+}
+
+.curso-button {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  border-radius: 7px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--navy);
+  font-weight: 600;
+  font-size: 13.5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.curso-button:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .grid6 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .grid6 {
+    grid-template-columns: 1fr;
+  }
+  .curso-head {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 13px 16px;
+  }
+  .curso-body {
+    padding: 17px 18px 20px;
+  }
+  .curso-foot {
+    padding: 0 18px 20px;
+  }
+}
+
+@media (max-width: 280px) {
+  .curso-head {
+    padding: 12px 14px;
+  }
+  .curso-body {
+    padding: 16px 14px 18px;
+  }
+  .curso-foot {
+    padding: 0 14px 18px;
+  }
+}
+
+/* MODAL DE DETALLE DE CURSO */
+.curso-modal-title {
+  font-family: var(--serif);
+  color: var(--navy);
+}
+
+.curso-modal-body {
+  color: var(--navy);
+}
+
+.curso-modal-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.curso-modal-desc {
+  font-size: 14.5px;
+}
+
+.curso-modal-datos {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.curso-modal-comprar {
+  background-color: var(--orange);
+  color: #fff;
+  border: none;
+}

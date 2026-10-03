@@ -10,4 +10,7 @@ public interface CursoRepository extends JpaRepository<Curso, Integer> {
 
   @Query("SELECT c FROM Curso c JOIN FETCH c.tipoCurso WHERE c.destacado = true AND c.estado = :estado ORDER BY c.idCurso ASC")
   List<Curso> findByDestacadoTrueAndEstadoOrderByIdCursoAsc(@Param("estado") String estado);
+
+  @Query("SELECT c FROM Curso c JOIN FETCH c.tipoCurso WHERE c.estado = :estado ORDER BY c.idCurso ASC")
+  List<Curso> findByEstadoOrderByIdCursoAsc(@Param("estado") String estado);
 }

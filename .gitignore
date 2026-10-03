@@ -5,6 +5,10 @@ target/
 *.iml
 *.iws
 
+.bloop/
+.metals/
+.vscode/
+
 .classpath
 .project
 .settings/
