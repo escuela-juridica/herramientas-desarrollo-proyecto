@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+
+<head>
+  <title th:text="${curso.idCurso == null} ? 'Nuevo curso' : 'Editar curso'">Curso</title>
+  <th:block layout:fragment="css">
+    <link rel="stylesheet" href="/css/admin/admin-cursos.css">
+  </th:block>
+</head>
+
+<body>
+  <div layout:fragment="content">
+    <div class="form-page-head">
+      <a class="form-back" href="/admin/cursos">
+        <i class="fa-solid fa-arrow-left"></i> Volver al listado
+      </a>
+      <div>
+        <p class="cursos-kicker">Gestión académica</p>
+        <h2 th:text="${curso.idCurso == null} ? 'Crear nuevo curso' : 'Editar curso'">Crear nuevo curso</h2>
+        <p>Completa la información que se mostrará en el catálogo.</p>
+      </div>
+    </div>
+
+    <form class="curso-form" th:object="${curso}" method="post" enctype="multipart/form-data"
+          th:action="${curso.idCurso == null} ? @{/admin/cursos/crear} : @{/admin/cursos/{id}/editar(id=${curso.idCurso})}">
+      <input th:if="${curso.idCurso != null}" type="hidden" th:field="*{idCurso}">
+
+      <div class="admin-alert admin-alert-error" role="alert" th:if="${errorGuardado}">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span th:text="${errorGuardado}">No se pudo guardar el curso.</span>
+      </div>
+
+      <div class="admin-alert admin-alert-error" role="alert" th:if="${#fields.hasAnyErrors()}">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <div>
+          <strong>Revisa los datos del formulario:</strong>
+          <ul>
+            <li th:each="error : ${#fields.allErrors()}" th:text="${error}">Campo inválido</li>
+          </ul>
+        </div>
+      </div>
+
+      <section class="form-card">
+        <div class="form-card-heading">
+          <span><i class="fa-solid fa-book-open"></i></span>
+          <div>
+            <h3>Información principal</h3>
+            <p>Datos de identificación y descripción del curso.</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="codigo">Código <em>*</em></label>
+            <input id="codigo" type="text" th:field="*{codigo}" maxlength="20"
+                   placeholder="Ej. EJ-2026-021" required>
+          </div>
+
+          <div class="form-field form-field-wide">
+            <label for="nombre">Nombre del curso <em>*</em></label>
+            <input id="nombre" type="text" th:field="*{nombre}" maxlength="150"
+                   placeholder="Ej. Diplomado en Derecho Civil" required>
+          </div>
+
+          <div class="form-field form-field-full">
+            <label for="descripcion">Descripción <em>*</em></label>
+            <textarea id="descripcion" th:field="*{descripcion}" maxlength="500" rows="4"
+                      placeholder="Describe el contenido y propósito del curso" required></textarea>
+            <small>Máximo 500 caracteres.</small>
+          </div>
+
+          <div class="form-field">
+            <label for="tipoCurso">Tipo de curso <em>*</em></label>
+            <select id="tipoCurso" th:field="*{tipoCurso.idTipoCurso}" required>
+              <option value="">Selecciona un tipo</option>
+              <option th:each="tipo : ${tiposCurso}" th:value="${tipo.idTipoCurso}"
+                      th:text="${tipo.nombre}">Diplomado</option>
+            </select>
+          </div>
+
+          <div class="form-field form-field-wide">
+            <label for="docente">Docente <em>*</em></label>
+            <select id="docente" th:field="*{docente.idDocente}" required>
+              <option value="">Selecciona un docente</option>
+              <option th:each="docenteItem : ${docentes}" th:value="${docenteItem.idDocente}"
+                      th:text="${docenteItem.nombres + ' ' + docenteItem.apellidos}">Docente</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="institucion">Institución</label>
+            <input id="institucion" type="text" th:field="*{institucion}" maxlength="100"
+                   placeholder="Escuela Jurídica">
+          </div>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="form-card-heading">
+          <span><i class="fa-regular fa-calendar"></i></span>
+          <div>
+            <h3>Programación y precio</h3>
+            <p>Define la modalidad, duración y disponibilidad.</p>
+          </div>
+        </div>
+
+        <div class="form-grid form-grid-balanced">
+          <div class="form-field">
+            <label for="modalidad">Modalidad</label>
+            <select id="modalidad" th:field="*{modalidad}">
+              <option value="">Selecciona una modalidad</option>
+              <option value="V">Virtual</option>
+              <option value="P">Presencial</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="duracionHoras">Duración (horas)</label>
+            <input id="duracionHoras" type="number" th:field="*{duracionHoras}" min="1" step="1"
+                   placeholder="40">
+          </div>
+
+          <div class="form-field">
+            <label for="cupos">Cupos</label>
+            <input id="cupos" type="number" th:field="*{cupos}" min="1" step="1" placeholder="30">
+          </div>
+
+          <div class="form-field">
+            <label for="precio">Precio (S/) <em>*</em></label>
+            <input id="precio" type="number" th:field="*{precio}" min="0" step="0.01"
+                   placeholder="0.00" required>
+          </div>
+
+          <div class="form-field">
+            <label for="fechaInicio">Fecha de inicio</label>
+            <input id="fechaInicio" type="date" th:field="*{fechaInicio}">
+          </div>
+
+          <div class="form-field">
+            <label for="fechaFin">Fecha de fin</label>
+            <input id="fechaFin" type="date" th:field="*{fechaFin}">
+          </div>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="form-card-heading">
+          <span><i class="fa-regular fa-image"></i></span>
+          <div>
+            <h3>Imagen y visibilidad</h3>
+            <p>Agrega una portada clara y define si será un curso destacado.</p>
+          </div>
+        </div>
+
+        <div class="form-grid form-grid-media">
+          <div class="form-field form-field-full">
+            <label for="imagenArchivo">
+              Imagen de portada <em th:if="${curso.idCurso == null}">*</em>
+            </label>
+            <input id="imagenArchivo" class="file-input" type="file" name="imagenArchivo"
+                   accept="image/jpeg,image/png,image/webp,image/gif"
+                   th:required="${curso.idCurso == null}">
+            <small>JPG, PNG, WEBP o GIF. Tamaño máximo: 5 MB.</small>
+          </div>
+
+          <div class="current-image" th:if="${curso.idCurso != null and curso.imagen != null}">
+            <img th:src="@{${curso.imagen}}" th:alt="'Portada actual de ' + ${curso.nombre}">
+            <span>Imagen actual</span>
+          </div>
+
+          <label class="featured-option">
+            <input type="checkbox" th:field="*{destacado}">
+            <span class="featured-check"><i class="fa-solid fa-check"></i></span>
+            <span>
+              <strong>Mostrar como destacado</strong>
+              <small>El curso podrá aparecer en la sección principal del sitio.</small>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <div class="form-actions">
+        <a class="admin-button admin-button-secondary" href="/admin/cursos">Cancelar</a>
+        <button class="admin-button admin-button-primary" type="submit">
+          <i class="fa-solid fa-floppy-disk"></i>
+          <span th:text="${curso.idCurso == null} ? 'Crear curso' : 'Guardar cambios'">Crear curso</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package pe.edu.escuela.app.repository;
 
 import java.util.List;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,4 +14,10 @@ public interface CursoRepository extends JpaRepository<Curso, Integer> {
 
   @Query("SELECT c FROM Curso c JOIN FETCH c.tipoCurso WHERE c.estado = :estado ORDER BY c.idCurso ASC")
   List<Curso> findByEstadoOrderByIdCursoAsc(@Param("estado") String estado);
+
+  @EntityGraph(attributePaths = {"tipoCurso", "docente"})
+  List<Curso> findAllByOrderByIdCursoAsc();
+
+  @EntityGraph(attributePaths = {"tipoCurso", "docente"})
+  List<Curso> findByNombreContainingIgnoreCaseOrderByIdCursoAsc(String nombre);
 }
