@@ -58,7 +58,7 @@ public class CursoService {
     return docenteRepository.findAll();
   }
 
-  public Curso guardarNuevo(Curso curso) {
+  public Curso guardarNuevo(Curso curso, String correoAdmin) {
     Integer idTipoCurso = curso.getTipoCurso() == null
         ? null
         : curso.getTipoCurso().getIdTipoCurso();
@@ -75,9 +75,9 @@ public class CursoService {
         .orElseThrow(() -> new IllegalArgumentException("El tipo de curso seleccionado no existe.")));
     curso.setDocente(docenteRepository.findById(idDocente)
         .orElseThrow(() -> new IllegalArgumentException("El docente seleccionado no existe.")));
-    curso.setAdministrador(administradorRepository.findFirstByOrderByIdAdminAsc()
+    curso.setAdministrador(administradorRepository.findByCorreo(correoAdmin)
         .orElseThrow(() -> new IllegalStateException(
-            "No existe un administrador para registrar el curso.")));
+            "No se encontró el administrador autenticado.")));
     curso.setEstado(Constantes.ESTADO_ACTIVO);
 
     return cursoRepository.save(curso);
