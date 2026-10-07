@@ -7,4 +7,5 @@ import pe.edu.escuela.app.model.Administrador;
 public interface AdministradorRepository extends JpaRepository<Administrador, Integer> {
 
   Optional<Administrador> findByCorreo(String correo);
+  Optional<Administrador> findFirstByOrderByIdAdminAsc();
 }

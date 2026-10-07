@@ -12,10 +12,89 @@
 
 <body>
   <div layout:fragment="content">
-    <section class="admin-construccion">
-      <i class="fa-solid fa-screwdriver-wrench"></i>
-      <h2>El CRUD de cursos está en construcción</h2>
-      <p>Acá vas a poder crear, editar, eliminar y buscar cursos del catálogo.</p>
+    <div class="admin-alert admin-alert-success" role="status" th:if="${mensajeExito}">
+      <i class="fa-solid fa-circle-check"></i>
+      <span th:text="${mensajeExito}">Curso creado correctamente.</span>
+    </div>
+
+    <section class="cursos-panel" aria-labelledby="cursosTitulo">
+      <div class="cursos-panel-head">
+        <div>
+          <p class="cursos-kicker">Gestión académica</p>
+          <h2 id="cursosTitulo">Listado de cursos</h2>
+          <p>Consulta cursos activos e inactivos registrados en la plataforma.</p>
+        </div>
+        <a class="admin-button admin-button-primary" href="/admin/cursos/nuevo">
+          <i class="fa-solid fa-plus"></i> Nuevo curso
+        </a>
+      </div>
+
+      <form class="cursos-toolbar" method="get" action="/admin/cursos" role="search">
+        <label class="cursos-search" for="busquedaCurso">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="busquedaCurso" type="search" name="busqueda"
+                 th:value="${busqueda}" placeholder="Buscar por nombre…"
+                 maxlength="150" autocomplete="off">
+        </label>
+        <button class="admin-button admin-button-secondary" type="submit">Buscar</button>
+        <a class="cursos-clear" href="/admin/cursos"
+           th:if="${busqueda != null and !busqueda.isBlank()}">Limpiar</a>
+        <span class="cursos-total" th:text="${#lists.size(cursos)} + ' resultado(s)'">0 resultado(s)</span>
+      </form>
+
+      <div class="cursos-table-wrap">
+        <table class="cursos-table">
+          <thead>
+            <tr>
+              <th scope="col">Imagen</th>
+              <th scope="col">Código</th>
+              <th scope="col">Curso</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Precio</th>
+              <th scope="col">Estado</th>
+              <th scope="col" class="cursos-actions-heading">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="curso : ${cursos}">
+              <td data-label="Imagen">
+                <img class="curso-thumbnail" th:src="@{${curso.imagen}}"
+                     th:alt="'Portada de ' + ${curso.nombre}">
+              </td>
+              <td data-label="Código">
+                <span class="curso-code" th:text="${curso.codigo}">EJ-2026-001</span>
+              </td>
+              <td data-label="Curso">
+                <strong class="curso-name" th:text="${curso.nombre}">Nombre del curso</strong>
+                <span class="curso-teacher"
+                      th:text="${curso.docente.nombres + ' ' + curso.docente.apellidos}">Docente</span>
+              </td>
+              <td data-label="Tipo" th:text="${curso.tipoCurso.nombre}">Diplomado</td>
+              <td data-label="Precio" class="curso-price"
+                  th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 2)}">S/ 0.00</td>
+              <td data-label="Estado">
+                <span class="status-pill"
+                      th:classappend="${curso.estado == 'A'} ? ' status-active' : ' status-inactive'">
+                  <i class="fa-solid fa-circle"></i>
+                  <span th:text="${curso.estado == 'A'} ? 'Activo' : 'Inactivo'">Activo</span>
+                </span>
+              </td>
+              <td data-label="Acciones" class="curso-actions">
+                <span class="action-pending" title="La edición se implementará en la siguiente etapa">
+                  <i class="fa-solid fa-pen"></i> Próximamente
+                </span>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(cursos)}">
+              <td class="cursos-empty" colspan="7">
+                <i class="fa-regular fa-folder-open"></i>
+                <strong>No se encontraron cursos</strong>
+                <span>Prueba con otro nombre o limpia la búsqueda.</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </div>
 </body>
