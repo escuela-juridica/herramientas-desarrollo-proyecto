@@ -20,6 +20,195 @@
   background-image: linear-gradient(180deg, rgba(8, 18, 32, .62) 0%, rgba(8, 18, 32, .7) 55%, rgba(8, 18, 32, .82) 100%), url('../img/portada/cursos/curso-slide-5.jpg');
 }
 
+/* ── BÚSQUEDA ESTÁTICA ────────────────────────────────────────────── */
+
+.busqueda-estatica {
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+  box-shadow: 0 2px 12px rgba(10, 35, 66, .06);
+}
+
+.busqueda-estatica-campos {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  align-items: center;
+}
+
+.busqueda-estatica-input-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.busqueda-estatica-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 15px;
+  pointer-events: none;
+  transition: color .2s;
+}
+
+.busqueda-estatica-input {
+  width: 100%;
+  padding: 13px 16px 13px 44px;
+  border: 1.5px solid var(--line);
+  border-radius: 9px;
+  font-size: 15px;
+  font-family: var(--sans);
+  color: var(--navy);
+  background: var(--paper, #f8f9fc);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.busqueda-estatica-input:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(10, 35, 66, .08);
+  background: #fff;
+}
+
+.busqueda-estatica-input-wrap:focus-within .busqueda-estatica-icon {
+  color: var(--navy);
+}
+
+.busqueda-estatica-select {
+  padding: 13px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 9px;
+  font-size: 14px;
+  font-family: var(--sans);
+  color: var(--navy);
+  background: var(--paper, #f8f9fc);
+  outline: none;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s;
+  min-width: 180px;
+}
+
+.busqueda-estatica-select:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(10, 35, 66, .08);
+  background: #fff;
+}
+
+.busqueda-estatica-btn {
+  padding: 13px 26px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.busqueda-estatica-btn:hover {
+  background: var(--orange);
+  transform: translateY(-2px);
+}
+
+.busqueda-estatica-btn:active {
+  transform: translateY(0);
+}
+
+/* ── BÚSQUEDA DINÁMICA ────────────────────────────────────────────── */
+
+.busqueda-dinamica {
+  display: block;
+  margin-bottom: 28px;
+  width: 100%;
+}
+
+.busqueda-dinamica-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.busqueda-dinamica-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--orange);
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.busqueda-dinamica-input {
+  width: 100%;
+  padding: 10px 14px 10px 36px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-family: var(--sans);
+  color: var(--navy);
+  background: #fff;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.busqueda-dinamica-input:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(200, 80, 30, .08);
+}
+
+.busqueda-dinamica-label {
+  font-size: 11.5px;
+  color: var(--orange);
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+
+/* ── RESPONSIVE: búsquedas ────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .busqueda-estatica {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .busqueda-estatica-campos {
+    flex-direction: column;
+  }
+
+  .busqueda-estatica-select {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .busqueda-estatica-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .busqueda-dinamica {
+    width: 100%;
+  }
+
+  .busqueda-dinamica-wrap {
+    width: 100%;
+  }
+}
+
 /* TARJETAS DE CURSO (Reutilizadas de inicio.css) */
 .grid6 {
   display: grid;

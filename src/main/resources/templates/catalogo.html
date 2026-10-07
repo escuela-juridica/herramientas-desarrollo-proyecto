@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}">
 
 <head>
   <title>Cursos</title>
   <th:block layout:fragment="css">
     <link rel="stylesheet" href="css/catalogo.css">
+  </th:block>
+  <th:block layout:fragment="js">
+    <script src="/js/catalogo.js" defer></script>
   </th:block>
 </head>
 
@@ -96,27 +98,62 @@
           <h2 class="tit">Catálogo de cursos</h2>
           <p class="section-lead">Explora nuestra oferta académica completa.</p>
         </div>
-        <div class="grid6" id="cursosGrid">
-          <article th:each="curso : ${cursos}" class="content-card curso">
-            <div class="curso-head">
-              <span class="curso-badge"
-                th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
-                th:text="${curso.tipoCurso.nombre}"></span>
-              <div class="curso-meta">
-                <span class="curso-hours"><i class="fa-solid fa-sack-dollar"></i> <span th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 0)}"></span></span>
-                <span class="curso-hours"><i class="fa-regular fa-clock"></i> <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
-              </div>
-            </div>
-            <div class="curso-cover"><img th:src="@{${curso.imagen}}" alt="Portada del curso"></div>
-            <div class="curso-body">
-              <h3 th:text="${curso.nombre}"></h3>
-              <p th:text="${curso.descripcion}"></p>
-            </div>
-            <div class="curso-foot">
-              <a href="#" class="curso-button" data-bs-toggle="modal" th:data-bs-target="'#modalCurso' + ${curso.idCurso}">Más Información</a>
-            </div>
 
-          </article>
+        <!-- BÚSQUEDA ESTÁTICA -->
+        <div class="busqueda-estatica">
+          <div class="busqueda-estatica-campos">
+            <div class="busqueda-estatica-input-wrap">
+              <i class="fa-solid fa-magnifying-glass busqueda-estatica-icon"></i>
+              <input type="text" id="campoEstatico" class="busqueda-estatica-input"
+                placeholder="Escribe el nombre del curso que buscas…" autocomplete="off">
+            </div>
+            <select id="selectTipo" class="busqueda-estatica-select">
+              <option value="">Todos los tipos</option>
+              <option th:each="tipo : ${tiposCurso}" th:value="${tipo.idTipoCurso}" th:text="${tipo.nombre}"></option>
+            </select>
+          </div>
+          <button id="btnEstatico" class="busqueda-estatica-btn">
+            <i class="fa-solid fa-search"></i> Buscar
+          </button>
+        </div>
+        <!-- FIN BÚSQUEDA ESTÁTICA -->
+
+        <!-- BÚSQUEDA DINÁMICA -->
+        <div class="busqueda-dinamica">
+          <div class="busqueda-dinamica-wrap">
+            <i class="fa-solid fa-bolt busqueda-dinamica-icon"></i>
+            <input type="text" id="campoDinamico" class="busqueda-dinamica-input"
+              placeholder="Escribe lo que quieres buscar" autocomplete="off">
+          </div>
+        </div>
+        <!-- FIN BÚSQUEDA DINÁMICA -->
+
+        <div class="grid6" id="cursosGrid">
+          <th:block th:fragment="resultadosCursos">
+            <article th:each="curso : ${cursos}" class="content-card curso">
+              <div class="curso-head">
+                <span class="curso-badge"
+                  th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
+                  th:text="${curso.tipoCurso.nombre}"></span>
+                <div class="curso-meta">
+                  <span class="curso-hours"><i class="fa-solid fa-sack-dollar"></i> <span
+                      th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 0)}"></span></span>
+                  <span class="curso-hours"><i class="fa-regular fa-clock"></i> <span
+                      th:text="${curso.duracionHoras} + ' hrs'"></span></span>
+                </div>
+              </div>
+              <div class="curso-cover"><img th:src="@{${curso.imagen}}" alt="Portada del curso"></div>
+              <div class="curso-body">
+                <h3 th:text="${curso.nombre}"></h3>
+                <p th:text="${curso.descripcion}"></p>
+              </div>
+              <div class="curso-foot">
+                <a href="#" class="curso-button" data-bs-toggle="modal"
+                  th:data-bs-target="'#modalCurso' + ${curso.idCurso}">Más Información</a>
+              </div>
+
+            </article>
+          </th:block>
         </div>
       </div>
     </section>
@@ -135,13 +172,16 @@
               <p th:text="${curso.descripcion}" class="curso-modal-desc"></p>
               <hr>
               <div class="curso-modal-datos">
-                <span><i class="fa-solid fa-sack-dollar"></i> Precio: <span th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 0)}"></span></span>
-                <span><i class="fa-regular fa-clock"></i> Duración: <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
+                <span><i class="fa-solid fa-sack-dollar"></i> Precio: <span
+                    th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 0)}"></span></span>
+                <span><i class="fa-regular fa-clock"></i> Duración: <span
+                    th:text="${curso.duracionHoras} + ' hrs'"></span></span>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn curso-modal-comprar" onclick="alert('¡Curso comprado exitosamente!')">Comprar</button>
+              <button type="button" class="btn curso-modal-comprar"
+                onclick="alert('¡Curso comprado exitosamente!')">Comprar</button>
             </div>
           </div>
         </div>
