@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -70,7 +71,8 @@ public class AdminCursoController {
       BindingResult bindingResult,
       @RequestParam(name = "imagenArchivo", required = false) MultipartFile imagenArchivo,
       Model model,
-      RedirectAttributes redirectAttributes) {
+      RedirectAttributes redirectAttributes,
+      Authentication authentication) {
 
     validarCurso(curso, imagenArchivo, bindingResult);
     if (bindingResult.hasErrors()) {
@@ -82,7 +84,7 @@ public class AdminCursoController {
     try {
       imagenGuardada = guardarImagen(imagenArchivo);
       curso.setImagen(imagenGuardada.rutaPublica());
-      cursoService.guardarNuevo(curso);
+      cursoService.guardarNuevo(curso, authentication.getName());
     } catch (IllegalArgumentException | IllegalStateException e) {
       eliminarImagenSiExiste(imagenGuardada);
       model.addAttribute("errorGuardado", e.getMessage());
