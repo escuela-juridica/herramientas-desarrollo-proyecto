@@ -17,11 +17,13 @@
   'use strict';
 
   /* ── Referencias al DOM ──────────────────────────────────────────── */
-  const campoEstatico  = document.getElementById('campoEstatico');
-  const selectTipo     = document.getElementById('selectTipo');
-  const btnEstatico    = document.getElementById('btnEstatico');
-  const campoDinamico  = document.getElementById('campoDinamico');
-  const cursosGrid     = document.getElementById('cursosGrid');
+  const campoEstatico      = document.getElementById('campoEstatico');
+  const selectTipo         = document.getElementById('selectTipo');
+  const btnEstatico        = document.getElementById('btnEstatico');
+  const btnLimpiar         = document.getElementById('btnLimpiar');
+  const campoDinamico      = document.getElementById('campoDinamico');
+  const btnLimpiarDinamico = document.getElementById('btnLimpiarDinamico');
+  const cursosGrid         = document.getElementById('cursosGrid');
 
   if (!cursosGrid) return; // protección mínima
 
@@ -56,13 +58,15 @@
 
   /* ══════════════════════════════════════════════════════════════════ */
   /* BÚSQUEDA ESTÁTICA                                                  */
-  /* input grande (nombre) + select (tipo de curso) → botón Buscar     */
+  /* input de nombre + select de tipo + botón Buscar / Quitar filtros   */
   /* ══════════════════════════════════════════════════════════════════ */
 
   if (btnEstatico) {
     btnEstatico.addEventListener('click', function () {
       var texto = campoEstatico ? campoEstatico.value : '';
       var tipo  = selectTipo    ? selectTipo.value    : '';
+      if (campoDinamico) campoDinamico.value = '';
+      if (btnLimpiarDinamico) btnLimpiarDinamico.style.display = 'none';
       buscar(texto, tipo);
     });
   }
@@ -72,24 +76,53 @@
     campoEstatico.addEventListener('keydown', function (evento) {
       if (evento.key === 'Enter') {
         var tipo = selectTipo ? selectTipo.value : '';
+        if (campoDinamico) campoDinamico.value = '';
+        if (btnLimpiarDinamico) btnLimpiarDinamico.style.display = 'none';
         buscar(campoEstatico.value, tipo);
       }
     });
   }
 
+  /* Botón Quitar Filtros: restablece ambos filtros y restaura todos los cursos */
+  if (btnLimpiar) {
+    btnLimpiar.addEventListener('click', function () {
+      if (campoEstatico) campoEstatico.value = '';
+      if (selectTipo)    selectTipo.value = '';
+      if (campoDinamico) campoDinamico.value = '';
+      if (btnLimpiarDinamico) btnLimpiarDinamico.style.display = 'none';
+      buscar('', '');
+    });
+  }
+
   /* ══════════════════════════════════════════════════════════════════ */
   /* BÚSQUEDA DINÁMICA                                                  */
-  /* input pequeño → debounce 300 ms → busca solo por nombre           */
-  /* No considera el select — es una búsqueda rápida independiente.    */
+  /* input en tiempo real → debounce 300 ms → busca por nombre          */
   /* ══════════════════════════════════════════════════════════════════ */
+
+  function actualizarBotonLimpiarDinamico() {
+    if (!btnLimpiarDinamico || !campoDinamico) return;
+    btnLimpiarDinamico.style.display = campoDinamico.value.trim().length > 0 ? 'inline-flex' : 'none';
+  }
 
   if (campoDinamico) {
     campoDinamico.addEventListener('input', function () {
+      actualizarBotonLimpiarDinamico();
       clearTimeout(debounceTimer);
       var textoActual = campoDinamico.value;
       debounceTimer = setTimeout(function () {
         buscar(textoActual, ''); // sin filtro de tipo en la búsqueda dinámica
       }, 300);
+    });
+  }
+
+  if (btnLimpiarDinamico) {
+    btnLimpiarDinamico.addEventListener('click', function () {
+      if (campoDinamico) {
+        campoDinamico.value = '';
+        campoDinamico.focus();
+      }
+      actualizarBotonLimpiarDinamico();
+      buscar('', '');
     });
   }
 

@@ -99,34 +99,54 @@
           <p class="section-lead">Explora nuestra oferta académica completa.</p>
         </div>
 
-        <!-- BÚSQUEDA ESTÁTICA -->
-        <div class="busqueda-estatica">
-          <div class="busqueda-estatica-campos">
-            <div class="busqueda-estatica-input-wrap">
-              <i class="fa-solid fa-magnifying-glass busqueda-estatica-icon"></i>
-              <input type="text" id="campoEstatico" class="busqueda-estatica-input"
-                placeholder="Escribe el nombre del curso que buscas…" autocomplete="off">
-            </div>
-            <select id="selectTipo" class="busqueda-estatica-select">
-              <option value="">Todos los tipos</option>
-              <option th:each="tipo : ${tiposCurso}" th:value="${tipo.idTipoCurso}" th:text="${tipo.nombre}"></option>
-            </select>
-          </div>
-          <button id="btnEstatico" class="busqueda-estatica-btn">
-            <i class="fa-solid fa-search"></i> Buscar
-          </button>
-        </div>
-        <!-- FIN BÚSQUEDA ESTÁTICA -->
+        <!-- BÚSQUEDAS Y FILTROS -->
+        <div class="contenedor-busquedas">
 
-        <!-- BÚSQUEDA DINÁMICA -->
-        <div class="busqueda-dinamica">
-          <div class="busqueda-dinamica-wrap">
-            <i class="fa-solid fa-bolt busqueda-dinamica-icon"></i>
-            <input type="text" id="campoDinamico" class="busqueda-dinamica-input"
-              placeholder="Escribe lo que quieres buscar" autocomplete="off">
+          <!-- BÚSQUEDA ESTÁTICA -->
+          <div class="busqueda-estatica">
+            <div class="busqueda-estatica-campos">
+              <div class="busqueda-estatica-input-wrap">
+                <i class="fa-solid fa-magnifying-glass busqueda-estatica-icon"></i>
+                <input type="text" id="campoEstatico" class="busqueda-estatica-input"
+                  placeholder="Buscar curso por nombre (ej. Notarial, Civil)…" autocomplete="off">
+              </div>
+              <div class="busqueda-estatica-select-wrap">
+                <i class="fa-solid fa-filter busqueda-estatica-select-icon"></i>
+                <select id="selectTipo" class="busqueda-estatica-select" aria-label="Filtrar por tipo de curso">
+                  <option value="">Todos los tipos</option>
+                  <option th:each="tipo : ${tiposCurso}" th:value="${tipo.idTipoCurso}" th:text="${tipo.nombre}">
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="busqueda-estatica-acciones">
+              <button type="button" id="btnEstatico" class="busqueda-estatica-btn" title="Buscar cursos">
+                <i class="fa-solid fa-magnifying-glass"></i> Buscar
+              </button>
+              <button type="button" id="btnLimpiar" class="busqueda-estatica-btn-limpiar"
+                title="Quitar todos los filtros">
+                <i class="fa-solid fa-rotate-left"></i> Quitar filtros
+              </button>
+            </div>
           </div>
+          <!-- FIN BÚSQUEDA ESTÁTICA -->
+
+          <!-- BÚSQUEDA DINÁMICA -->
+          <div class="busqueda-dinamica">
+            <div class="busqueda-dinamica-wrap">
+              <i class="fa-solid fa-magnifying-glass busqueda-dinamica-icon"></i>
+              <input type="text" id="campoDinamico" class="busqueda-dinamica-input"
+                placeholder="Escribe el nombre o tema del curso (ej. Notarial, Civil, Inmobiliario)…"
+                autocomplete="off">
+              <button type="button" id="btnLimpiarDinamico" class="busqueda-dinamica-clear"
+                aria-label="Limpiar búsqueda en vivo" title="Borrar texto" style="display: none;">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+          <!-- FIN BÚSQUEDA DINÁMICA -->
+
         </div>
-        <!-- FIN BÚSQUEDA DINÁMICA -->
 
         <div class="grid6" id="cursosGrid">
           <th:block th:fragment="resultadosCursos">
