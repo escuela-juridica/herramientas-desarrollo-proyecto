@@ -14,6 +14,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -91,6 +92,59 @@ class AdminCursoControllerTest {
     try (var archivos = Files.list(uploadDir)) {
       assertThat(archivos).isEmpty();
     }
+  }
+
+  @Test
+  void editarSinNuevaImagenConservaLaAnterior() {
+    AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
+    Curso existente = crearCursoValido();
+    existente.setImagen("/uploads/cursos/original.jpg");
+    Curso formulario = crearCursoValido();
+    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(formulario, "curso");
+    when(cursoService.obtenerPorId(7)).thenReturn(existente);
+
+    String vista = controller.editar(7, formulario, bindingResult, null,
+        new ExtendedModelMap(), new RedirectAttributesModelMap());
+
+    assertThat(vista).isEqualTo("redirect:/admin/cursos");
+    assertThat(formulario.getIdCurso()).isEqualTo(7);
+    assertThat(formulario.getImagen()).isEqualTo("/uploads/cursos/original.jpg");
+    verify(cursoService).actualizar(7, formulario, null);
+  }
+
+  @Test
+  void editarEliminaNuevaImagenSiFallaElGuardado() throws Exception {
+    AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
+    Curso existente = crearCursoValido();
+    existente.setImagen("/uploads/cursos/original.jpg");
+    Curso formulario = crearCursoValido();
+    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(formulario, "curso");
+    MockMultipartFile imagen = new MockMultipartFile(
+        "imagenArchivo", "nueva.png", "image/png", new byte[] {1, 2, 3});
+    when(cursoService.obtenerPorId(7)).thenReturn(existente);
+    when(cursoService.actualizar(org.mockito.ArgumentMatchers.eq(7),
+        org.mockito.ArgumentMatchers.same(formulario),
+        org.mockito.ArgumentMatchers.anyString()))
+        .thenThrow(new DataIntegrityViolationException("Código duplicado"));
+
+    String vista = controller.editar(7, formulario, bindingResult, imagen,
+        new ExtendedModelMap(), new RedirectAttributesModelMap());
+
+    assertThat(vista).isEqualTo("admin/curso-form");
+    try (var archivos = Files.list(uploadDir)) {
+      assertThat(archivos).isEmpty();
+    }
+  }
+
+  @Test
+  void busquedaDinamicaConsultaPorCodigo() {
+    AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
+    ExtendedModelMap model = new ExtendedModelMap();
+
+    String vista = controller.buscarCursos(null, "EJ-2026", model);
+
+    assertThat(vista).isEqualTo("admin/cursos :: filasCursos");
+    verify(cursoService).buscarParaAdministracionPorCodigo("EJ-2026");
   }
 
   private Curso crearCursoValido() {

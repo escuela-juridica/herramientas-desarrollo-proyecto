@@ -18,17 +18,21 @@ document.addEventListener("DOMContentLoaded", () => {
   if (formularioBusqueda && buscador) {
     formularioBusqueda.addEventListener("submit", (evento) => {
       evento.preventDefault();
-      buscarCursos(buscador.value.trim());
+      buscadorDinamico.value = "";
+      clearTimeout(temporizadorDinamico);
+      buscarCursos("busqueda", buscador.value.trim());
     });
   }
 
   // BUSQUEDA DINAMICA
   if (buscadorDinamico) {
     buscadorDinamico.addEventListener("input", () => {
+      buscador.value = "";
       clearTimeout(temporizadorDinamico);
+      controladorPeticion?.abort();
 
       temporizadorDinamico = setTimeout(() => {
-        buscarCursos(buscadorDinamico.value.trim());
+        buscarCursos("codigo", buscadorDinamico.value.trim());
       }, 300);
     });
   }
@@ -43,22 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       clearTimeout(temporizadorDinamico);
 
-      buscarCursos("");
+      buscarCursos("busqueda", "");
     });
   }
-  // DESACTIVAR CURSO
-  filasCursos.addEventListener("click", (evento) => {
-    const botonEliminar = evento.target.closest(".curso-action-delete");
-
-    if (!botonEliminar) return;
-
-    if (!confirm("¿Deseas marcar este curso como inactivo?")) {
-      evento.preventDefault();
-    }
-  });
-
   // BUSCAR CURSOS
-  async function buscarCursos(busqueda) {
+  async function buscarCursos(campo, texto) {
     if (controladorPeticion) {
       controladorPeticion.abort();
     }
@@ -67,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const respuesta = await fetch(
-        `/admin/cursos/buscar?busqueda=${encodeURIComponent(busqueda)}`,
+        `/admin/cursos/buscar?${campo}=${encodeURIComponent(texto)}`,
         {
           headers: {
             "X-Requested-With": "XMLHttpRequest"
@@ -100,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
       actualizarTotal();
 
-      console.log("Búsqueda completada:", busqueda);
+      console.log("Búsqueda completada:", campo, texto);
 
     } catch (error) {
       if (error.name !== "AbortError") {
@@ -114,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const filas = filasCursos.querySelectorAll("tr[data-curso]");
 
     if (totalCursos) {
-      totalCursos.textContent = `${filas.length} resultado(s)`;
+      totalCursos.textContent = `${filas.length} ${filas.length === 1 ? "registro" : "registros"}`;
     }
   }
 });

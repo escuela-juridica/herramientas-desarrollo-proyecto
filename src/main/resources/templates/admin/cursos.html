@@ -16,6 +16,10 @@
       <i class="fa-solid fa-circle-check"></i>
       <span th:text="${mensajeExito}">Curso creado correctamente.</span>
     </div>
+    <div class="admin-alert admin-alert-error" role="alert" th:if="${error}">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span th:text="${error}">No se pudo completar la operación.</span>
+    </div>
 
     <section class="cursos-panel" aria-labelledby="cursosTitulo">
       <div class="cursos-panel-head">
@@ -30,49 +34,32 @@
         </a>
       </div>
 
-    
-<div class="cursos-toolbar-contenedor">
-
-  <form class="cursos-toolbar" method="get" action="/admin/cursos" role="search">
-    <label class="cursos-search" for="busquedaCurso">
-      <i class="fa-solid fa-magnifying-glass"></i>
-
-      <input id="busquedaCurso"
-             type="search"
-             name="busqueda"
-             th:value="${busqueda}"
-             placeholder="Búsqueda estática por nombre..."
-             maxlength="150"
-             autocomplete="off">
-    </label>
-
-    
-    <button class="admin-button admin-button-secondary" type="submit">
-      Buscar
-    </button>
-
-    <button class="cursos-clear" id="limpiarBusquedaCurso" type="button">
-      Limpiar
-    </button>
-  </form>
-
-  
-  <div class="cursos-toolbar-dinamica" role="search">
-    <label class="cursos-search" for="busquedaCursoDinamica">
-        <i class="fa-solid fa-bolt"></i>
-        <input id="busquedaCursoDinamica" type="search"
-               placeholder="Búsqueda dinámica por nombre..."
-               maxlength="150" autocomplete="off">
-    </label>
-</div>
-
-  <span class="cursos-total"
-        th:text="${#lists.size(cursos)} + ' resultado(s)'">
-    0 resultado(s)
-  </span>
-
-</div>
-
+      <div class="cursos-toolbar-contenedor">
+        <div class="cursos-buscadores">
+          <form class="cursos-toolbar" method="get" action="/admin/cursos" role="search">
+            <label class="cursos-search" for="busquedaCurso">
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <input id="busquedaCurso" type="search" name="busqueda"
+                     th:value="${busqueda}" aria-label="Buscar curso por nombre al pulsar Buscar"
+                     placeholder="Buscar curso por nombre..." maxlength="150" autocomplete="off">
+            </label>
+            <button class="admin-button admin-button-secondary" type="submit">Buscar</button>
+            <button class="cursos-clear" id="limpiarBusquedaCurso" type="button">Limpiar</button>
+          </form>
+          <div class="cursos-toolbar-dinamica" role="search">
+            <label class="cursos-search" for="busquedaCursoDinamica">
+              <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+              <input id="busquedaCursoDinamica" type="search"
+                     aria-label="Filtrar cursos por código mientras escribes"
+                     placeholder="Filtrar cursos por código..." maxlength="20" autocomplete="off">
+            </label>
+          </div>
+        </div>
+        <p class="cursos-total" aria-live="polite"
+           th:text="|${#lists.size(cursos)} ${#lists.size(cursos) == 1 ? 'registro' : 'registros'}|">
+          0 registros
+        </p>
+      </div>
 
       <div class="cursos-table-wrap">
         <table class="cursos-table">
@@ -161,6 +148,14 @@
     </button>
 
 </form>
+
+                <form th:if="${curso.estado == 'I'}"
+                      th:action="@{/admin/cursos/reactivar/{idCurso}(idCurso=${curso.idCurso})}"
+                      method="post" class="curso-action-form">
+                  <button type="submit" class="curso-action curso-action-reactivate">
+                    <i class="fa-solid fa-rotate-left"></i> Reactivar
+                  </button>
+                </form>
 
               </td>
             </tr>
