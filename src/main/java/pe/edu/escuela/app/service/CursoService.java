@@ -52,6 +52,20 @@ public class CursoService {
     return cursoRepository.findByCodigoContainingIgnoreCaseOrderByIdCursoAsc(codigo.trim());
   }
 
+  public List<Curso> filtrarParaAdministracion(String nombre, String codigo) {
+    String nombreLimpio = nombre == null ? "" : nombre.trim();
+    String codigoLimpio = codigo == null ? "" : codigo.trim();
+    if (nombreLimpio.isEmpty()) {
+      return buscarParaAdministracionPorCodigo(codigoLimpio);
+    }
+    if (codigoLimpio.isEmpty()) {
+      return listarParaAdministracion(nombreLimpio);
+    }
+    return cursoRepository
+        .findByNombreContainingIgnoreCaseAndCodigoContainingIgnoreCaseOrderByIdCursoAsc(
+            nombreLimpio, codigoLimpio);
+  }
+
   public Curso obtenerPorId(Integer idCurso) {
     return cursoRepository.findById(idCurso)
         .orElseThrow(() -> new IllegalArgumentException("No existe el curso solicitado."));

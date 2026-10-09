@@ -41,24 +41,28 @@
               <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
               <input id="busquedaCurso" type="search" name="busqueda"
                      th:value="${busqueda}" aria-label="Buscar curso por nombre al pulsar Buscar"
-                     placeholder="Buscar curso por nombre..." maxlength="150" autocomplete="off">
+                     placeholder="Escribe el nombre y presiona Buscar" maxlength="150" autocomplete="off">
             </label>
             <button class="admin-button admin-button-secondary" type="submit">Buscar</button>
-            <button class="cursos-clear" id="limpiarBusquedaCurso" type="button">Limpiar</button>
           </form>
           <div class="cursos-toolbar-dinamica" role="search">
             <label class="cursos-search" for="busquedaCursoDinamica">
               <i class="fa-solid fa-bolt" aria-hidden="true"></i>
               <input id="busquedaCursoDinamica" type="search"
                      aria-label="Filtrar cursos por código mientras escribes"
-                     placeholder="Filtrar cursos por código..." maxlength="20" autocomplete="off">
+                     placeholder="Escribe un código para filtrar" maxlength="20" autocomplete="off">
             </label>
           </div>
         </div>
-        <p class="cursos-total" aria-live="polite"
-           th:text="|${#lists.size(cursos)} ${#lists.size(cursos) == 1 ? 'registro' : 'registros'}|">
-          0 registros
-        </p>
+        <div class="cursos-toolbar-footer">
+          <p class="cursos-total" aria-live="polite"
+             th:text="|${#lists.size(cursos)} ${#lists.size(cursos) == 1 ? 'registro' : 'registros'}|">
+            0 registros
+          </p>
+          <button class="cursos-clear" id="limpiarBusquedaCurso" type="button">
+            <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Limpiar ambas búsquedas
+          </button>
+        </div>
       </div>
 
       <div class="cursos-table-wrap">

@@ -62,9 +62,7 @@ public class AdminCursoController {
       @RequestParam(name = "codigo", required = false) String codigo,
       Model model) {
 
-    model.addAttribute("cursos", codigo == null
-        ? cursoService.listarParaAdministracion(busqueda)
-        : cursoService.buscarParaAdministracionPorCodigo(codigo));
+    model.addAttribute("cursos", cursoService.filtrarParaAdministracion(busqueda, codigo));
 
     return "admin/cursos :: filasCursos";
   }

@@ -137,14 +137,14 @@ class AdminCursoControllerTest {
   }
 
   @Test
-  void busquedaDinamicaConsultaPorCodigo() {
+  void busquedaCombinaNombreYCodigo() {
     AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
     ExtendedModelMap model = new ExtendedModelMap();
 
-    String vista = controller.buscarCursos(null, "EJ-2026", model);
+    String vista = controller.buscarCursos("Civil", "EJ-2026", model);
 
     assertThat(vista).isEqualTo("admin/cursos :: filasCursos");
-    verify(cursoService).buscarParaAdministracionPorCodigo("EJ-2026");
+    verify(cursoService).filtrarParaAdministracion("Civil", "EJ-2026");
   }
 
   private Curso crearCursoValido() {

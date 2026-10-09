@@ -73,6 +73,29 @@ class CursoServiceTest {
   }
 
   @Test
+  void filtrarParaAdministracionCombinaNombreYCodigo() {
+    List<Curso> cursos = List.of(new Curso());
+    when(cursoRepository
+        .findByNombreContainingIgnoreCaseAndCodigoContainingIgnoreCaseOrderByIdCursoAsc(
+            "Civil", "EJ-2026"))
+        .thenReturn(cursos);
+
+    assertThat(cursoService.filtrarParaAdministracion("  Civil  ", "  EJ-2026  "))
+        .isSameAs(cursos);
+  }
+
+  @Test
+  void filtrarParaAdministracionConUnSoloCriterioUsaEseCriterio() {
+    when(cursoRepository.findByNombreContainingIgnoreCaseOrderByIdCursoAsc("Civil"))
+        .thenReturn(List.of(new Curso()));
+    when(cursoRepository.findByCodigoContainingIgnoreCaseOrderByIdCursoAsc("EJ-2026"))
+        .thenReturn(List.of(new Curso()));
+
+    assertThat(cursoService.filtrarParaAdministracion("Civil", " ")).hasSize(1);
+    assertThat(cursoService.filtrarParaAdministracion(" ", "EJ-2026")).hasSize(1);
+  }
+
+  @Test
   void obtenerPorIdInexistenteInformaElProblema() {
     when(cursoRepository.findById(99)).thenReturn(Optional.empty());
 

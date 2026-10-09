@@ -18,21 +18,19 @@ document.addEventListener("DOMContentLoaded", () => {
   if (formularioBusqueda && buscador) {
     formularioBusqueda.addEventListener("submit", (evento) => {
       evento.preventDefault();
-      buscadorDinamico.value = "";
       clearTimeout(temporizadorDinamico);
-      buscarCursos("busqueda", buscador.value.trim());
+      buscarCursos();
     });
   }
 
   // BUSQUEDA DINAMICA
   if (buscadorDinamico) {
     buscadorDinamico.addEventListener("input", () => {
-      buscador.value = "";
       clearTimeout(temporizadorDinamico);
       controladorPeticion?.abort();
 
       temporizadorDinamico = setTimeout(() => {
-        buscarCursos("codigo", buscadorDinamico.value.trim());
+        buscarCursos();
       }, 300);
     });
   }
@@ -47,25 +45,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
       clearTimeout(temporizadorDinamico);
 
-      buscarCursos("busqueda", "");
+      buscarCursos();
     });
   }
   // BUSCAR CURSOS
-  async function buscarCursos(campo, texto) {
+  async function buscarCursos() {
     if (controladorPeticion) {
       controladorPeticion.abort();
     }
 
-    controladorPeticion = new AbortController();
+    const peticion = new AbortController();
+    controladorPeticion = peticion;
 
     try {
+      const parametros = new URLSearchParams({
+        busqueda: buscador.value.trim(),
+        codigo: buscadorDinamico.value.trim()
+      });
       const respuesta = await fetch(
-        `/admin/cursos/buscar?${campo}=${encodeURIComponent(texto)}`,
+        `/admin/cursos/buscar?${parametros}`,
         {
           headers: {
             "X-Requested-With": "XMLHttpRequest"
           },
-          signal: controladorPeticion.signal
+          signal: peticion.signal
         }
       );
 
@@ -74,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const html = await respuesta.text();
+      if (peticion.signal.aborted) return;
 
       // LEER EL FRAGMENTO HTML
       const tablaTemporal = document.createElement("table");
@@ -93,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
       actualizarTotal();
 
-      console.log("Búsqueda completada:", campo, texto);
+      console.log("Búsqueda completada:", parametros.toString());
 
     } catch (error) {
       if (error.name !== "AbortError") {
