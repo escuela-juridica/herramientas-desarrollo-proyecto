@@ -83,9 +83,14 @@
 
             <tr th:each="curso : ${cursos}" data-curso>
               <td data-label="Imagen">
-                <img class="curso-thumbnail"
-                     th:src="@{${curso.imagen}}"
-                     th:alt="'Portada de ' + ${curso.nombre}">
+                <a class="curso-thumbnail-link" th:href="@{${curso.imagen}}"
+                   target="_blank" rel="noopener noreferrer"
+                   th:aria-label="'Ver imagen completa de ' + ${curso.nombre}"
+                   title="Ver imagen completa">
+                  <img class="curso-thumbnail"
+                       th:src="@{${curso.imagen}}"
+                       th:alt="'Portada de ' + ${curso.nombre}">
+                </a>
               </td>
 
               <td data-label="Código">

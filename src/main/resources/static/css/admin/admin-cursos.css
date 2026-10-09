@@ -272,6 +272,16 @@
   background: #eef1f4;
 }
 
+.curso-thumbnail-link {
+  display: inline-block;
+  border-radius: 7px;
+}
+
+.curso-thumbnail-link:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+}
+
 .curso-code {
   color: var(--navy-2);
   font-size: 12px;

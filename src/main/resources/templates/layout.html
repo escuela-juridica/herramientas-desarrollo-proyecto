@@ -32,8 +32,15 @@
           <a href="/nosotros" class="site-nav-link" th:classappend="${active == 'nosotros'} ? ' on'">Nosotros</a>
           <a href="/contacto" class="site-nav-link" th:classappend="${active == 'contacto'} ? ' on'">Contacto</a>
           <div class="nav-auth">
-            <a href="/login" class="site-button button-primary"><i class="fa-solid fa-user-shield"></i>
+            <a th:if="${adminActual == null}" th:href="@{/login}" class="site-button button-primary"><i class="fa-solid fa-user-shield"></i>
               Administrador</a>
+            <a th:if="${adminActual != null}" th:href="@{/admin}" class="site-button button-primary"><i class="fa-solid fa-user-shield"></i>
+              Panel administrativo</a>
+            <form th:if="${adminActual != null}" th:action="@{/logout}" method="post" class="nav-logout-form">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+              <button type="submit" class="site-button button-ghost"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+                Cerrar sesión</button>
+            </form>
           </div>
         </div>
       </div>
