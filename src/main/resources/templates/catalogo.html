@@ -183,30 +183,38 @@
       </div>
     </section>
 
-    <!-- Modales de Detalles del Curso (Generados fuera de contenedores con overflow) -->
+    <!-- Modales de Detalles del Curso (Diseño Premium) -->
     <th:block th:each="curso : ${cursos}">
       <div class="modal fade" th:id="'modalCurso' + ${curso.idCurso}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content curso-modal-content">
+            <div class="modal-header curso-modal-header">
               <h5 class="modal-title curso-modal-title" th:text="${curso.nombre}"></h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body curso-modal-body">
-              <img th:src="@{${curso.imagen}}" class="img-fluid mb-3 rounded curso-modal-img" alt="Portada del curso">
+              <div class="curso-modal-img-wrap">
+                <img th:src="@{${curso.imagen}}" class="img-fluid rounded curso-modal-img" alt="Portada del curso">
+                <span class="curso-badge curso-modal-badge"
+                      th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
+                      th:text="${curso.tipoCurso.nombre}"></span>
+              </div>
               <p th:text="${curso.descripcion}" class="curso-modal-desc"></p>
-              <hr>
-              <div class="curso-modal-datos">
-                <span><i class="fa-solid fa-sack-dollar"></i> Precio: <span
-                    th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 0)}"></span></span>
-                <span><i class="fa-regular fa-clock"></i> Duración: <span
-                    th:text="${curso.duracionHoras} + ' hrs'"></span></span>
+
+              <!-- Caja de datos resumen -->
+              <div class="curso-modal-datos-box">
+                <div class="curso-modal-datos">
+                  <span><i class="fa-solid fa-hashtag"></i> Código: <span th:text="${curso.codigo}"></span></span>
+                  <span><i class="fa-regular fa-clock"></i> Duración: <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
+                </div>
+                <div class="curso-modal-precio">
+                  Precio: S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}"></span>
+                </div>
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn curso-modal-comprar"
-                onclick="alert('¡Curso comprado exitosamente!')">Comprar</button>
+            <div class="modal-footer curso-modal-footer">
+              <button type="button" class="btn curso-modal-cancelar" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn curso-modal-comprar" onclick="alert('¡Curso comprado exitosamente!')">Confirmar Compra</button>
             </div>
           </div>
         </div>

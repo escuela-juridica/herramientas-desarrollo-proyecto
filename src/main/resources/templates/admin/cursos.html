@@ -16,6 +16,10 @@
       <i class="fa-solid fa-circle-check"></i>
       <span th:text="${mensajeExito}">Curso creado correctamente.</span>
     </div>
+    <div class="admin-alert admin-alert-error" role="alert" th:if="${error}">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span th:text="${error}">No se pudo completar la operación.</span>
+    </div>
 
     <section class="cursos-panel" aria-labelledby="cursosTitulo">
       <div class="cursos-panel-head">
@@ -24,23 +28,42 @@
           <h2 id="cursosTitulo">Listado de cursos</h2>
           <p>Consulta cursos activos e inactivos registrados en la plataforma.</p>
         </div>
+
         <a class="admin-button admin-button-primary" href="/admin/cursos/nuevo">
           <i class="fa-solid fa-plus"></i> Nuevo curso
         </a>
       </div>
 
-      <form class="cursos-toolbar" method="get" action="/admin/cursos" role="search">
-        <label class="cursos-search" for="busquedaCurso">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input id="busquedaCurso" type="search" name="busqueda"
-                 th:value="${busqueda}" placeholder="Buscar por nombre…"
-                 maxlength="150" autocomplete="off">
-        </label>
-        <button class="admin-button admin-button-secondary" type="submit">Buscar</button>
-        <a class="cursos-clear" href="/admin/cursos"
-           th:if="${busqueda != null and !busqueda.isBlank()}">Limpiar</a>
-        <span class="cursos-total" th:text="${#lists.size(cursos)} + ' resultado(s)'">0 resultado(s)</span>
-      </form>
+      <div class="cursos-toolbar-contenedor">
+        <div class="cursos-buscadores">
+          <form class="cursos-toolbar" method="get" action="/admin/cursos" role="search">
+            <label class="cursos-search" for="busquedaCurso">
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <input id="busquedaCurso" type="search" name="busqueda"
+                     th:value="${busqueda}" aria-label="Buscar curso por nombre al pulsar Buscar"
+                     placeholder="Escribe el nombre y presiona Buscar" maxlength="150" autocomplete="off">
+            </label>
+            <button class="admin-button admin-button-secondary" type="submit">Buscar</button>
+          </form>
+          <div class="cursos-toolbar-dinamica" role="search">
+            <label class="cursos-search" for="busquedaCursoDinamica">
+              <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+              <input id="busquedaCursoDinamica" type="search"
+                     aria-label="Filtrar cursos por código mientras escribes"
+                     placeholder="Escribe un código para filtrar" maxlength="20" autocomplete="off">
+            </label>
+          </div>
+        </div>
+        <div class="cursos-toolbar-footer">
+          <p class="cursos-total" aria-live="polite"
+             th:text="|${#lists.size(cursos)} ${#lists.size(cursos) == 1 ? 'registro' : 'registros'}|">
+            0 registros
+          </p>
+          <button class="cursos-clear" id="limpiarBusquedaCurso" type="button">
+            <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Limpiar ambas búsquedas
+          </button>
+        </div>
+      </div>
 
       <div class="cursos-table-wrap">
         <table class="cursos-table">
@@ -55,41 +78,106 @@
               <th scope="col" class="cursos-actions-heading">Acciones</th>
             </tr>
           </thead>
-          <tbody>
-            <tr th:each="curso : ${cursos}">
+
+          <tbody id="filasCursos" th:fragment="filasCursos">
+
+            <tr th:each="curso : ${cursos}" data-curso>
               <td data-label="Imagen">
-                <img class="curso-thumbnail" th:src="@{${curso.imagen}}"
-                     th:alt="'Portada de ' + ${curso.nombre}">
+                <a class="curso-thumbnail-link" th:href="@{${curso.imagen}}"
+                   target="_blank" rel="noopener noreferrer"
+                   th:aria-label="'Ver imagen completa de ' + ${curso.nombre}"
+                   title="Ver imagen completa">
+                  <img class="curso-thumbnail"
+                       th:src="@{${curso.imagen}}"
+                       th:alt="'Portada de ' + ${curso.nombre}">
+                </a>
               </td>
+
               <td data-label="Código">
-                <span class="curso-code" th:text="${curso.codigo}">EJ-2026-001</span>
+                <span class="curso-code"
+                      th:text="${curso.codigo}">
+                  EJ-2026-001
+                </span>
               </td>
+
               <td data-label="Curso">
-                <strong class="curso-name" th:text="${curso.nombre}">Nombre del curso</strong>
+                <strong class="curso-name"
+                        th:text="${curso.nombre}">
+                  Nombre del curso
+                </strong>
+
                 <span class="curso-teacher"
-                      th:text="${curso.docente.nombres + ' ' + curso.docente.apellidos}">Docente</span>
+                      th:text="${curso.docente.nombres + ' ' + curso.docente.apellidos}">
+                  Docente
+                </span>
               </td>
-              <td data-label="Tipo" th:text="${curso.tipoCurso.nombre}">Diplomado</td>
-              <td data-label="Precio" class="curso-price"
-                  th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 2)}">S/ 0.00</td>
+
+              <td data-label="Tipo"
+                  th:text="${curso.tipoCurso.nombre}">
+                Diplomado
+              </td>
+
+              <td data-label="Precio"
+                  class="curso-price"
+                  th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 2)}">
+                S/ 0.00
+              </td>
+
               <td data-label="Estado">
                 <span class="status-pill"
                       th:classappend="${curso.estado == 'A'} ? ' status-active' : ' status-inactive'">
+
                   <i class="fa-solid fa-circle"></i>
-                  <span th:text="${curso.estado == 'A'} ? 'Activo' : 'Inactivo'">Activo</span>
+
+                  <span th:text="${curso.estado == 'A'} ? 'Activo' : 'Inactivo'">
+                    Activo
+                  </span>
+
                 </span>
               </td>
+
               <td data-label="Acciones" class="curso-actions">
-                <span class="action-pending" title="La edición se implementará en la siguiente etapa">
-                  <i class="fa-solid fa-pen"></i> Próximamente
-                </span>
+
+                <a class="curso-action curso-action-edit"
+                   th:href="@{/admin/cursos/editar/{idCurso}(idCurso=${curso.idCurso})}">
+                  <i class="fa-solid fa-pen"></i>
+                  Editar
+                </a>
+      
+
+   <form th:if="${curso.estado == 'A'}"
+      th:action="@{/admin/cursos/eliminar/{idCurso}(idCurso=${curso.idCurso})}"
+      method="post"
+      class="curso-action-form"
+      onsubmit="return confirm('¿Deseas desactivar este curso?');">
+
+    <button type="submit" class="curso-action curso-action-delete">
+        <i class="fa-solid fa-ban"></i>
+        Desactivar
+    </button>
+
+</form>
+
+                <form th:if="${curso.estado == 'I'}"
+                      th:action="@{/admin/cursos/reactivar/{idCurso}(idCurso=${curso.idCurso})}"
+                      method="post" class="curso-action-form">
+                  <button type="submit" class="curso-action curso-action-reactivate">
+                    <i class="fa-solid fa-rotate-left"></i> Reactivar
+                  </button>
+                </form>
+
               </td>
             </tr>
+
             <tr th:if="${#lists.isEmpty(cursos)}">
               <td class="cursos-empty" colspan="7">
                 <i class="fa-regular fa-folder-open"></i>
+
                 <strong>No se encontraron cursos</strong>
-                <span>Prueba con otro nombre o limpia la búsqueda.</span>
+
+                <span>
+                  Prueba con otro nombre o limpia la búsqueda.
+                </span>
               </td>
             </tr>
           </tbody>
@@ -97,5 +185,9 @@
       </div>
     </section>
   </div>
+    
+ <th:block layout:fragment="js">
+    <script th:src="@{/js/admin/admin-cursos.js}" defer></script>
+</th:block>
 </body>
 </html>

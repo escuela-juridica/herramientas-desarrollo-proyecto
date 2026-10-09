@@ -3,16 +3,20 @@ package pe.edu.escuela.app.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
@@ -24,8 +28,13 @@ import pe.edu.escuela.app.service.CursoService;
 @ExtendWith(MockitoExtension.class)
 class AdminCursoControllerTest {
 
+  private static final String CORREO_ADMIN = "admin@escuelajuridica.edu.pe";
+
   @Mock
   private CursoService cursoService;
+
+  @Mock
+  private Authentication authentication;
 
   @TempDir
   private Path uploadDir;
@@ -39,13 +48,15 @@ class AdminCursoControllerTest {
         new BeanPropertyBindingResult(curso, "curso");
     MockMultipartFile imagen = new MockMultipartFile(
         "imagenArchivo", "portada.JPG", "image/jpeg", new byte[] {1, 2, 3});
+    when(authentication.getName()).thenReturn(CORREO_ADMIN);
 
     String vista = controller.crear(
         curso,
         bindingResult,
         imagen,
         new ExtendedModelMap(),
-        new RedirectAttributesModelMap());
+        new RedirectAttributesModelMap(),
+        authentication);
 
     assertThat(vista).isEqualTo("redirect:/admin/cursos");
     assertThat(curso.getImagen())
@@ -54,7 +65,7 @@ class AdminCursoControllerTest {
     String nombreGuardado = curso.getImagen().substring("/uploads/cursos/".length());
     assertThat(Files.readAllBytes(uploadDir.resolve(nombreGuardado)))
         .containsExactly(1, 2, 3);
-    verify(cursoService).guardarNuevo(curso);
+    verify(cursoService).guardarNuevo(curso, CORREO_ADMIN);
   }
 
   @Test
@@ -66,20 +77,108 @@ class AdminCursoControllerTest {
         new BeanPropertyBindingResult(curso, "curso");
     MockMultipartFile imagen = new MockMultipartFile(
         "imagenArchivo", "portada.png", "image/png", new byte[] {4, 5, 6});
+    when(authentication.getName()).thenReturn(CORREO_ADMIN);
     doThrow(new IllegalStateException("Base no disponible"))
-        .when(cursoService).guardarNuevo(curso);
+        .when(cursoService).guardarNuevo(curso, CORREO_ADMIN);
 
     String vista = controller.crear(
         curso,
         bindingResult,
         imagen,
         new ExtendedModelMap(),
-        new RedirectAttributesModelMap());
+        new RedirectAttributesModelMap(),
+        authentication);
 
     assertThat(vista).isEqualTo("admin/curso-form");
     try (var archivos = Files.list(uploadDir)) {
       assertThat(archivos).isEmpty();
     }
+  }
+
+  @Test
+  void crearRechazaFechasVacias() {
+    AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
+    Curso curso = crearCursoValido();
+    curso.setFechaInicio(null);
+    curso.setFechaFin(null);
+    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(curso, "curso");
+    MockMultipartFile imagen = new MockMultipartFile(
+        "imagenArchivo", "portada.jpg", "image/jpeg", new byte[] {1});
+
+    String vista = controller.crear(curso, bindingResult, imagen,
+        new ExtendedModelMap(), new RedirectAttributesModelMap(), authentication);
+
+    assertThat(vista).isEqualTo("admin/curso-form");
+    assertThat(bindingResult.getFieldError("fechaInicio")).isNotNull();
+    assertThat(bindingResult.getFieldError("fechaFin")).isNotNull();
+  }
+
+  @Test
+  void crearRechazaImagenWebp() {
+    AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
+    Curso curso = crearCursoValido();
+    MockMultipartFile imagen = new MockMultipartFile(
+        "imagenArchivo", "portada.webp", "image/webp", new byte[] {1});
+    ExtendedModelMap model = new ExtendedModelMap();
+
+    String vista = controller.crear(curso, new BeanPropertyBindingResult(curso, "curso"),
+        imagen, model, new RedirectAttributesModelMap(), authentication);
+
+    assertThat(vista).isEqualTo("admin/curso-form");
+    assertThat(model.get("errorGuardado")).isEqualTo("El archivo debe ser una imagen JPG o PNG.");
+  }
+
+  @Test
+  void editarSinNuevaImagenConservaLaAnterior() {
+    AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
+    Curso existente = crearCursoValido();
+    existente.setImagen("/uploads/cursos/original.jpg");
+    Curso formulario = crearCursoValido();
+    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(formulario, "curso");
+    when(cursoService.obtenerPorId(7)).thenReturn(existente);
+
+    String vista = controller.editar(7, formulario, bindingResult, null,
+        new ExtendedModelMap(), new RedirectAttributesModelMap());
+
+    assertThat(vista).isEqualTo("redirect:/admin/cursos");
+    assertThat(formulario.getIdCurso()).isEqualTo(7);
+    assertThat(formulario.getImagen()).isEqualTo("/uploads/cursos/original.jpg");
+    verify(cursoService).actualizar(7, formulario, null);
+  }
+
+  @Test
+  void editarEliminaNuevaImagenSiFallaElGuardado() throws Exception {
+    AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
+    Curso existente = crearCursoValido();
+    existente.setImagen("/uploads/cursos/original.jpg");
+    Curso formulario = crearCursoValido();
+    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(formulario, "curso");
+    MockMultipartFile imagen = new MockMultipartFile(
+        "imagenArchivo", "nueva.png", "image/png", new byte[] {1, 2, 3});
+    when(cursoService.obtenerPorId(7)).thenReturn(existente);
+    when(cursoService.actualizar(org.mockito.ArgumentMatchers.eq(7),
+        org.mockito.ArgumentMatchers.same(formulario),
+        org.mockito.ArgumentMatchers.anyString()))
+        .thenThrow(new DataIntegrityViolationException("Código duplicado"));
+
+    String vista = controller.editar(7, formulario, bindingResult, imagen,
+        new ExtendedModelMap(), new RedirectAttributesModelMap());
+
+    assertThat(vista).isEqualTo("admin/curso-form");
+    try (var archivos = Files.list(uploadDir)) {
+      assertThat(archivos).isEmpty();
+    }
+  }
+
+  @Test
+  void busquedaCombinaNombreYCodigo() {
+    AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
+    ExtendedModelMap model = new ExtendedModelMap();
+
+    String vista = controller.buscarCursos("Civil", "EJ-2026", model);
+
+    assertThat(vista).isEqualTo("admin/cursos :: filasCursos");
+    verify(cursoService).filtrarParaAdministracion("Civil", "EJ-2026");
   }
 
   private Curso crearCursoValido() {
@@ -93,6 +192,8 @@ class AdminCursoControllerTest {
     curso.setNombre("Curso de prueba");
     curso.setDescripcion("Descripción válida para probar la carga de imagen.");
     curso.setPrecio(new BigDecimal("100.00"));
+    curso.setFechaInicio(LocalDate.of(2026, 11, 5));
+    curso.setFechaFin(LocalDate.of(2026, 11, 20));
     curso.setTipoCurso(tipoCurso);
     curso.setDocente(docente);
     return curso;
