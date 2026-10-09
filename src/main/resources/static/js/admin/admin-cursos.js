@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // ACTUALIZAR TABLA
       filasCursos.innerHTML = nuevasFilas.innerHTML;
 
-      // ACTUALIZAR CONTADOR
+      
       actualizarTotal();
 
       console.log("Búsqueda completada:", busqueda);
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ACTUALIZAR TOTAL
+
   function actualizarTotal() {
     const filas = filasCursos.querySelectorAll("tr[data-curso]");
 
