@@ -166,9 +166,18 @@ th:action="${curso.idCurso == null} ? @{/admin/cursos/crear} : @{/admin/cursos/e
             <small>JPG o PNG. Tamaño máximo: 5 MB.</small>
           </div>
 
-          <div class="current-image" th:if="${curso.idCurso != null and curso.imagen != null}">
-            <img th:src="@{${curso.imagen}}" th:alt="'Portada actual de ' + ${curso.nombre}">
-            <span>Imagen actual</span>
+          <div class="curso-image-previews">
+            <div class="curso-image-preview" id="nuevaImagenVista" hidden>
+              <strong>Nueva imagen</strong>
+              <img id="nuevaImagenMiniatura" alt="Vista previa de la nueva imagen">
+              <a id="nuevaImagenCompleta" target="_blank" rel="noopener noreferrer">Ver imagen completa</a>
+            </div>
+
+            <div class="curso-image-preview" th:if="${curso.idCurso != null and curso.imagen != null}">
+              <strong>Imagen actual</strong>
+              <img th:src="@{${curso.imagen}}" th:alt="'Imagen actual de ' + ${curso.nombre}">
+              <a th:href="@{${curso.imagen}}" target="_blank" rel="noopener noreferrer">Ver imagen completa</a>
+            </div>
           </div>
 
           <label class="featured-option">
@@ -191,6 +200,9 @@ th:action="${curso.idCurso == null} ? @{/admin/cursos/crear} : @{/admin/cursos/e
       </div>
     </form>
   </div>
+  <th:block layout:fragment="js">
+    <script src="/js/admin/curso-imagen-preview.js" defer></script>
+  </th:block>
   
 </body>
 </html>

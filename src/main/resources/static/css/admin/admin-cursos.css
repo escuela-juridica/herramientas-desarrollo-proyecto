@@ -590,28 +590,41 @@
   cursor: pointer;
 }
 
-.current-image {
-  width: fit-content;
-  position: relative;
+.curso-image-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
 }
 
-.current-image img {
-  width: 150px;
-  height: 90px;
+.curso-image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.curso-image-preview[hidden] {
+  display: none;
+}
+
+.curso-image-preview strong {
+  color: #344255;
+  font-size: 12.5px;
+}
+
+.curso-image-preview img {
+  width: 220px;
+  height: 140px;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
+  border: 1px solid var(--line);
   border-radius: 9px;
+  background: #fafbfc;
 }
 
-.current-image span {
-  position: absolute;
-  right: 6px;
-  bottom: 6px;
-  padding: 3px 7px;
-  border-radius: 5px;
-  background: rgba(10, 37, 64, .86);
-  color: #fff;
-  font-size: 9.5px;
+.curso-image-preview a {
+  color: var(--navy-2);
+  font-size: 12px;
   font-weight: 700;
 }
 
