@@ -190,7 +190,7 @@
             </div>
             <div class="curso-foot">
               <div style="width: 100%; text-align: left !important; font-size: 1.25rem; font-weight: bold; color: var(--navy); margin-bottom: 15px;">
-                S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 0)}"></span>
+                S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}"></span>
               </div>
               <a href="/catalogo" class="curso-button">Más Información</a>
             </div>

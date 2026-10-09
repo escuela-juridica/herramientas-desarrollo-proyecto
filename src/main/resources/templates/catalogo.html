@@ -114,7 +114,7 @@
             </div>
             <div class="curso-foot">
               <div style="width: 100%; text-align: left !important; font-size: 1.25rem; font-weight: bold; color: var(--navy); margin-bottom: 15px;">
-                S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 0)}"></span>
+                S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}"></span>
               </div>
               <a href="#" class="curso-button" data-bs-toggle="modal" th:data-bs-target="'#modalCurso' + ${curso.idCurso}">Más Información</a>
             </div>
@@ -150,7 +150,7 @@
                   <span><i class="fa-regular fa-clock"></i> Duración: <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
                 </div>
                 <div style="font-size: 1.5rem; color: var(--navy); font-weight: bold; text-align: center;">
-                  Precio: S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 0)}"></span>
+                  Precio: S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}"></span>
                 </div>
               </div>
             </div>
