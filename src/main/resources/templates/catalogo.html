@@ -103,7 +103,7 @@
                 th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
                 th:text="${curso.tipoCurso.nombre}"></span>
               <div class="curso-meta">
-                <span class="curso-hours"><i class="fa-solid fa-sack-dollar"></i> <span th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 0)}"></span></span>
+                <span class="curso-hours"><i class="fa-solid fa-hashtag"></i> <span th:text="${curso.codigo}"></span></span>
                 <span class="curso-hours"><i class="fa-regular fa-clock"></i> <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
               </div>
             </div>
@@ -113,6 +113,9 @@
               <p th:text="${curso.descripcion}"></p>
             </div>
             <div class="curso-foot">
+              <div style="width: 100%; text-align: left !important; font-size: 1.25rem; font-weight: bold; color: var(--navy); margin-bottom: 15px;">
+                S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 0)}"></span>
+              </div>
               <a href="#" class="curso-button" data-bs-toggle="modal" th:data-bs-target="'#modalCurso' + ${curso.idCurso}">Más Información</a>
             </div>
 
@@ -121,27 +124,39 @@
       </div>
     </section>
 
-    <!-- Modales de Detalles del Curso (Generados fuera de contenedores con overflow) -->
+    <!-- Modales de Detalles del Curso (Diseño Premium) -->
     <th:block th:each="curso : ${cursos}">
       <div class="modal fade" th:id="'modalCurso' + ${curso.idCurso}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title curso-modal-title" th:text="${curso.nombre}"></h5>
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 15px 35px rgba(0,0,0,0.2);">
+            <div class="modal-header" style="border-bottom: none; padding: 1.5rem 1.5rem 0.5rem;">
+              <h5 class="modal-title" th:text="${curso.nombre}" style="font-family: var(--serif); color: var(--navy); font-weight: bold; font-size: 1.4rem; line-height: 1.3;"></h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-            <div class="modal-body curso-modal-body">
-              <img th:src="@{${curso.imagen}}" class="img-fluid mb-3 rounded curso-modal-img" alt="Portada del curso">
-              <p th:text="${curso.descripcion}" class="curso-modal-desc"></p>
-              <hr>
-              <div class="curso-modal-datos">
-                <span><i class="fa-solid fa-sack-dollar"></i> Precio: <span th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 0)}"></span></span>
-                <span><i class="fa-regular fa-clock"></i> Duración: <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
+            <div class="modal-body" style="color: var(--navy); padding: 0 1.5rem 1.5rem;">
+              <div style="position: relative; margin-bottom: 1rem;">
+                <img th:src="@{${curso.imagen}}" class="img-fluid rounded" alt="Portada del curso" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                <span class="curso-badge" 
+                      th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
+                      th:text="${curso.tipoCurso.nombre}"
+                      style="position: absolute; top: 12px; left: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"></span>
+              </div>
+              <p th:text="${curso.descripcion}" style="font-size: 0.95rem; line-height: 1.6; color: var(--navy); opacity: 0.9;"></p>
+              
+              <!-- Caja de datos resumen -->
+              <div style="background-color: rgba(0,0,0,0.03); border-radius: 8px; padding: 15px; margin-top: 15px;">
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; color: var(--muted); margin-bottom: 8px;">
+                  <span><i class="fa-solid fa-hashtag"></i> Código: <span th:text="${curso.codigo}"></span></span>
+                  <span><i class="fa-regular fa-clock"></i> Duración: <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
+                </div>
+                <div style="font-size: 1.5rem; color: var(--navy); font-weight: bold; text-align: center;">
+                  Precio: S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 0)}"></span>
+                </div>
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn curso-modal-comprar" onclick="alert('¡Curso comprado exitosamente!')">Comprar</button>
+            <div class="modal-footer" style="border-top: none; padding: 0 1.5rem 1.5rem; justify-content: center; gap: 10px;">
+              <button type="button" class="btn" style="background-color: transparent; color: var(--muted); border: 1px solid #ccc; font-weight: bold; padding: 10px 24px; border-radius: 6px;" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn" style="background-color: var(--orange); color: white; border: none; font-weight: bold; padding: 10px 24px; border-radius: 6px; box-shadow: 0 4px 10px rgba(230, 126, 34, 0.4);" onclick="alert('¡Curso comprado exitosamente!')">Confirmar Compra</button>
             </div>
           </div>
         </div>

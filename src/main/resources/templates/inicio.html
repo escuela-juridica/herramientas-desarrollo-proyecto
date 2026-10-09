@@ -179,7 +179,7 @@
                 th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
                 th:text="${curso.tipoCurso.nombre}"></span>
               <div class="curso-meta">
-                <span class="curso-hours"><i class="fa-solid fa-sack-dollar"></i> <span th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 0)}"></span></span>
+                <span class="curso-hours"><i class="fa-solid fa-hashtag"></i> <span th:text="${curso.codigo}"></span></span>
                 <span class="curso-hours"><i class="fa-regular fa-clock"></i> <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
               </div>
             </div>
@@ -188,7 +188,12 @@
               <h3 th:text="${curso.nombre}"></h3>
               <p th:text="${curso.descripcion}"></p>
             </div>
-            <div class="curso-foot"><a href="/catalogo" class="curso-button">Más Información</a></div>
+            <div class="curso-foot">
+              <div style="width: 100%; text-align: left !important; font-size: 1.25rem; font-weight: bold; color: var(--navy); margin-bottom: 15px;">
+                S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 0)}"></span>
+              </div>
+              <a href="/catalogo" class="curso-button">Más Información</a>
+            </div>
           </article>
         </div>
       </div>
