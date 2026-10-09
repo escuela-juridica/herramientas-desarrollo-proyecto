@@ -20,4 +20,11 @@ public interface CursoRepository extends JpaRepository<Curso, Integer> {
 
   @EntityGraph(attributePaths = {"tipoCurso", "docente"})
   List<Curso> findByNombreContainingIgnoreCaseOrderByIdCursoAsc(String nombre);
+
+  @EntityGraph(attributePaths = {"tipoCurso", "docente"})
+  List<Curso> findByCodigoContainingIgnoreCaseOrderByIdCursoAsc(String codigo);
+
+  @EntityGraph(attributePaths = {"tipoCurso", "docente"})
+  List<Curso> findByNombreContainingIgnoreCaseAndCodigoContainingIgnoreCaseOrderByIdCursoAsc(
+      String nombre, String codigo);
 }

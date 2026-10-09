@@ -13,8 +13,8 @@
 <body>
   <div layout:fragment="content">
     <div class="form-page-head">
-      <a class="form-back" href="/admin/cursos">
-        <i class="fa-solid fa-arrow-left"></i> Volver al listado
+      <a class="form-back" href="/admin/cursos" aria-label="Volver al listado" title="Volver al listado">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
       </a>
       <div>
         <p class="cursos-kicker">Gestión académica</p>
@@ -24,7 +24,8 @@
     </div>
 
     <form class="curso-form" th:object="${curso}" method="post" enctype="multipart/form-data"
-          th:action="${curso.idCurso == null} ? @{/admin/cursos/crear} : @{/admin/cursos/{id}/editar(id=${curso.idCurso})}">
+          
+th:action="${curso.idCurso == null} ? @{/admin/cursos/crear} : @{/admin/cursos/editar/{idCurso}(idCurso=${curso.idCurso})}">
       <input th:if="${curso.idCurso != null}" type="hidden" th:field="*{idCurso}">
 
       <div class="admin-alert admin-alert-error" role="alert" th:if="${errorGuardado}">
@@ -118,29 +119,29 @@
 
           <div class="form-field">
             <label for="duracionHoras">Duración (horas)</label>
-            <input id="duracionHoras" type="number" th:field="*{duracionHoras}" min="1" step="1"
+            <input id="duracionHoras" type="number" th:field="*{duracionHoras}" min="1" max="1000" step="1"
                    placeholder="40">
           </div>
 
           <div class="form-field">
             <label for="cupos">Cupos</label>
-            <input id="cupos" type="number" th:field="*{cupos}" min="1" step="1" placeholder="30">
+            <input id="cupos" type="number" th:field="*{cupos}" min="1" max="1000" step="1" placeholder="30">
           </div>
 
           <div class="form-field">
             <label for="precio">Precio (S/) <em>*</em></label>
-            <input id="precio" type="number" th:field="*{precio}" min="0" step="0.01"
+            <input id="precio" type="number" th:field="*{precio}" min="0" max="20000" step="0.01"
                    placeholder="0.00" required>
           </div>
 
           <div class="form-field">
-            <label for="fechaInicio">Fecha de inicio</label>
-            <input id="fechaInicio" type="date" th:field="*{fechaInicio}">
+            <label for="fechaInicio">Fecha de inicio <em>*</em></label>
+            <input id="fechaInicio" type="date" th:field="*{fechaInicio}" required>
           </div>
 
           <div class="form-field">
-            <label for="fechaFin">Fecha de fin</label>
-            <input id="fechaFin" type="date" th:field="*{fechaFin}">
+            <label for="fechaFin">Fecha de fin <em>*</em></label>
+            <input id="fechaFin" type="date" th:field="*{fechaFin}" required>
           </div>
         </div>
       </section>
@@ -160,14 +161,23 @@
               Imagen de portada <em th:if="${curso.idCurso == null}">*</em>
             </label>
             <input id="imagenArchivo" class="file-input" type="file" name="imagenArchivo"
-                   accept="image/jpeg,image/png,image/webp,image/gif"
+                   accept="image/jpeg,image/png,.jpg,.jpeg,.png"
                    th:required="${curso.idCurso == null}">
-            <small>JPG, PNG, WEBP o GIF. Tamaño máximo: 5 MB.</small>
+            <small>JPG o PNG. Tamaño máximo: 5 MB.</small>
           </div>
 
-          <div class="current-image" th:if="${curso.idCurso != null and curso.imagen != null}">
-            <img th:src="@{${curso.imagen}}" th:alt="'Portada actual de ' + ${curso.nombre}">
-            <span>Imagen actual</span>
+          <div class="curso-image-previews">
+            <div class="curso-image-preview" id="nuevaImagenVista" hidden>
+              <strong>Nueva imagen</strong>
+              <img id="nuevaImagenMiniatura" alt="Vista previa de la nueva imagen">
+              <a id="nuevaImagenCompleta" target="_blank" rel="noopener noreferrer">Ver imagen completa</a>
+            </div>
+
+            <div class="curso-image-preview" th:if="${curso.idCurso != null and curso.imagen != null}">
+              <strong>Imagen actual</strong>
+              <img th:src="@{${curso.imagen}}" th:alt="'Imagen actual de ' + ${curso.nombre}">
+              <a th:href="@{${curso.imagen}}" target="_blank" rel="noopener noreferrer">Ver imagen completa</a>
+            </div>
           </div>
 
           <label class="featured-option">
@@ -190,5 +200,9 @@
       </div>
     </form>
   </div>
+  <th:block layout:fragment="js">
+    <script src="/js/admin/curso-imagen-preview.js" defer></script>
+  </th:block>
+  
 </body>
 </html>

@@ -45,6 +45,27 @@ public class CursoService {
     return cursoRepository.findByNombreContainingIgnoreCaseOrderByIdCursoAsc(busqueda.trim());
   }
 
+  public List<Curso> buscarParaAdministracionPorCodigo(String codigo) {
+    if (codigo == null || codigo.isBlank()) {
+      return cursoRepository.findAllByOrderByIdCursoAsc();
+    }
+    return cursoRepository.findByCodigoContainingIgnoreCaseOrderByIdCursoAsc(codigo.trim());
+  }
+
+  public List<Curso> filtrarParaAdministracion(String nombre, String codigo) {
+    String nombreLimpio = nombre == null ? "" : nombre.trim();
+    String codigoLimpio = codigo == null ? "" : codigo.trim();
+    if (nombreLimpio.isEmpty()) {
+      return buscarParaAdministracionPorCodigo(codigoLimpio);
+    }
+    if (codigoLimpio.isEmpty()) {
+      return listarParaAdministracion(nombreLimpio);
+    }
+    return cursoRepository
+        .findByNombreContainingIgnoreCaseAndCodigoContainingIgnoreCaseOrderByIdCursoAsc(
+            nombreLimpio, codigoLimpio);
+  }
+
   public Curso obtenerPorId(Integer idCurso) {
     return cursoRepository.findById(idCurso)
         .orElseThrow(() -> new IllegalArgumentException("No existe el curso solicitado."));
@@ -81,5 +102,50 @@ public class CursoService {
     curso.setEstado(Constantes.ESTADO_ACTIVO);
 
     return cursoRepository.save(curso);
+  }
+
+  public Curso actualizar(Integer idCurso, Curso datos, String nuevaImagen) {
+    Curso existente = obtenerPorId(idCurso);
+    Integer idTipo = datos.getTipoCurso() == null ? null : datos.getTipoCurso().getIdTipoCurso();
+    Integer idDocente = datos.getDocente() == null ? null : datos.getDocente().getIdDocente();
+    if (idTipo == null || idDocente == null) {
+      throw new IllegalArgumentException("Debes seleccionar un tipo de curso y un docente.");
+    }
+
+    TipoCurso tipo = tipoCursoRepository.findById(idTipo)
+        .orElseThrow(() -> new IllegalArgumentException("El tipo de curso seleccionado no existe."));
+    Docente docente = docenteRepository.findById(idDocente)
+        .orElseThrow(() -> new IllegalArgumentException("El docente seleccionado no existe."));
+
+    existente.setCodigo(datos.getCodigo());
+    existente.setNombre(datos.getNombre());
+    existente.setDescripcion(datos.getDescripcion());
+    existente.setInstitucion(datos.getInstitucion());
+    existente.setModalidad(datos.getModalidad());
+    existente.setDuracionHoras(datos.getDuracionHoras());
+    existente.setCupos(datos.getCupos());
+    existente.setFechaInicio(datos.getFechaInicio());
+    existente.setFechaFin(datos.getFechaFin());
+    existente.setPrecio(datos.getPrecio());
+    existente.setDestacado(datos.isDestacado());
+    existente.setTipoCurso(tipo);
+    existente.setDocente(docente);
+    if (nuevaImagen != null) {
+      existente.setImagen(nuevaImagen);
+    }
+
+    return cursoRepository.saveAndFlush(existente);
+  }
+
+  public void desactivar(Integer idCurso) {
+    Curso curso = obtenerPorId(idCurso);
+    curso.setEstado(Constantes.ESTADO_INACTIVO);
+    cursoRepository.save(curso);
+  }
+
+  public void reactivar(Integer idCurso) {
+    Curso curso = obtenerPorId(idCurso);
+    curso.setEstado(Constantes.ESTADO_ACTIVO);
+    cursoRepository.save(curso);
   }
 }
