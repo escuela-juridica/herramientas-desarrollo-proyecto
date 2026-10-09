@@ -21,6 +21,10 @@ public interface CursoRepository extends JpaRepository<Curso, Integer> {
   @EntityGraph(attributePaths = {"tipoCurso", "docente"})
   List<Curso> findByNombreContainingIgnoreCaseOrderByIdCursoAsc(String nombre);
 
-  @Query("SELECT c FROM Curso c JOIN FETCH c.tipoCurso WHERE (:nombre IS NULL OR LOWER(c.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND (:idTipoCurso IS NULL OR c.tipoCurso.idTipoCurso = :idTipoCurso) AND c.estado = :estado ORDER BY c.idCurso ASC")
-  List<Curso> buscarConFiltros(@Param("nombre") String nombre, @Param("idTipoCurso") Integer idTipoCurso, @Param("estado") String estado);
+  @Query("SELECT c FROM Curso c JOIN FETCH c.tipoCurso WHERE (:nombre IS NULL OR LOWER(c.nombre) LIKE LOWER(CONCAT('%', CAST(:nombre AS String), '%'))) AND (:descripcion IS NULL OR LOWER(c.descripcion) LIKE LOWER(CONCAT('%', CAST(:descripcion AS String), '%'))) AND (:idTipoCurso IS NULL OR c.tipoCurso.idTipoCurso = :idTipoCurso) AND c.estado = :estado ORDER BY c.idCurso ASC")
+  List<Curso> buscarConFiltros(
+      @Param("nombre") String nombre,
+      @Param("descripcion") String descripcion,
+      @Param("idTipoCurso") Integer idTipoCurso,
+      @Param("estado") String estado);
 }

@@ -136,7 +136,7 @@
             <div class="busqueda-dinamica-wrap">
               <i class="fa-solid fa-magnifying-glass busqueda-dinamica-icon"></i>
               <input type="text" id="campoDinamico" class="busqueda-dinamica-input"
-                placeholder="Escribe el nombre o tema del curso (ej. Notarial, Civil, Inmobiliario)…"
+                placeholder="Buscar por descripción"
                 autocomplete="off">
               <button type="button" id="btnLimpiarDinamico" class="busqueda-dinamica-clear"
                 aria-label="Limpiar búsqueda en vivo" title="Borrar texto" style="display: none;">
@@ -150,6 +150,11 @@
 
         <div class="grid6" id="cursosGrid">
           <th:block th:fragment="resultadosCursos">
+            <div th:if="${#lists.isEmpty(cursos)}" class="busqueda-sin-resultados">
+              <i class="fa-solid fa-magnifying-glass busqueda-sin-resultados-icon"></i>
+              <h3 class="busqueda-sin-resultados-titulo">No se encontraron cursos</h3>
+              <p class="busqueda-sin-resultados-texto">No hay cursos que coincidan con los criterios de búsqueda ingresados. Intenta ajustar los filtros o buscar con otros términos.</p>
+            </div>
             <article th:each="curso : ${cursos}" class="content-card curso">
               <div class="curso-head">
                 <span class="curso-badge"

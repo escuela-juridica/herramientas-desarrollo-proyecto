@@ -330,6 +330,41 @@
   }
 }
 
+/* ── MENSAJE SIN RESULTADOS ────────────────────────────────────────── */
+
+.busqueda-sin-resultados {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 56px 24px;
+  background: #fff;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(10, 35, 66, .03);
+}
+
+.busqueda-sin-resultados-icon {
+  font-size: 40px;
+  color: #94a3b8;
+  margin-bottom: 14px;
+  display: inline-block;
+}
+
+.busqueda-sin-resultados-titulo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+  font-family: var(--serif, inherit);
+}
+
+.busqueda-sin-resultados-texto {
+  font-size: 0.92rem;
+  color: #64748b;
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
 /* TARJETAS DE CURSO (Reutilizadas de inicio.css) */
 .grid6 {
   display: grid;

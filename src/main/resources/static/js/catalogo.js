@@ -1,14 +1,18 @@
 /**
- * catalogo.js — Búsqueda estática y dinámica de cursos
+ * catalogo.js — Búsqueda estática y dinámica de cursos en conjunto
  * Rama: feature/busqueda-productos (Paolo Añorga)
  *
- * BÚSQUEDA ESTÁTICA  : input grande de nombre + select de tipo de curso + botón "Buscar".
- *                      Solo se dispara al hacer clic en el botón (o al pulsar Enter en el input).
+ * BÚSQUEDA ESTÁTICA  : input de nombre + select de tipo de curso + botón "Buscar".
+ *                      Se dispara al hacer clic en el botón (o al pulsar Enter en el input).
  *
- * BÚSQUEDA DINÁMICA  : input pequeño con debounce de 300 ms.
- *                      Los resultados cambian solos mientras el usuario escribe.
+ * BÚSQUEDA DINÁMICA  : input de descripción con debounce de 300 ms.
+ *                      Los resultados se filtran en tiempo real mientras el usuario escribe.
  *
- * Ambas usan el mismo endpoint GET /catalogo/buscar?texto=...&idTipoCurso=...
+ * BÚSQUEDA CONJUNTA  : Ambos buscadores operan en conjunto: si el usuario ingresa
+ *                      parámetros en la búsqueda estática (nombre y/o tipo) y en la dinámica
+ *                      (descripción), se consultan los 3 campos a la vez.
+ *
+ * Endpoint: GET /catalogo/buscar?texto=...&descripcion=...&idTipoCurso=...
  * El servidor devuelve el fragmento Thymeleaf "resultadosCursos" (HTML puro, no JSON).
  * El JS solo reemplaza el innerHTML de #cursosGrid — nunca arma tarjetas por su cuenta.
  */
@@ -34,12 +38,14 @@
    * Pide al servidor el fragmento de tarjetas filtradas y lo pega en #cursosGrid.
    *
    * @param {string}  texto       - Término de nombre (puede ser vacío).
+   * @param {string}  descripcion - Término de descripción (puede ser vacío).
    * @param {string}  tipoCurso   - ID del tipo de curso seleccionado (puede ser vacío/"").
    */
-  function buscar(texto, tipoCurso) {
+  function buscar(texto, descripcion, tipoCurso) {
     const params = new URLSearchParams();
-    if (texto && texto.trim())  params.set('texto', texto.trim());
-    if (tipoCurso)              params.set('idTipoCurso', tipoCurso);
+    if (texto && texto.trim())              params.set('texto', texto.trim());
+    if (descripcion && descripcion.trim()) params.set('descripcion', descripcion.trim());
+    if (tipoCurso)                         params.set('idTipoCurso', tipoCurso);
 
     fetch('/catalogo/buscar?' + params.toString())
       .then(function (respuesta) {
@@ -53,7 +59,24 @@
       })
       .catch(function (error) {
         console.error('[catalogo.js] Error en la búsqueda:', error);
+        cursosGrid.innerHTML =
+          '<div class="busqueda-sin-resultados">' +
+          '<i class="fa-solid fa-triangle-exclamation busqueda-sin-resultados-icon"></i>' +
+          '<h3 class="busqueda-sin-resultados-titulo">Error al realizar la búsqueda</h3>' +
+          '<p class="busqueda-sin-resultados-texto">Ocurrió un inconveniente al conectar con el servidor. Por favor, intenta de nuevo.</p>' +
+          '</div>';
       });
+  }
+
+  /**
+   * Ejecuta la búsqueda unificada leyendo los valores actuales
+   * de los campos estáticos (nombre, tipo) y del campo dinámico (descripción).
+   */
+  function ejecutarBusqueda() {
+    var texto       = campoEstatico ? campoEstatico.value : '';
+    var tipo        = selectTipo    ? selectTipo.value    : '';
+    var descripcion = campoDinamico ? campoDinamico.value : '';
+    buscar(texto, descripcion, tipo);
   }
 
   /* ══════════════════════════════════════════════════════════════════ */
@@ -63,23 +86,23 @@
 
   if (btnEstatico) {
     btnEstatico.addEventListener('click', function () {
-      var texto = campoEstatico ? campoEstatico.value : '';
-      var tipo  = selectTipo    ? selectTipo.value    : '';
-      if (campoDinamico) campoDinamico.value = '';
-      if (btnLimpiarDinamico) btnLimpiarDinamico.style.display = 'none';
-      buscar(texto, tipo);
+      ejecutarBusqueda();
     });
   }
 
-  /* Enter dentro del input grande también dispara la búsqueda estática */
+  /* Enter dentro del input de nombre también dispara la búsqueda */
   if (campoEstatico) {
     campoEstatico.addEventListener('keydown', function (evento) {
       if (evento.key === 'Enter') {
-        var tipo = selectTipo ? selectTipo.value : '';
-        if (campoDinamico) campoDinamico.value = '';
-        if (btnLimpiarDinamico) btnLimpiarDinamico.style.display = 'none';
-        buscar(campoEstatico.value, tipo);
+        ejecutarBusqueda();
       }
+    });
+  }
+
+  /* Cambio directo en el selector de tipo: aplica el filtro inmediatamente */
+  if (selectTipo) {
+    selectTipo.addEventListener('change', function () {
+      ejecutarBusqueda();
     });
   }
 
@@ -90,13 +113,13 @@
       if (selectTipo)    selectTipo.value = '';
       if (campoDinamico) campoDinamico.value = '';
       if (btnLimpiarDinamico) btnLimpiarDinamico.style.display = 'none';
-      buscar('', '');
+      buscar('', '', '');
     });
   }
 
   /* ══════════════════════════════════════════════════════════════════ */
   /* BÚSQUEDA DINÁMICA                                                  */
-  /* input en tiempo real → debounce 300 ms → busca por nombre          */
+  /* input en tiempo real → debounce 300 ms → busca por descripción     */
   /* ══════════════════════════════════════════════════════════════════ */
 
   function actualizarBotonLimpiarDinamico() {
@@ -108,10 +131,17 @@
     campoDinamico.addEventListener('input', function () {
       actualizarBotonLimpiarDinamico();
       clearTimeout(debounceTimer);
-      var textoActual = campoDinamico.value;
       debounceTimer = setTimeout(function () {
-        buscar(textoActual, ''); // sin filtro de tipo en la búsqueda dinámica
+        ejecutarBusqueda();
       }, 300);
+    });
+
+    /* Enter inmediato en campo dinámico */
+    campoDinamico.addEventListener('keydown', function (evento) {
+      if (evento.key === 'Enter') {
+        clearTimeout(debounceTimer);
+        ejecutarBusqueda();
+      }
     });
   }
 
@@ -122,7 +152,7 @@
         campoDinamico.focus();
       }
       actualizarBotonLimpiarDinamico();
-      buscar('', '');
+      ejecutarBusqueda();
     });
   }
 
