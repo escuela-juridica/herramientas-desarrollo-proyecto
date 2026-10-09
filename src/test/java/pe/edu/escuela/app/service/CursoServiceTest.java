@@ -62,6 +62,42 @@ class CursoServiceTest {
   }
 
   @Test
+  void buscarEnCatalogoConParametrosLimpiaEspaciosYFiltraConEstadoActivo() {
+    List<Curso> cursos = List.of(new Curso());
+    when(cursoRepository.buscarConFiltros("Civil", "Notarial", 2, Constantes.ESTADO_ACTIVO))
+        .thenReturn(cursos);
+
+    List<Curso> resultado = cursoService.buscarEnCatalogo("  Civil  ", "  Notarial  ", 2);
+
+    assertThat(resultado).isSameAs(cursos);
+    verify(cursoRepository).buscarConFiltros("Civil", "Notarial", 2, Constantes.ESTADO_ACTIVO);
+  }
+
+  @Test
+  void buscarEnCatalogoConValoresVaciosEnviaParametrosNulos() {
+    List<Curso> cursos = List.of(new Curso());
+    when(cursoRepository.buscarConFiltros(null, null, null, Constantes.ESTADO_ACTIVO))
+        .thenReturn(cursos);
+
+    List<Curso> resultado = cursoService.buscarEnCatalogo("   ", "", null);
+
+    assertThat(resultado).isSameAs(cursos);
+    verify(cursoRepository).buscarConFiltros(null, null, null, Constantes.ESTADO_ACTIVO);
+  }
+
+  @Test
+  void buscarEnCatalogoSobrecargadoDosParametrosInvocaConDescripcionNula() {
+    List<Curso> cursos = List.of(new Curso());
+    when(cursoRepository.buscarConFiltros("Civil", null, 1, Constantes.ESTADO_ACTIVO))
+        .thenReturn(cursos);
+
+    List<Curso> resultado = cursoService.buscarEnCatalogo("Civil", 1);
+
+    assertThat(resultado).isSameAs(cursos);
+    verify(cursoRepository).buscarConFiltros("Civil", null, 1, Constantes.ESTADO_ACTIVO);
+  }
+
+  @Test
   void buscarParaAdministracionPorCodigoUsaElCodigoLimpio() {
     List<Curso> cursos = List.of(new Curso());
     when(cursoRepository.findByCodigoContainingIgnoreCaseOrderByIdCursoAsc("EJ-2026"))

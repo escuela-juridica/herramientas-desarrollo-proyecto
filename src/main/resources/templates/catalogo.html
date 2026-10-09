@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}">
 
 <head>
   <title>Cursos</title>
   <th:block layout:fragment="css">
     <link rel="stylesheet" href="css/catalogo.css">
+  </th:block>
+  <th:block layout:fragment="js">
+    <script src="/js/catalogo.js" defer></script>
   </th:block>
 </head>
 
@@ -96,30 +98,87 @@
           <h2 class="tit">Catálogo de cursos</h2>
           <p class="section-lead">Explora nuestra oferta académica completa.</p>
         </div>
-        <div class="grid6" id="cursosGrid">
-          <article th:each="curso : ${cursos}" class="content-card curso">
-            <div class="curso-head">
-              <span class="curso-badge"
-                th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
-                th:text="${curso.tipoCurso.nombre}"></span>
-              <div class="curso-meta">
-                <span class="curso-hours"><i class="fa-solid fa-hashtag"></i> <span th:text="${curso.codigo}"></span></span>
-                <span class="curso-hours"><i class="fa-regular fa-clock"></i> <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
-              </div>
-            </div>
-            <div class="curso-cover"><img th:src="@{${curso.imagen}}" alt="Portada del curso"></div>
-            <div class="curso-body">
-              <h3 th:text="${curso.nombre}"></h3>
-              <p th:text="${curso.descripcion}"></p>
-            </div>
-            <div class="curso-foot">
-              <div class="curso-precio">
-                S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}"></span>
-              </div>
-              <a href="#" class="curso-button" data-bs-toggle="modal" th:data-bs-target="'#modalCurso' + ${curso.idCurso}">Más Información</a>
-            </div>
 
-          </article>
+        <!-- BÚSQUEDAS Y FILTROS -->
+        <div class="contenedor-busquedas">
+
+          <!-- BÚSQUEDA ESTÁTICA -->
+          <div class="busqueda-estatica">
+            <div class="busqueda-estatica-campos">
+              <div class="busqueda-estatica-input-wrap">
+                <i class="fa-solid fa-magnifying-glass busqueda-estatica-icon"></i>
+                <input type="text" id="campoEstatico" class="busqueda-estatica-input"
+                  placeholder="Buscar curso por nombre (ej. Notarial, Civil)…" autocomplete="off">
+              </div>
+              <div class="busqueda-estatica-select-wrap">
+                <i class="fa-solid fa-filter busqueda-estatica-select-icon"></i>
+                <select id="selectTipo" class="busqueda-estatica-select" aria-label="Filtrar por tipo de curso">
+                  <option value="">Todos los tipos</option>
+                  <option th:each="tipo : ${tiposCurso}" th:value="${tipo.idTipoCurso}" th:text="${tipo.nombre}">
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="busqueda-estatica-acciones">
+              <button type="button" id="btnEstatico" class="busqueda-estatica-btn" title="Buscar cursos">
+                <i class="fa-solid fa-magnifying-glass"></i> Buscar
+              </button>
+              <button type="button" id="btnLimpiar" class="busqueda-estatica-btn-limpiar"
+                title="Quitar todos los filtros">
+                <i class="fa-solid fa-rotate-left"></i> Quitar filtros
+              </button>
+            </div>
+          </div>
+          <!-- FIN BÚSQUEDA ESTÁTICA -->
+
+          <!-- BÚSQUEDA DINÁMICA -->
+          <div class="busqueda-dinamica">
+            <div class="busqueda-dinamica-wrap">
+              <i class="fa-solid fa-magnifying-glass busqueda-dinamica-icon"></i>
+              <input type="text" id="campoDinamico" class="busqueda-dinamica-input"
+                placeholder="Buscar por descripción"
+                autocomplete="off">
+              <button type="button" id="btnLimpiarDinamico" class="busqueda-dinamica-clear"
+                aria-label="Limpiar búsqueda en vivo" title="Borrar texto" style="display: none;">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+          <!-- FIN BÚSQUEDA DINÁMICA -->
+
+        </div>
+
+        <div class="grid6" id="cursosGrid">
+          <th:block th:fragment="resultadosCursos">
+            <div th:if="${#lists.isEmpty(cursos)}" class="busqueda-sin-resultados">
+              <i class="fa-solid fa-magnifying-glass busqueda-sin-resultados-icon"></i>
+              <h3 class="busqueda-sin-resultados-titulo">No se encontraron cursos</h3>
+              <p class="busqueda-sin-resultados-texto">No hay cursos que coincidan con los criterios de búsqueda ingresados. Intenta ajustar los filtros o buscar con otros términos.</p>
+            </div>
+            <article th:each="curso : ${cursos}" class="content-card curso">
+              <div class="curso-head">
+                <span class="curso-badge"
+                  th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
+                  th:text="${curso.tipoCurso.nombre}"></span>
+                <div class="curso-meta">
+                  <span class="curso-hours"><i class="fa-solid fa-sack-dollar"></i> <span
+                      th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 0)}"></span></span>
+                  <span class="curso-hours"><i class="fa-regular fa-clock"></i> <span
+                      th:text="${curso.duracionHoras} + ' hrs'"></span></span>
+                </div>
+              </div>
+              <div class="curso-cover"><img th:src="@{${curso.imagen}}" alt="Portada del curso"></div>
+              <div class="curso-body">
+                <h3 th:text="${curso.nombre}"></h3>
+                <p th:text="${curso.descripcion}"></p>
+              </div>
+              <div class="curso-foot">
+                <a href="#" class="curso-button" data-bs-toggle="modal"
+                  th:data-bs-target="'#modalCurso' + ${curso.idCurso}">Más Información</a>
+              </div>
+
+            </article>
+          </th:block>
         </div>
       </div>
     </section>

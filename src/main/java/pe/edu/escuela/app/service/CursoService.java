@@ -38,6 +38,16 @@ public class CursoService {
     return cursoRepository.findByEstadoOrderByIdCursoAsc(Constantes.ESTADO_ACTIVO);
   }
 
+  public List<Curso> buscarEnCatalogo(String texto, Integer idTipoCurso) {
+    return buscarEnCatalogo(texto, null, idTipoCurso);
+  }
+
+  public List<Curso> buscarEnCatalogo(String texto, String descripcion, Integer idTipoCurso) {
+    String nombre = (texto == null || texto.isBlank()) ? null : texto.trim();
+    String desc = (descripcion == null || descripcion.isBlank()) ? null : descripcion.trim();
+    return cursoRepository.buscarConFiltros(nombre, desc, idTipoCurso, Constantes.ESTADO_ACTIVO);
+  }
+
   public List<Curso> listarParaAdministracion(String busqueda) {
     if (busqueda == null || busqueda.isBlank()) {
       return cursoRepository.findAllByOrderByIdCursoAsc();
