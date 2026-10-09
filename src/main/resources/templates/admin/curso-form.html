@@ -24,7 +24,8 @@
     </div>
 
     <form class="curso-form" th:object="${curso}" method="post" enctype="multipart/form-data"
-          th:action="${curso.idCurso == null} ? @{/admin/cursos/crear} : @{/admin/cursos/{id}/editar(id=${curso.idCurso})}">
+          
+th:action="${curso.idCurso == null} ? @{/admin/cursos/crear} : @{/admin/cursos/editar/{idCurso}(idCurso=${curso.idCurso})}">
       <input th:if="${curso.idCurso != null}" type="hidden" th:field="*{idCurso}">
 
       <div class="admin-alert admin-alert-error" role="alert" th:if="${errorGuardado}">
@@ -190,5 +191,6 @@
       </div>
     </form>
   </div>
+  
 </body>
 </html>

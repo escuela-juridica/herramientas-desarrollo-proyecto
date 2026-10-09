@@ -23,6 +23,10 @@ import pe.edu.escuela.app.model.Curso;
 import pe.edu.escuela.app.model.Docente;
 import pe.edu.escuela.app.model.TipoCurso;
 import pe.edu.escuela.app.service.CursoService;
+import org.springframework.web.bind.annotation.PathVariable;
+import pe.edu.escuela.app.repository.CursoRepository;
+import pe.edu.escuela.app.util.Constantes;
+
 
 /**
  * Controlador del CRUD de cursos dentro del panel administrativo (/admin/cursos).
@@ -31,29 +35,41 @@ import pe.edu.escuela.app.service.CursoService;
 public class AdminCursoController {
 
   private static final Set<String> EXTENSIONES_IMAGEN_PERMITIDAS =
-      Set.of("jpg", "jpeg", "png", "webp", "gif");
+          Set.of("jpg", "jpeg", "png", "webp", "gif");
 
   private final CursoService cursoService;
+  private final CursoRepository cursoRepository;
   private final Path uploadDir;
 
   public AdminCursoController(
-      CursoService cursoService,
-      @Value("${app.upload-dir}") String uploadDir) {
+          CursoService cursoService,
+          CursoRepository cursoRepository,
+          @Value("${app.upload-dir}") String uploadDir) {
     this.cursoService = cursoService;
+    this.cursoRepository = cursoRepository;
     this.uploadDir = Paths.get(uploadDir).toAbsolutePath().normalize();
   }
 
   @GetMapping("/admin/cursos")
   public String listar(
-      @RequestParam(name = "busqueda", required = false) String busqueda,
-      Model model) {
+          @RequestParam(name = "busqueda", required = false) String busqueda,
+          Model model) {
     model.addAttribute("activeAdmin", "cursos");
     model.addAttribute("tituloAdmin", "Cursos");
     model.addAttribute("cursos", cursoService.listarParaAdministracion(busqueda));
     model.addAttribute("busqueda", busqueda == null ? "" : busqueda.trim());
     return "admin/cursos";
   }
+@GetMapping("/admin/cursos/buscar")
+public String buscarCursos(
+        @RequestParam(name = "busqueda", required = false) String busqueda,
+        Model model) {
 
+    model.addAttribute("cursos", cursoService.listarParaAdministracion(busqueda));
+    model.addAttribute("busqueda", busqueda == null ? "" : busqueda.trim());
+
+    return "admin/cursos :: filasCursos";
+}
   @GetMapping("/admin/cursos/nuevo")
   public String mostrarFormularioCreacion(Model model) {
     Curso curso = new Curso();
@@ -66,11 +82,11 @@ public class AdminCursoController {
 
   @PostMapping("/admin/cursos/crear")
   public String crear(
-      @ModelAttribute("curso") Curso curso,
-      BindingResult bindingResult,
-      @RequestParam(name = "imagenArchivo", required = false) MultipartFile imagenArchivo,
-      Model model,
-      RedirectAttributes redirectAttributes) {
+          @ModelAttribute("curso") Curso curso,
+          BindingResult bindingResult,
+          @RequestParam(name = "imagenArchivo", required = false) MultipartFile imagenArchivo,
+          Model model,
+          RedirectAttributes redirectAttributes) {
 
     validarCurso(curso, imagenArchivo, bindingResult);
     if (bindingResult.hasErrors()) {
@@ -91,8 +107,8 @@ public class AdminCursoController {
     } catch (DataIntegrityViolationException e) {
       eliminarImagenSiExiste(imagenGuardada);
       model.addAttribute(
-          "errorGuardado",
-          "No se pudo guardar el curso. Verifica que el código no esté repetido.");
+              "errorGuardado",
+              "No se pudo guardar el curso. Verifica que el código no esté repetido.");
       prepararFormulario(model);
       return "admin/curso-form";
     } catch (IOException e) {
@@ -119,9 +135,9 @@ public class AdminCursoController {
   }
 
   private void validarCurso(
-      Curso curso,
-      MultipartFile imagenArchivo,
-      BindingResult bindingResult) {
+          Curso curso,
+          MultipartFile imagenArchivo,
+          BindingResult bindingResult) {
     if (curso.getCodigo() == null || curso.getCodigo().isBlank()) {
       bindingResult.rejectValue("codigo", "curso.codigo.vacio", "El código es obligatorio.");
     }
@@ -130,23 +146,23 @@ public class AdminCursoController {
     }
     if (curso.getDescripcion() == null || curso.getDescripcion().isBlank()) {
       bindingResult.rejectValue(
-          "descripcion", "curso.descripcion.vacia", "La descripción es obligatoria.");
+              "descripcion", "curso.descripcion.vacia", "La descripción es obligatoria.");
     }
     if (curso.getPrecio() == null || curso.getPrecio().signum() < 0) {
       bindingResult.rejectValue("precio", "curso.precio.invalido", "Ingresa un precio válido.");
     }
     if (curso.getTipoCurso() == null || curso.getTipoCurso().getIdTipoCurso() == null) {
       bindingResult.rejectValue(
-          "tipoCurso.idTipoCurso", "curso.tipo.vacio", "Selecciona un tipo de curso.");
+              "tipoCurso.idTipoCurso", "curso.tipo.vacio", "Selecciona un tipo de curso.");
     }
     if (curso.getDocente() == null || curso.getDocente().getIdDocente() == null) {
       bindingResult.rejectValue(
-          "docente.idDocente", "curso.docente.vacio", "Selecciona un docente.");
+              "docente.idDocente", "curso.docente.vacio", "Selecciona un docente.");
     }
     if (curso.getFechaInicio() != null && curso.getFechaFin() != null
-        && curso.getFechaFin().isBefore(curso.getFechaInicio())) {
+            && curso.getFechaFin().isBefore(curso.getFechaInicio())) {
       bindingResult.rejectValue(
-          "fechaFin", "curso.fechaFin.invalida", "La fecha de fin no puede ser anterior al inicio.");
+              "fechaFin", "curso.fechaFin.invalida", "La fecha de fin no puede ser anterior al inicio.");
     }
     if (imagenArchivo == null || imagenArchivo.isEmpty()) {
       bindingResult.reject("curso.imagen.vacia", "Selecciona una imagen para el curso.");
@@ -159,9 +175,9 @@ public class AdminCursoController {
     String tipoContenido = archivo.getContentType();
 
     if (tipoContenido == null || !tipoContenido.toLowerCase(Locale.ROOT).startsWith("image/")
-        || !EXTENSIONES_IMAGEN_PERMITIDAS.contains(extension)) {
+            || !EXTENSIONES_IMAGEN_PERMITIDAS.contains(extension)) {
       throw new IllegalArgumentException(
-          "El archivo debe ser una imagen JPG, PNG, WEBP o GIF.");
+              "El archivo debe ser una imagen JPG, PNG, WEBP o GIF.");
     }
 
     Files.createDirectories(uploadDir);
@@ -208,4 +224,156 @@ public class AdminCursoController {
 
   private record ImagenGuardada(Path destino, String rutaPublica) {
   }
+
+  @GetMapping("/admin/cursos/editar/{idCurso}")
+  public String formularioEditar(
+          @PathVariable Integer idCurso,
+          Model model,
+          RedirectAttributes redirectAttributes) {
+
+    try {
+      Curso curso = cursoService.obtenerPorId(idCurso);
+
+      model.addAttribute("curso", curso);
+      model.addAttribute("activeAdmin", "cursos");
+      model.addAttribute("tituloAdmin", "Editar curso");
+      model.addAttribute("tiposCurso", cursoService.obtenerTiposCurso());
+      model.addAttribute("docentes", cursoService.obtenerDocentes());
+
+      return "admin/curso-form";
+
+    } catch (IllegalArgumentException e) {
+      redirectAttributes.addFlashAttribute("error", e.getMessage());
+      return "redirect:/admin/cursos";
+    }
+  }
+
+  @PostMapping("/admin/cursos/editar/{idCurso}")
+  public String editar(
+          @PathVariable Integer idCurso,
+          @ModelAttribute("curso") Curso cursoFormulario,
+          BindingResult bindingResult,
+          @RequestParam(name = "imagenArchivo", required = false) MultipartFile imagenArchivo,
+          Model model,
+          RedirectAttributes redirectAttributes) {
+
+    if (cursoFormulario.getCodigo() == null || cursoFormulario.getCodigo().isBlank()) {
+      bindingResult.rejectValue(
+              "codigo", "curso.codigo.vacio", "El código es obligatorio.");
+    }
+
+    if (cursoFormulario.getNombre() == null || cursoFormulario.getNombre().isBlank()) {
+      bindingResult.rejectValue(
+              "nombre", "curso.nombre.vacio", "El nombre es obligatorio.");
+    }
+
+    if (cursoFormulario.getDescripcion() == null
+            || cursoFormulario.getDescripcion().isBlank()) {
+      bindingResult.rejectValue(
+              "descripcion", "curso.descripcion.vacia", "La descripción es obligatoria.");
+    }
+
+    if (cursoFormulario.getPrecio() == null
+            || cursoFormulario.getPrecio().signum() < 0) {
+      bindingResult.rejectValue(
+              "precio", "curso.precio.invalido", "Ingresa un precio válido.");
+    }
+    if (cursoFormulario.getTipoCurso() == null
+            || cursoFormulario.getTipoCurso().getIdTipoCurso() == null) {
+      bindingResult.rejectValue(
+              "tipoCurso.idTipoCurso",
+              "curso.tipo.vacio",
+              "Selecciona un tipo de curso.");
+    }
+
+    if (cursoFormulario.getDocente() == null
+            || cursoFormulario.getDocente().getIdDocente() == null) {
+      bindingResult.rejectValue(
+              "docente.idDocente",
+              "curso.docente.vacio",
+              "Selecciona un docente.");
+    }
+
+    if (cursoFormulario.getFechaInicio() != null
+            && cursoFormulario.getFechaFin() != null
+            && cursoFormulario.getFechaFin()
+            .isBefore(cursoFormulario.getFechaInicio())) {
+      bindingResult.rejectValue(
+              "fechaFin",
+              "curso.fechaFin.invalida",
+              "La fecha de fin no puede ser anterior al inicio.");
+    }
+
+    if (bindingResult.hasErrors()) {
+      model.addAttribute("activeAdmin", "cursos");
+      model.addAttribute("tituloAdmin", "Editar curso");
+      model.addAttribute("tiposCurso", cursoService.obtenerTiposCurso());
+      model.addAttribute("docentes", cursoService.obtenerDocentes());
+      return "admin/curso-form";
+    }
+
+    ImagenGuardada imagenGuardada = null;
+
+    try {
+      Curso cursoExistente = cursoService.obtenerPorId(idCurso);
+
+      cursoExistente.setCodigo(cursoFormulario.getCodigo());
+      cursoExistente.setNombre(cursoFormulario.getNombre());
+      cursoExistente.setDescripcion(cursoFormulario.getDescripcion());
+      cursoExistente.setPrecio(cursoFormulario.getPrecio());
+      cursoExistente.setFechaInicio(cursoFormulario.getFechaInicio());
+      cursoExistente.setFechaFin(cursoFormulario.getFechaFin());
+      cursoExistente.setDestacado(cursoFormulario.isDestacado());
+      cursoExistente.setEstado(cursoFormulario.getEstado());
+
+      if (imagenArchivo != null && !imagenArchivo.isEmpty()) {
+        imagenGuardada = guardarImagen(imagenArchivo);
+        cursoExistente.setImagen(imagenGuardada.rutaPublica());
+      }
+
+      cursoRepository.save(cursoExistente);
+
+      redirectAttributes.addFlashAttribute(
+              "mensajeExito",
+              "Curso actualizado correctamente.");
+
+      return "redirect:/admin/cursos?busqueda=";
+
+    } catch (IOException | IllegalArgumentException | IllegalStateException e) {
+      eliminarImagenSiExiste(imagenGuardada);
+
+      model.addAttribute("errorGuardado", e.getMessage());
+      model.addAttribute("activeAdmin", "cursos");
+      model.addAttribute("tituloAdmin", "Editar curso");
+      model.addAttribute("tiposCurso", cursoService.obtenerTiposCurso());
+      model.addAttribute("docentes", cursoService.obtenerDocentes());
+
+      return "admin/curso-form";
+    }
+  }
+
+ @PostMapping("/admin/cursos/eliminar/{idCurso}")
+public String eliminar(
+        @PathVariable Integer idCurso,
+        RedirectAttributes redirectAttributes) {
+
+    try {
+        Curso curso = cursoService.obtenerPorId(idCurso);
+
+        curso.setEstado(Constantes.ESTADO_INACTIVO);
+
+        cursoRepository.save(curso);
+
+        redirectAttributes.addFlashAttribute(
+                "mensajeExito",
+                "Curso desactivado correctamente.");
+
+    } catch (IllegalArgumentException e) {
+        redirectAttributes.addFlashAttribute(
+                "error",
+                e.getMessage());
+    }
+
+    return "redirect:/admin/cursos";
+}
 }
