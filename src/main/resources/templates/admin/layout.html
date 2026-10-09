@@ -28,10 +28,11 @@
     </div>
 
     <div class="admin-collapsible">
-      <div class="admin-perfil">
-        <div class="admin-avatar">MC</div>
+      <div class="admin-perfil" th:if="${adminActual != null}">
+        <div class="admin-avatar"
+             th:text="${#strings.substring(adminActual.nombres,0,1)} + ${#strings.substring(adminActual.apellidos,0,1)}">MC</div>
         <div>
-          <p class="admin-nombre">Maykol Adán Calle Paredes</p>
+          <p class="admin-nombre" th:text="${adminActual.nombres} + ' ' + ${adminActual.apellidos}">Nombre Apellido</p>
           <p class="admin-rol">Administrador</p>
         </div>
       </div>
@@ -55,7 +56,10 @@
         <p class="admin-eyebrow">Panel administrativo</p>
         <h1 th:text="${tituloAdmin}">Título</h1>
       </div>
-      <a href="/login" class="admin-logout"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</a>
+      <form th:action="@{/logout}" method="post" class="admin-logout-form">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <button type="submit" class="admin-logout"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+      </form>
     </header>
 
        <div layout:fragment="content"></div>

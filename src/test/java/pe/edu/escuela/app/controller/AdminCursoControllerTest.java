@@ -3,6 +3,7 @@ package pe.edu.escuela.app.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
@@ -24,8 +26,13 @@ import pe.edu.escuela.app.service.CursoService;
 @ExtendWith(MockitoExtension.class)
 class AdminCursoControllerTest {
 
+  private static final String CORREO_ADMIN = "admin@escuelajuridica.edu.pe";
+
   @Mock
   private CursoService cursoService;
+
+  @Mock
+  private Authentication authentication;
 
   @TempDir
   private Path uploadDir;
@@ -39,13 +46,15 @@ class AdminCursoControllerTest {
         new BeanPropertyBindingResult(curso, "curso");
     MockMultipartFile imagen = new MockMultipartFile(
         "imagenArchivo", "portada.JPG", "image/jpeg", new byte[] {1, 2, 3});
+    when(authentication.getName()).thenReturn(CORREO_ADMIN);
 
     String vista = controller.crear(
         curso,
         bindingResult,
         imagen,
         new ExtendedModelMap(),
-        new RedirectAttributesModelMap());
+        new RedirectAttributesModelMap(),
+        authentication);
 
     assertThat(vista).isEqualTo("redirect:/admin/cursos");
     assertThat(curso.getImagen())
@@ -54,7 +63,7 @@ class AdminCursoControllerTest {
     String nombreGuardado = curso.getImagen().substring("/uploads/cursos/".length());
     assertThat(Files.readAllBytes(uploadDir.resolve(nombreGuardado)))
         .containsExactly(1, 2, 3);
-    verify(cursoService).guardarNuevo(curso);
+    verify(cursoService).guardarNuevo(curso, CORREO_ADMIN);
   }
 
   @Test
@@ -66,15 +75,17 @@ class AdminCursoControllerTest {
         new BeanPropertyBindingResult(curso, "curso");
     MockMultipartFile imagen = new MockMultipartFile(
         "imagenArchivo", "portada.png", "image/png", new byte[] {4, 5, 6});
+    when(authentication.getName()).thenReturn(CORREO_ADMIN);
     doThrow(new IllegalStateException("Base no disponible"))
-        .when(cursoService).guardarNuevo(curso);
+        .when(cursoService).guardarNuevo(curso, CORREO_ADMIN);
 
     String vista = controller.crear(
         curso,
         bindingResult,
         imagen,
         new ExtendedModelMap(),
-        new RedirectAttributesModelMap());
+        new RedirectAttributesModelMap(),
+        authentication);
 
     assertThat(vista).isEqualTo("admin/curso-form");
     try (var archivos = Files.list(uploadDir)) {

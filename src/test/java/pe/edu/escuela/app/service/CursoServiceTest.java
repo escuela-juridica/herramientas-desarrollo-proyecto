@@ -69,7 +69,7 @@ class CursoServiceTest {
   }
 
   @Test
-  void guardarNuevoResuelveRelacionesYAsignaElPrimerAdministrador() {
+  void guardarNuevoResuelveRelacionesYAsignaElAdministradorAutenticado() {
     TipoCurso tipoRecibido = new TipoCurso();
     tipoRecibido.setIdTipoCurso(2);
     Docente docenteRecibido = new Docente();
@@ -88,11 +88,11 @@ class CursoServiceTest {
 
     when(tipoCursoRepository.findById(2)).thenReturn(Optional.of(tipoGuardado));
     when(docenteRepository.findById(5)).thenReturn(Optional.of(docenteGuardado));
-    when(administradorRepository.findFirstByOrderByIdAdminAsc())
+    when(administradorRepository.findByCorreo("admin@escuelajuridica.edu.pe"))
         .thenReturn(Optional.of(administrador));
     when(cursoRepository.save(curso)).thenReturn(curso);
 
-    Curso resultado = cursoService.guardarNuevo(curso);
+    Curso resultado = cursoService.guardarNuevo(curso, "admin@escuelajuridica.edu.pe");
 
     assertThat(resultado.getIdCurso()).isNull();
     assertThat(resultado.getTipoCurso()).isSameAs(tipoGuardado);
