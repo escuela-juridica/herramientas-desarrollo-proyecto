@@ -50,6 +50,35 @@
   border: 1px solid;
   border-radius: 10px;
   font-size: 13.5px;
+  transition: opacity .2s ease;
+}
+
+.admin-alert.is-hiding {
+  opacity: 0;
+}
+
+.admin-alert-close {
+  margin: -4px -5px -4px auto;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.admin-alert-close:hover,
+.admin-alert-close:focus-visible {
+  background: rgba(0, 0, 0, .08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-alert {
+    transition: none;
+  }
 }
 
 .admin-alert-success {
