@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
@@ -95,6 +96,39 @@ class AdminCursoControllerTest {
   }
 
   @Test
+  void crearRechazaFechasVacias() {
+    AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
+    Curso curso = crearCursoValido();
+    curso.setFechaInicio(null);
+    curso.setFechaFin(null);
+    BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(curso, "curso");
+    MockMultipartFile imagen = new MockMultipartFile(
+        "imagenArchivo", "portada.jpg", "image/jpeg", new byte[] {1});
+
+    String vista = controller.crear(curso, bindingResult, imagen,
+        new ExtendedModelMap(), new RedirectAttributesModelMap(), authentication);
+
+    assertThat(vista).isEqualTo("admin/curso-form");
+    assertThat(bindingResult.getFieldError("fechaInicio")).isNotNull();
+    assertThat(bindingResult.getFieldError("fechaFin")).isNotNull();
+  }
+
+  @Test
+  void crearRechazaImagenWebp() {
+    AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
+    Curso curso = crearCursoValido();
+    MockMultipartFile imagen = new MockMultipartFile(
+        "imagenArchivo", "portada.webp", "image/webp", new byte[] {1});
+    ExtendedModelMap model = new ExtendedModelMap();
+
+    String vista = controller.crear(curso, new BeanPropertyBindingResult(curso, "curso"),
+        imagen, model, new RedirectAttributesModelMap(), authentication);
+
+    assertThat(vista).isEqualTo("admin/curso-form");
+    assertThat(model.get("errorGuardado")).isEqualTo("El archivo debe ser una imagen JPG o PNG.");
+  }
+
+  @Test
   void editarSinNuevaImagenConservaLaAnterior() {
     AdminCursoController controller = new AdminCursoController(cursoService, uploadDir.toString());
     Curso existente = crearCursoValido();
@@ -158,6 +192,8 @@ class AdminCursoControllerTest {
     curso.setNombre("Curso de prueba");
     curso.setDescripcion("Descripción válida para probar la carga de imagen.");
     curso.setPrecio(new BigDecimal("100.00"));
+    curso.setFechaInicio(LocalDate.of(2026, 11, 5));
+    curso.setFechaFin(LocalDate.of(2026, 11, 20));
     curso.setTipoCurso(tipoCurso);
     curso.setDocente(docente);
     return curso;

@@ -447,7 +447,6 @@
   border: 1px solid var(--line);
   border-radius: 10px;
   color: var(--navy);
-  font-size: 0;
   text-decoration: none;
   transition: .18s;
 }
@@ -617,6 +616,7 @@
 }
 
 .featured-option {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 11px;
@@ -624,10 +624,16 @@
   cursor: pointer;
 }
 
-.featured-option > input {
+.featured-option > input[type="checkbox"] {
   position: absolute;
+  top: 50%;
+  left: 0;
+  width: 21px;
+  height: 21px;
+  margin: 0;
   opacity: 0;
-  pointer-events: none;
+  transform: translateY(-50%);
+  cursor: pointer;
 }
 
 .featured-check {
@@ -643,13 +649,13 @@
   transition: .18s;
 }
 
-.featured-option > input:checked + .featured-check {
+.featured-option > input[type="checkbox"]:checked ~ .featured-check {
   background: var(--orange);
   border-color: var(--orange);
   color: #fff;
 }
 
-.featured-option > input:focus-visible + .featured-check {
+.featured-option > input[type="checkbox"]:focus-visible ~ .featured-check {
   box-shadow: 0 0 0 3px rgba(245, 130, 32, .2);
 }
 

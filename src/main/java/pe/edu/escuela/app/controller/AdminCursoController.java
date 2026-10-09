@@ -34,7 +34,7 @@ import pe.edu.escuela.app.service.CursoService;
 public class AdminCursoController {
 
   private static final Set<String> EXTENSIONES_IMAGEN_PERMITIDAS =
-          Set.of("jpg", "jpeg", "png", "webp", "gif");
+          Set.of("jpg", "jpeg", "png");
 
   private final CursoService cursoService;
   private final Path uploadDir;
@@ -163,6 +163,14 @@ public class AdminCursoController {
       bindingResult.rejectValue(
               "docente.idDocente", "curso.docente.vacio", "Selecciona un docente.");
     }
+    if (curso.getFechaInicio() == null) {
+      bindingResult.rejectValue(
+              "fechaInicio", "curso.fechaInicio.vacia", "La fecha de inicio es obligatoria.");
+    }
+    if (curso.getFechaFin() == null) {
+      bindingResult.rejectValue(
+              "fechaFin", "curso.fechaFin.vacia", "La fecha de fin es obligatoria.");
+    }
     if (curso.getFechaInicio() != null && curso.getFechaFin() != null
             && curso.getFechaFin().isBefore(curso.getFechaInicio())) {
       bindingResult.rejectValue(
@@ -175,10 +183,12 @@ public class AdminCursoController {
     String extension = obtenerExtension(nombreOriginal);
     String tipoContenido = archivo.getContentType();
 
-    if (tipoContenido == null || !tipoContenido.toLowerCase(Locale.ROOT).startsWith("image/")
-            || !EXTENSIONES_IMAGEN_PERMITIDAS.contains(extension)) {
+    String tipoEsperado = "png".equals(extension) ? "image/png" : "image/jpeg";
+    if (tipoContenido == null
+            || !EXTENSIONES_IMAGEN_PERMITIDAS.contains(extension)
+            || !tipoEsperado.equals(tipoContenido.toLowerCase(Locale.ROOT))) {
       throw new IllegalArgumentException(
-              "El archivo debe ser una imagen JPG, PNG, WEBP o GIF.");
+              "El archivo debe ser una imagen JPG o PNG.");
     }
 
     Files.createDirectories(uploadDir);
