@@ -31,6 +31,12 @@
 
 /* ── BÚSQUEDA ESTÁTICA (Compacta y clara) ─────────────────────────── */
 
+.busqueda-estatica-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .busqueda-estatica {
   background: #fff;
   border: 1px solid var(--line);
@@ -42,6 +48,8 @@
   gap: 12px;
   box-shadow: 0 2px 8px rgba(10, 35, 66, .04);
   transition: border-color .2s, box-shadow .2s;
+  flex: 1;
+  min-width: 0;
 }
 
 .busqueda-estatica:focus-within {
@@ -180,8 +188,9 @@
   transform: translateY(0);
 }
 
-.busqueda-estatica-btn-limpiar {
-  height: 38px;
+.busqueda-quitar-filtros {
+  flex-shrink: 0;
+  height: 34px;
   padding: 0 13px;
   background: #f4f5f8;
   color: #475569;
@@ -198,7 +207,7 @@
   gap: 6px;
 }
 
-.busqueda-estatica-btn-limpiar:hover {
+.busqueda-quitar-filtros:hover {
   background: #fee2e2;
   border-color: #fca5a5;
   color: #b91c1c;
@@ -206,7 +215,7 @@
   box-shadow: 0 3px 8px rgba(185, 28, 28, .1);
 }
 
-.busqueda-estatica-btn-limpiar:active {
+.busqueda-quitar-filtros:active {
   transform: translateY(0);
 }
 
@@ -292,6 +301,15 @@
 /* ── RESPONSIVE: búsquedas ────────────────────────────────────────── */
 
 @media (max-width: 768px) {
+  .busqueda-estatica-fila {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .busqueda-quitar-filtros {
+    align-self: flex-end;
+  }
+
   .busqueda-estatica {
     flex-direction: column;
     align-items: stretch;
@@ -313,20 +331,12 @@
 
   .busqueda-estatica-acciones {
     display: flex;
-    gap: 8px;
     width: 100%;
   }
 
-  .busqueda-estatica-btn,
-  .busqueda-estatica-btn-limpiar {
+  .busqueda-estatica-btn {
     flex: 1;
     justify-content: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .busqueda-estatica-acciones {
-    flex-direction: column;
   }
 }
 

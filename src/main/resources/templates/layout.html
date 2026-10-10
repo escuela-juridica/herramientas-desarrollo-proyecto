@@ -34,8 +34,9 @@
           <div class="nav-auth">
             <a th:if="${adminActual == null}" th:href="@{/login}" class="site-button button-primary"><i class="fa-solid fa-user-shield"></i>
               Administrador</a>
-            <a th:if="${adminActual != null}" th:href="@{/admin}" class="site-button button-primary"><i class="fa-solid fa-user-shield"></i>
-              Panel administrativo</a>
+            <a th:if="${adminActual != null}" th:href="@{/admin}" class="site-button button-primary"
+              title="Ir al panel administrativo"><i class="fa-solid fa-user-shield"></i>
+              <span th:text="'Panel de ' + ${adminActual.nombres}">Panel de Ricardo</span></a>
             <form th:if="${adminActual != null}" th:action="@{/logout}" method="post" class="nav-logout-form">
               <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
               <button type="submit" class="site-button button-ghost"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
