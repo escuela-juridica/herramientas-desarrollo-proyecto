@@ -103,31 +103,33 @@
         <div class="contenedor-busquedas">
 
           <!-- BÚSQUEDA ESTÁTICA -->
-          <div class="busqueda-estatica">
-            <div class="busqueda-estatica-campos">
-              <div class="busqueda-estatica-input-wrap">
-                <i class="fa-solid fa-magnifying-glass busqueda-estatica-icon"></i>
-                <input type="text" id="campoEstatico" class="busqueda-estatica-input"
-                  placeholder="Buscar curso por nombre (ej. Notarial, Civil)…" autocomplete="off">
+          <div class="busqueda-estatica-fila">
+            <div class="busqueda-estatica">
+              <div class="busqueda-estatica-campos">
+                <div class="busqueda-estatica-input-wrap">
+                  <i class="fa-solid fa-magnifying-glass busqueda-estatica-icon"></i>
+                  <input type="text" id="campoEstatico" class="busqueda-estatica-input"
+                    placeholder="Escribe el nombre y presiona Buscar (ej. Notarial, Civil)" autocomplete="off">
+                </div>
+                <div class="busqueda-estatica-select-wrap">
+                  <i class="fa-solid fa-filter busqueda-estatica-select-icon"></i>
+                  <select id="selectTipo" class="busqueda-estatica-select" aria-label="Filtrar por tipo de curso">
+                    <option value="">Todos los tipos</option>
+                    <option th:each="tipo : ${tiposCurso}" th:value="${tipo.idTipoCurso}" th:text="${tipo.nombre}">
+                    </option>
+                  </select>
+                </div>
               </div>
-              <div class="busqueda-estatica-select-wrap">
-                <i class="fa-solid fa-filter busqueda-estatica-select-icon"></i>
-                <select id="selectTipo" class="busqueda-estatica-select" aria-label="Filtrar por tipo de curso">
-                  <option value="">Todos los tipos</option>
-                  <option th:each="tipo : ${tiposCurso}" th:value="${tipo.idTipoCurso}" th:text="${tipo.nombre}">
-                  </option>
-                </select>
+              <div class="busqueda-estatica-acciones">
+                <button type="button" id="btnEstatico" class="busqueda-estatica-btn" title="Buscar cursos">
+                  <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                </button>
               </div>
             </div>
-            <div class="busqueda-estatica-acciones">
-              <button type="button" id="btnEstatico" class="busqueda-estatica-btn" title="Buscar cursos">
-                <i class="fa-solid fa-magnifying-glass"></i> Buscar
-              </button>
-              <button type="button" id="btnLimpiar" class="busqueda-estatica-btn-limpiar"
-                title="Quitar todos los filtros">
-                <i class="fa-solid fa-rotate-left"></i> Quitar filtros
-              </button>
-            </div>
+            <button type="button" id="btnLimpiar" class="busqueda-quitar-filtros"
+              title="Quitar todos los filtros (nombre, tipo y descripción)">
+              <i class="fa-solid fa-rotate-left"></i> Quitar filtros
+            </button>
           </div>
           <!-- FIN BÚSQUEDA ESTÁTICA -->
 
@@ -136,7 +138,7 @@
             <div class="busqueda-dinamica-wrap">
               <i class="fa-solid fa-magnifying-glass busqueda-dinamica-icon"></i>
               <input type="text" id="campoDinamico" class="busqueda-dinamica-input"
-                placeholder="Buscar por descripción"
+                placeholder="Escribe una descripción para filtrar"
                 autocomplete="off">
               <button type="button" id="btnLimpiarDinamico" class="busqueda-dinamica-clear"
                 aria-label="Limpiar búsqueda en vivo" title="Borrar texto" style="display: none;">
@@ -161,8 +163,8 @@
                   th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
                   th:text="${curso.tipoCurso.nombre}"></span>
                 <div class="curso-meta">
-                  <span class="curso-hours"><i class="fa-solid fa-sack-dollar"></i> <span
-                      th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 0)}"></span></span>
+                  <span class="curso-hours"><i class="fa-solid fa-hashtag"></i> <span
+                      th:text="${curso.codigo}"></span></span>
                   <span class="curso-hours"><i class="fa-regular fa-clock"></i> <span
                       th:text="${curso.duracionHoras} + ' hrs'"></span></span>
                 </div>
@@ -173,6 +175,9 @@
                 <p th:text="${curso.descripcion}"></p>
               </div>
               <div class="curso-foot">
+                <div class="curso-precio">
+                  S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}"></span>
+                </div>
                 <a href="#" class="curso-button" data-bs-toggle="modal"
                   th:data-bs-target="'#modalCurso' + ${curso.idCurso}">Más Información</a>
               </div>
