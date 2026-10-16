@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -48,10 +49,12 @@ public class Curso {
   @Column(name = "cupos")
   private Integer cupos;
 
-  @Column(name = "fecha_inicio")
+  @Column(name = "fecha_inicio", nullable = false)
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate fechaInicio;
 
-  @Column(name = "fecha_fin")
+  @Column(name = "fecha_fin", nullable = false)
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate fechaFin;
 
   @Column(name = "precio", nullable = false, precision = 10, scale = 2)

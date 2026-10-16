@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,14 +40,19 @@
       <h2>Iniciar sesión</h2>
       <p class="sub">Ingresa tus credenciales para acceder al panel.</p>
 
-      <form action="/admin" method="get">
+      <div class="login-alert" role="alert" th:if="${param.error}">
+        <i class="fa-solid fa-circle-exclamation"></i> Correo o contraseña incorrectos.
+      </div>
+
+      <form action="/login" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
         <div class="field">
           <label for="l-mail"><i class="fa-solid fa-envelope"></i> Correo electrónico</label>
-          <input id="l-mail" type="text" placeholder="tucorreo@ejemplo.com" autocomplete="username">
+          <input id="l-mail" name="correo" type="text" placeholder="tucorreo@ejemplo.com" autocomplete="username" required>
         </div>
         <div class="field">
           <label for="l-pass"><i class="fa-solid fa-key"></i> Contraseña</label>
-          <input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+          <input id="l-pass" name="clave" type="password" placeholder="••••••••" autocomplete="current-password" required>
         </div>
         <button type="submit" class="site-button button-primary"><i class="fa-solid fa-right-to-bracket"></i> Ingresar</button>
         <a class="help-link">¿Necesitas recuperar el acceso?</a>

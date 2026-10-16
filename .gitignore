@@ -5,9 +5,17 @@ target/
 *.iml
 *.iws
 
+.bloop/
+.metals/
+.vscode/
+
 .classpath
 .project
 .settings/
 
 *.class
 .DS_Store
+
+# Portadas subidas desde el administrador; conservar las imágenes semilla.
+uploads/cursos/*
+!uploads/cursos/curso-*.jpg
