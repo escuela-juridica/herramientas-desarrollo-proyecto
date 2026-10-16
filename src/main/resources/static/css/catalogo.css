@@ -340,6 +340,15 @@
   }
 }
 
+/* ── CONTADOR DE RESULTADOS ───────────────────────────────────────── */
+
+.catalogo-contador {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
 /* ── MENSAJE SIN RESULTADOS ────────────────────────────────────────── */
 
 .busqueda-sin-resultados {

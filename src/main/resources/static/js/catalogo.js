@@ -28,6 +28,7 @@
   const campoDinamico      = document.getElementById('campoDinamico');
   const btnLimpiarDinamico = document.getElementById('btnLimpiarDinamico');
   const cursosGrid         = document.getElementById('cursosGrid');
+  const contadorCursos     = document.getElementById('contadorCursos');
 
   if (!cursosGrid) return; // protección mínima
 
@@ -56,6 +57,7 @@
       })
       .then(function (html) {
         cursosGrid.innerHTML = html;
+        actualizarContador();
       })
       .catch(function (error) {
         console.error('[catalogo.js] Error en la búsqueda:', error);
@@ -65,7 +67,15 @@
           '<h3 class="busqueda-sin-resultados-titulo">Error al realizar la búsqueda</h3>' +
           '<p class="busqueda-sin-resultados-texto">Ocurrió un inconveniente al conectar con el servidor. Por favor, intenta de nuevo.</p>' +
           '</div>';
+        actualizarContador();
       });
+  }
+
+  /* ── Contador de resultados (tipo DataTable) ──────────────────────── */
+  function actualizarContador() {
+    if (!contadorCursos) return;
+    const total = cursosGrid.querySelectorAll('.content-card.curso').length;
+    contadorCursos.textContent = total + (total === 1 ? ' curso encontrado' : ' cursos encontrados');
   }
 
   /**

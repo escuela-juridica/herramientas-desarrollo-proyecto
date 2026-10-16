@@ -150,6 +150,11 @@
 
         </div>
 
+        <p class="catalogo-contador" id="contadorCursos" aria-live="polite"
+          th:text="|${#lists.size(cursos)} ${#lists.size(cursos) == 1 ? 'curso encontrado' : 'cursos encontrados'}|">
+          20 cursos encontrados
+        </p>
+
         <div class="grid6" id="cursosGrid">
           <th:block th:fragment="resultadosCursos">
             <div th:if="${#lists.isEmpty(cursos)}" class="busqueda-sin-resultados">
