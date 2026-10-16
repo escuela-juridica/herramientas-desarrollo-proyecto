@@ -127,7 +127,7 @@
               </div>
             </div>
             <button type="button" id="btnLimpiar" class="busqueda-quitar-filtros"
-              title="Quitar todos los filtros (nombre, tipo y descripción)">
+              title="Quitar todos los filtros (nombre, tipo y código)">
               <i class="fa-solid fa-rotate-left"></i> Quitar filtros
             </button>
           </div>
@@ -138,7 +138,7 @@
             <div class="busqueda-dinamica-wrap">
               <i class="fa-solid fa-magnifying-glass busqueda-dinamica-icon"></i>
               <input type="text" id="campoDinamico" class="busqueda-dinamica-input"
-                placeholder="Escribe una descripción para filtrar"
+                placeholder="Escribe el código para filtrar"
                 autocomplete="off">
               <button type="button" id="btnLimpiarDinamico" class="busqueda-dinamica-clear"
                 aria-label="Limpiar búsqueda en vivo" title="Borrar texto" style="display: none;">
@@ -163,7 +163,7 @@
                   th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
                   th:text="${curso.tipoCurso.nombre}"></span>
                 <div class="curso-meta">
-                  <span class="curso-hours"><i class="fa-solid fa-hashtag"></i> <span
+                  <span class="curso-hours curso-code"><i class="fa-solid fa-hashtag"></i> <span
                       th:text="${curso.codigo}"></span></span>
                   <span class="curso-hours"><i class="fa-regular fa-clock"></i> <span
                       th:text="${curso.duracionHoras} + ' hrs'"></span></span>

@@ -64,13 +64,13 @@ class CursoServiceTest {
   @Test
   void buscarEnCatalogoConParametrosLimpiaEspaciosYFiltraConEstadoActivo() {
     List<Curso> cursos = List.of(new Curso());
-    when(cursoRepository.buscarConFiltros("Civil", "Notarial", 2, Constantes.ESTADO_ACTIVO))
+    when(cursoRepository.buscarConFiltros("Civil", "EJ-2026", 2, Constantes.ESTADO_ACTIVO))
         .thenReturn(cursos);
 
-    List<Curso> resultado = cursoService.buscarEnCatalogo("  Civil  ", "  Notarial  ", 2);
+    List<Curso> resultado = cursoService.buscarEnCatalogo("  Civil  ", "  EJ-2026  ", 2);
 
     assertThat(resultado).isSameAs(cursos);
-    verify(cursoRepository).buscarConFiltros("Civil", "Notarial", 2, Constantes.ESTADO_ACTIVO);
+    verify(cursoRepository).buscarConFiltros("Civil", "EJ-2026", 2, Constantes.ESTADO_ACTIVO);
   }
 
   @Test
@@ -86,7 +86,7 @@ class CursoServiceTest {
   }
 
   @Test
-  void buscarEnCatalogoSobrecargadoDosParametrosInvocaConDescripcionNula() {
+  void buscarEnCatalogoSobrecargadoDosParametrosInvocaConCodigoNulo() {
     List<Curso> cursos = List.of(new Curso());
     when(cursoRepository.buscarConFiltros("Civil", null, 1, Constantes.ESTADO_ACTIVO))
         .thenReturn(cursos);

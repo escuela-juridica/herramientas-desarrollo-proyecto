@@ -431,6 +431,12 @@
   gap: 6px;
 }
 
+.curso-code {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
 .curso-meta {
   display: flex;
   align-items: center;
