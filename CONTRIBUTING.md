@@ -1,10 +1,10 @@
-# Guía de trabajo en equipo (Gitflow) — Avance 2
+# Guía de trabajo en equipo (Gitflow)
 
 Repositorio: https://github.com/escuela-juridica/herramientas-desarrollo-proyecto.git
 
 Esta guía es para clonar el proyecto, crear tu rama y subir tu trabajo sin pisar el de los demás. Todo el mundo pasa por `develop`, nunca directo a `main`.
 
-> Esta es la modalidad de trabajo del **Avance 2** (Spring Boot + Thymeleaf + PostgreSQL). El reparto del Avance 1 (sitio estático) quedó atrás.
+> El Avance 2 (Spring Boot + Thymeleaf + PostgreSQL + Spring Security) ya está completo y mergeado en `develop`. Esta guía sigue siendo la forma de trabajar para cualquier cambio nuevo: correcciones, mejoras o el siguiente avance.
 
 ## Diagrama de ramas
 
@@ -12,17 +12,11 @@ Esta guía es para clonar el proyecto, crear tu rama y subir tu trabajo sin pisa
 graph TD
   main(["main"])
   develop(["develop"])
-  f1["feature/listado-cursos<br/>Kelvin"]
-  f2["feature/busqueda-productos<br/>Paolo"]
-  f3["feature/login-spring-security<br/>Maykol"]
-  f4["feature/admin-crear-cursos<br/>Joel"]
-  f5["feature/admin-editar-eliminar-cursos<br/>Juan"]
+  f1["feature/lo-que-estés-haciendo"]
+  f2["feature/otra-tarea"]
 
   f1 -->|Pull Request| develop
   f2 -->|Pull Request| develop
-  f3 -->|Pull Request| develop
-  f4 -->|Pull Request| develop
-  f5 -->|Pull Request| develop
   develop -->|Pull Request, antes de la sustentación| main
 ```
 
@@ -48,54 +42,27 @@ git pull origin develop
 
 ## 3. Crear tu rama de trabajo
 
-Tu rama sale **desde `develop`** (asegúrate de haber hecho el paso 2 justo antes). El nombre debe ser exactamente el que te toca:
-
-| Integrante | Rama a crear | Qué construye |
-|---|---|---|
-| Kelvin Acevedo | `feature/listado-cursos` | Página pública de productos: listar los 20 cursos desde la base de datos, con sus imágenes |
-| Paolo Añorga | `feature/busqueda-productos` | Búsqueda estática y dinámica en esa misma página (JS + `fetch` contra la base de datos) |
-| Maykol Calle | `feature/login-spring-security` | Login real con Spring Security: autenticar contra `administrador`, proteger `/admin/**`, redirigir solo al panel |
-| Joel Saldaña | `feature/admin-crear-cursos` | CRUD en `/admin/cursos`: listar, crear, búsqueda estática |
-| Juan Morales | `feature/admin-editar-eliminar-cursos` | CRUD en `/admin/cursos`: búsqueda dinámica, editar, eliminar (borrado lógico) |
+Tu rama sale **desde `develop`** (asegúrate de haber hecho el paso 2 justo antes). Nómbrala según lo que vas a hacer, con el prefijo `feature/` (o `fix/` si es una corrección puntual):
 
 ```
-git checkout -b feature/tu-rama-aqui
+git checkout -b feature/descripcion-corta-de-tu-tarea
 ```
 
 Este comando se usa **una sola vez** (crea la rama y te cambia a ella). Los días siguientes, para volver a tu rama, solo usas:
 
 ```
-git checkout feature/tu-rama-aqui
+git checkout feature/descripcion-corta-de-tu-tarea
 ```
 
 ## 4. Trabajar en tu parte
 
-A diferencia del Avance 1, acá no hay bloques marcados con tu nombre — el proyecto es Spring Boot y cada parte vive en su propio paquete/controlador. Dónde tocar según tu tarea:
+El proyecto es Spring Boot y cada parte vive en su propio paquete/controlador — revisa el `README.md` (secciones "Estructura de carpetas" y "Rutas") para ubicar rápido dónde está lo que necesitas tocar:
 
-**Kelvin** (`feature/listado-cursos`):
-- `CatalogoController.java` (`src/main/java/pe/edu/escuela/app/controller/`) — agregar el método que trae los cursos desde `CursoService`/`CursoRepository` y los pasa al modelo.
-- `templates/catalogo.html` — reemplazar el placeholder por el `th:each` que arma las tarjetas.
-- `css/catalogo.css` — estilos de las tarjetas.
+- **Páginas públicas** (`/inicio`, `/catalogo`, `/nosotros`, `/contacto`): controladores en `controller/`, templates en `templates/`, CSS/JS propios por página en `static/css/` y `static/js/`.
+- **Login / seguridad**: `config/SecurityConfig.java`, `security/AdminAuthenticationSuccessHandler.java`, `service/AdministradorUserDetailsService.java`.
+- **Panel administrativo** (`/admin/**`): `controller/AdminController.java` y `controller/AdminCursoController.java`, templates en `templates/admin/`, estilos en `static/css/admin/`.
 
-**Paolo** (`feature/busqueda-productos`):
-- Mismo `catalogo.html`/`CatalogoController.java` que Kelvin — **coordina con él antes de tocar el archivo**, van a compartirlo.
-- Un endpoint de búsqueda (puede ser en el mismo `CatalogoController` o uno nuevo) que reciba el texto y devuelva los cursos filtrados.
-- JS nuevo (ej. `js/catalogo.js`) con el `fetch` que llama a ese endpoint en cada tecla para la búsqueda dinámica, y el botón para la estática.
-
-**Maykol** (`feature/login-spring-security`):
-- Agregar la dependencia `spring-boot-starter-security` al `pom.xml`.
-- Una clase de configuración de seguridad (`SecurityConfig`) + un `UserDetailsService` que busque por `correo` en `administrador` (la entidad y el repositorio ya existen, falta el repositorio de `Administrador` si no existe todavía).
-- `LoginController.java` y `templates/login.html` — conectar el formulario al login real de Spring Security en vez del redirect a mano que hay ahora.
-- Proteger `/admin/**` para que solo un admin logueado entre.
-
-**Joel** (`feature/admin-crear-cursos`):
-- `AdminCursoController.java` — el método `listar()` ya existe pero es un placeholder; hay que traer los cursos reales, y agregar `crear()` (formulario + guardar).
-- `templates/admin/cursos.html` — reemplazar el bloque "en construcción" por la tabla real + el formulario de creación.
-- `css/admin/admin-cursos.css` — estilos de la tabla/formulario (ya existe el archivo, vacío).
-
-**Juan** (`feature/admin-editar-eliminar-cursos`):
-- Mismo `AdminCursoController.java`/`admin/cursos.html` que Joel — **coordina con él**, van a compartir esos archivos.
-- Agregar `editar()`, `eliminar()` (borrado lógico: `estado = 'I'`, nunca `DELETE`) y el endpoint de búsqueda dinámica dentro del CRUD.
+Si vas a tocar un archivo que otra persona también está editando en paralelo (ej. `catalogo.html`, `admin/cursos.html`), avísale antes para no pisar su trabajo — esos archivos se han compartido varias veces durante el proyecto y es la fuente más común de conflictos de merge.
 
 **Todos**: revisar el `README.md` (sección "Convenciones de código") antes de empezar — ahí está cómo están organizados las entidades, los `Service`/`Repository`, y por qué `ddl-auto=validate` significa que nadie debe tocar el esquema de la base de datos sin avisar (eso va en `script/init.sql`, no se toca desde código).
 
@@ -111,7 +78,7 @@ git commit -m "feat: [descripción corta de lo que hiciste]"
 Ejemplos de buenos mensajes de commit:
 - `feat: listar cursos desde la base de datos en /catalogo`
 - `feat: busqueda dinamica de cursos con fetch`
-- `feat: configurar Spring Security y UserDetailsService`
+- `fix: corregir validacion de fechas en el formulario de curso`
 
 ## 6. Subir tu rama al repositorio
 
@@ -129,7 +96,7 @@ git push
 
 ## 7. Actualizar tu rama con lo nuevo de `develop`
 
-Antes de abrir el Pull Request (o si pasó tiempo desde que la creaste), trae los cambios que otros ya subieron a `develop`. **Esto es más importante que en el Avance 1**, porque varios comparten los mismos archivos (Kelvin/Paolo en `catalogo.html`, Joel/Juan en `admin/cursos.html`):
+Antes de abrir el Pull Request (o si pasó tiempo desde que la creaste), trae los cambios que otros ya subieron a `develop`. Esto es importante cuando varios comparten los mismos archivos:
 
 ```
 git checkout develop
@@ -150,8 +117,9 @@ git commit
 En GitHub, entra al repositorio y crea el Pull Request de tu rama **hacia `develop`** (no hacia `main`). Antes de pedir que lo revisen:
 
 - Levanta la app localmente y prueba tu parte en el navegador (escritorio y ventana angosta).
-- Si compartes archivo con alguien (Kelvin↔Paolo, Joel↔Juan), avísale antes de mergear para no pisar su trabajo.
+- Si compartes archivo con alguien, avísale antes de mergear para no pisar su trabajo.
 - Confirma que `mvnw` compila sin errores.
+- Asigna un **reviewer** (botón "Request" en el panel derecho del PR) — no es obligatorio para que GitHub lo bloquee, pero sin avisarle a alguien el PR puede quedarse esperando sin que nadie se entere.
 
 ## Comandos importantes (resumen)
 
@@ -170,7 +138,7 @@ En GitHub, entra al repositorio y crea el Pull Request de tu rama **hacia `devel
 
 ## Reglas que no se rompen
 
-- Nunca `git push` directo a `main` ni a `develop` — todo entra por Pull Request.
 - Nunca trabajar directamente sobre `develop` o `main` — siempre en tu `feature/*`.
 - `develop` se mergea a `main` solo cuando todo el equipo terminó y probó su parte, antes de la sustentación.
 - Nadie cambia `script/init.sql` (el esquema de la base de datos) sin avisar al resto — todos dependen de esas mismas tablas.
+- **`main` y `develop` tienen protección activada en GitHub** (Ruleset): no se puede hacer `push` directo a ninguna de las dos, y todo Pull Request necesita **al menos 1 aprobación de otra persona** antes de poder mergearse — ni siquiera el autor puede aprobar su propio PR. Esto ya no es una regla de confianza, GitHub la bloquea técnicamente.

@@ -491,6 +491,16 @@
   flex: 1;
 }
 
+.curso-modalidad {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  color: var(--navy-2);
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .curso-foot {
   padding: 0 22px 22px;
 }
@@ -622,7 +632,9 @@
 
 .curso-modal-datos {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
+  gap: 8px;
   font-weight: bold;
   font-size: .9rem;
   color: var(--muted);

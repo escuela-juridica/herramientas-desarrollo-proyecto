@@ -178,6 +178,10 @@
               <div class="curso-body">
                 <h3 th:text="${curso.nombre}"></h3>
                 <p th:text="${curso.descripcion}"></p>
+                <span class="curso-modalidad" th:if="${curso.modalidad != null}">
+                  <i th:classappend="${curso.modalidad == 'V'} ? 'fa-laptop' : 'fa-building'" class="fa-solid"></i>
+                  <span th:text="${curso.modalidad == 'V'} ? 'Virtual' : 'Presencial'"></span>
+                </span>
               </div>
               <div class="curso-foot">
                 <div class="curso-precio">
@@ -216,6 +220,10 @@
                 <div class="curso-modal-datos">
                   <span><i class="fa-solid fa-hashtag"></i> Código: <span th:text="${curso.codigo}"></span></span>
                   <span><i class="fa-regular fa-clock"></i> Duración: <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
+                  <span th:if="${curso.modalidad != null}">
+                    <i th:classappend="${curso.modalidad == 'V'} ? 'fa-laptop' : 'fa-building'" class="fa-solid"></i>
+                    Modalidad: <span th:text="${curso.modalidad == 'V'} ? 'Virtual' : 'Presencial'"></span>
+                  </span>
                 </div>
                 <div class="curso-modal-precio">
                   Precio: S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}"></span>
