@@ -5,14 +5,14 @@
  * BÚSQUEDA ESTÁTICA  : input de nombre + select de tipo de curso + botón "Buscar".
  *                      Se dispara al hacer clic en el botón (o al pulsar Enter en el input).
  *
- * BÚSQUEDA DINÁMICA  : input de descripción con debounce de 300 ms.
+ * BÚSQUEDA DINÁMICA  : input de código con debounce de 300 ms.
  *                      Los resultados se filtran en tiempo real mientras el usuario escribe.
  *
  * BÚSQUEDA CONJUNTA  : Ambos buscadores operan en conjunto: si el usuario ingresa
  *                      parámetros en la búsqueda estática (nombre y/o tipo) y en la dinámica
- *                      (descripción), se consultan los 3 campos a la vez.
+ *                      (código), se consultan los 3 campos a la vez.
  *
- * Endpoint: GET /catalogo/buscar?texto=...&descripcion=...&idTipoCurso=...
+ * Endpoint: GET /catalogo/buscar?texto=...&codigo=...&idTipoCurso=...
  * El servidor devuelve el fragmento Thymeleaf "resultadosCursos" (HTML puro, no JSON).
  * El JS solo reemplaza el innerHTML de #cursosGrid — nunca arma tarjetas por su cuenta.
  */
@@ -28,6 +28,7 @@
   const campoDinamico      = document.getElementById('campoDinamico');
   const btnLimpiarDinamico = document.getElementById('btnLimpiarDinamico');
   const cursosGrid         = document.getElementById('cursosGrid');
+  const contadorCursos     = document.getElementById('contadorCursos');
 
   if (!cursosGrid) return; // protección mínima
 
@@ -37,15 +38,15 @@
   /**
    * Pide al servidor el fragmento de tarjetas filtradas y lo pega en #cursosGrid.
    *
-   * @param {string}  texto       - Término de nombre (puede ser vacío).
-   * @param {string}  descripcion - Término de descripción (puede ser vacío).
-   * @param {string}  tipoCurso   - ID del tipo de curso seleccionado (puede ser vacío/"").
+   * @param {string}  texto     - Término de nombre (puede ser vacío).
+   * @param {string}  codigo    - Término de código (puede ser vacío).
+   * @param {string}  tipoCurso - ID del tipo de curso seleccionado (puede ser vacío/"").
    */
-  function buscar(texto, descripcion, tipoCurso) {
+  function buscar(texto, codigo, tipoCurso) {
     const params = new URLSearchParams();
-    if (texto && texto.trim())              params.set('texto', texto.trim());
-    if (descripcion && descripcion.trim()) params.set('descripcion', descripcion.trim());
-    if (tipoCurso)                         params.set('idTipoCurso', tipoCurso);
+    if (texto && texto.trim())   params.set('texto', texto.trim());
+    if (codigo && codigo.trim()) params.set('codigo', codigo.trim());
+    if (tipoCurso)                params.set('idTipoCurso', tipoCurso);
 
     fetch('/catalogo/buscar?' + params.toString())
       .then(function (respuesta) {
@@ -56,6 +57,7 @@
       })
       .then(function (html) {
         cursosGrid.innerHTML = html;
+        actualizarContador();
       })
       .catch(function (error) {
         console.error('[catalogo.js] Error en la búsqueda:', error);
@@ -65,18 +67,26 @@
           '<h3 class="busqueda-sin-resultados-titulo">Error al realizar la búsqueda</h3>' +
           '<p class="busqueda-sin-resultados-texto">Ocurrió un inconveniente al conectar con el servidor. Por favor, intenta de nuevo.</p>' +
           '</div>';
+        actualizarContador();
       });
+  }
+
+  /* ── Contador de resultados (tipo DataTable) ──────────────────────── */
+  function actualizarContador() {
+    if (!contadorCursos) return;
+    const total = cursosGrid.querySelectorAll('.content-card.curso').length;
+    contadorCursos.textContent = total + (total === 1 ? ' curso encontrado' : ' cursos encontrados');
   }
 
   /**
    * Ejecuta la búsqueda unificada leyendo los valores actuales
-   * de los campos estáticos (nombre, tipo) y del campo dinámico (descripción).
+   * de los campos estáticos (nombre, tipo) y del campo dinámico (código).
    */
   function ejecutarBusqueda() {
-    var texto       = campoEstatico ? campoEstatico.value : '';
-    var tipo        = selectTipo    ? selectTipo.value    : '';
-    var descripcion = campoDinamico ? campoDinamico.value : '';
-    buscar(texto, descripcion, tipo);
+    var texto  = campoEstatico ? campoEstatico.value : '';
+    var tipo   = selectTipo    ? selectTipo.value    : '';
+    var codigo = campoDinamico ? campoDinamico.value : '';
+    buscar(texto, codigo, tipo);
   }
 
   /* ══════════════════════════════════════════════════════════════════ */
@@ -99,13 +109,6 @@
     });
   }
 
-  /* Cambio directo en el selector de tipo: aplica el filtro inmediatamente */
-  if (selectTipo) {
-    selectTipo.addEventListener('change', function () {
-      ejecutarBusqueda();
-    });
-  }
-
   /* Botón Quitar Filtros: restablece ambos filtros y restaura todos los cursos */
   if (btnLimpiar) {
     btnLimpiar.addEventListener('click', function () {
@@ -119,7 +122,7 @@
 
   /* ══════════════════════════════════════════════════════════════════ */
   /* BÚSQUEDA DINÁMICA                                                  */
-  /* input en tiempo real → debounce 300 ms → busca por descripción     */
+  /* input en tiempo real → debounce 300 ms → busca por código          */
   /* ══════════════════════════════════════════════════════════════════ */
 
   function actualizarBotonLimpiarDinamico() {

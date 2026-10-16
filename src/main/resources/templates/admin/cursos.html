@@ -75,6 +75,7 @@
               <th scope="col">Tipo</th>
               <th scope="col">Precio</th>
               <th scope="col">Estado</th>
+              <th scope="col">Creado</th>
               <th scope="col" class="cursos-actions-heading">Acciones</th>
             </tr>
           </thead>
@@ -136,6 +137,11 @@
                 </span>
               </td>
 
+              <td data-label="Creado" class="curso-creado">
+                <span th:text="${#temporals.format(curso.fechaCreacion, 'dd/MM/yyyy')}">01/01/2026</span>
+                <span class="curso-creado-hora" th:text="${#temporals.format(curso.fechaCreacion, 'hh:mm a')}">12:00 AM</span>
+              </td>
+
               <td data-label="Acciones" class="curso-actions">
 
                 <a class="curso-action curso-action-edit"
@@ -170,7 +176,7 @@
             </tr>
 
             <tr th:if="${#lists.isEmpty(cursos)}">
-              <td class="cursos-empty" colspan="7">
+              <td class="cursos-empty" colspan="8">
                 <i class="fa-regular fa-folder-open"></i>
 
                 <strong>No se encontraron cursos</strong>

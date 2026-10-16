@@ -42,10 +42,10 @@ public class CursoService {
     return buscarEnCatalogo(texto, null, idTipoCurso);
   }
 
-  public List<Curso> buscarEnCatalogo(String texto, String descripcion, Integer idTipoCurso) {
+  public List<Curso> buscarEnCatalogo(String texto, String codigo, Integer idTipoCurso) {
     String nombre = (texto == null || texto.isBlank()) ? null : texto.trim();
-    String desc = (descripcion == null || descripcion.isBlank()) ? null : descripcion.trim();
-    return cursoRepository.buscarConFiltros(nombre, desc, idTipoCurso, Constantes.ESTADO_ACTIVO);
+    String cod = (codigo == null || codigo.isBlank()) ? null : codigo.trim();
+    return cursoRepository.buscarConFiltros(nombre, cod, idTipoCurso, Constantes.ESTADO_ACTIVO);
   }
 
   public List<Curso> listarParaAdministracion(String busqueda) {

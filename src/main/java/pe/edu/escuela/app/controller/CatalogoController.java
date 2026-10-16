@@ -26,10 +26,10 @@ public class CatalogoController {
   @GetMapping("/catalogo/buscar")
   public String buscar(
       @RequestParam(required = false) String texto,
-      @RequestParam(required = false) String descripcion,
+      @RequestParam(required = false) String codigo,
       @RequestParam(required = false) Integer idTipoCurso,
       Model model) {
-    model.addAttribute("cursos", cursoService.buscarEnCatalogo(texto, descripcion, idTipoCurso));
+    model.addAttribute("cursos", cursoService.buscarEnCatalogo(texto, codigo, idTipoCurso));
     return "catalogo :: resultadosCursos";
   }
 }
