@@ -176,7 +176,7 @@
           <article th:each="curso : ${destacados}" class="content-card curso">
             <div class="curso-head">
               <span class="curso-badge"
-                th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
+                th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-acento' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
                 th:text="${curso.tipoCurso.nombre}"></span>
               <div class="curso-meta">
                 <span class="curso-hours"><i class="fa-solid fa-hashtag"></i> <span th:text="${curso.codigo}"></span></span>
@@ -213,7 +213,7 @@
               <div class="curso-modal-img-wrap">
                 <img th:src="@{${curso.imagen}}" class="img-fluid rounded curso-modal-img" alt="Portada del curso">
                 <span class="curso-badge curso-modal-badge"
-                      th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
+                      th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-acento' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
                       th:text="${curso.tipoCurso.nombre}"></span>
               </div>
               <p th:text="${curso.descripcion}" class="curso-modal-desc"></p>
