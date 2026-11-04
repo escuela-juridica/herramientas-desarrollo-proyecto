@@ -24,6 +24,8 @@
         <button type="button" data-bs-target="#cursos" data-bs-slide-to="2" aria-label="Imagen 3"></button>
         <button type="button" data-bs-target="#cursos" data-bs-slide-to="3" aria-label="Imagen 4"></button>
         <button type="button" data-bs-target="#cursos" data-bs-slide-to="4" aria-label="Imagen 5"></button>
+        <button type="button" data-bs-target="#cursos" data-bs-slide-to="5" aria-label="Imagen 6"></button>
+        <button type="button" data-bs-target="#cursos" data-bs-slide-to="6" aria-label="Imagen 7"></button>
       </div>
       <div class="carousel-inner">
         <div class="carousel-item hero-slide curso-slide-2 active">
@@ -77,6 +79,28 @@
             <p class="kicker">Plana Docente</p>
             <h2>Aprende de quienes ejercen el derecho</h2>
             <p>Clases dictadas por notarios, vocales y funcionarios en actividad, con experiencia real del sector.</p>
+            <div class="slide-actions">
+              <a href="#catalogo" class="site-button button-primary">Ver Seminarios</a>
+              <a href="#catalogo" class="button-light">Ver Catálogo</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide curso-slide-6">
+          <div class="slide-cap">
+            <p class="kicker">Derecho Notarial</p>
+            <h2>Formación para la fe pública</h2>
+            <p>Cursos y diplomados sobre función notarial, escrituras públicas y asuntos no contenciosos.</p>
+            <div class="slide-actions">
+              <a href="#catalogo" class="site-button button-primary">Ver Cursos</a>
+              <a href="#catalogo" class="button-light">Ver Catálogo</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide curso-slide-7">
+          <div class="slide-cap">
+            <p class="kicker">Estudia a tu Ritmo</p>
+            <h2>Seminarios y cursos cortos</h2>
+            <p>Actualízate en pocas horas con contenido directo, pensado para profesionales con poco tiempo.</p>
             <div class="slide-actions">
               <a href="#catalogo" class="site-button button-primary">Ver Seminarios</a>
               <a href="#catalogo" class="button-light">Ver Catálogo</a>
@@ -165,7 +189,7 @@
             <article th:each="curso : ${cursos}" class="content-card curso">
               <div class="curso-head">
                 <span class="curso-badge"
-                  th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-acento' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
+                  th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
                   th:text="${curso.tipoCurso.nombre}"></span>
                 <div class="curso-meta">
                   <span class="curso-hours curso-code"><i class="fa-solid fa-hashtag"></i> <span
@@ -210,7 +234,7 @@
               <div class="curso-modal-img-wrap">
                 <img th:src="@{${curso.imagen}}" class="img-fluid rounded curso-modal-img" alt="Portada del curso">
                 <span class="curso-badge curso-modal-badge"
-                      th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-acento' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
+                      th:classappend="${curso.tipoCurso.nombre == 'Curso Corto'} ? 'badge-orange' : (${curso.tipoCurso.nombre == 'Seminario'} ? 'badge-burgundy' : 'badge-navy')"
                       th:text="${curso.tipoCurso.nombre}"></span>
               </div>
               <p th:text="${curso.descripcion}" class="curso-modal-desc"></p>

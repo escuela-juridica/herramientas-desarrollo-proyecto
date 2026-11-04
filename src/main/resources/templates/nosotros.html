@@ -14,12 +14,15 @@
   <main layout:fragment="content">
 
     <!-- SECCIÓN: BANNER / HERO -->
-    <div class="hero-carousel carousel slide band" id="nosotros-hero" data-bs-ride="carousel" data-bs-interval="4000">
+    <div class="hero-carousel carousel slide band" id="nosotros-hero" data-bs-ride="carousel" data-bs-interval="4500">
       <div class="carousel-indicators">
-        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="0" class="active" aria-current="true"
-          aria-label="Imagen 1"></button>
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Imagen 1"></button>
         <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="1" aria-label="Imagen 2"></button>
         <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="2" aria-label="Imagen 3"></button>
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="3" aria-label="Imagen 4"></button>
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="4" aria-label="Imagen 5"></button>
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="5" aria-label="Imagen 6"></button>
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="6" aria-label="Imagen 7"></button>
       </div>
       <div class="carousel-inner">
         <div class="carousel-item hero-slide nosotros-slide-1 active">
@@ -28,7 +31,7 @@
             <h2>Las personas detrás del proyecto</h2>
             <p>Seis desarrolladores de la Universidad Tecnológica del Perú construyen el sitio web de Escuela Jurídica.</p>
             <div class="slide-actions">
-              <a href="#desarrolladores" class="site-button button-primary">Conoce al equipo</a>
+              <a href="#organigrama" class="site-button button-primary">Conoce al equipo</a>
             </div>
           </div>
         </div>
@@ -36,7 +39,7 @@
           <div class="slide-cap">
             <p class="kicker">Escuela Jurídica</p>
             <h2>Formación jurídica especializada desde 2015</h2>
-            <p>Capacitación y actualización profesional en Derecho Registral, Derecho Notarial y Derecho Inmobiliario.</p>
+            <p>Capacitación y actualización profesional en Derecho Registral, Notarial e Inmobiliario, con propietaria y equipo de trabajo.</p>
             <div class="slide-actions">
               <a href="#organigrama" class="site-button button-primary">Ver organigrama</a>
             </div>
@@ -44,11 +47,51 @@
         </div>
         <div class="carousel-item hero-slide nosotros-slide-3">
           <div class="slide-cap">
-            <p class="kicker">Metodología</p>
-            <h2>Un proyecto organizado con Scrum</h2>
-            <p>Trabajamos por sprints, con historias de usuario en Jira y control de versiones con Git Flow.</p>
+            <p class="kicker">Universidad Tecnológica del Perú</p>
+            <h2>Un proyecto del curso Herramientas de Desarrollo</h2>
+            <p>Desarrollado por estudiantes de Ingeniería de la UTP, bajo la guía del docente del curso.</p>
+            <div class="slide-actions">
+              <a href="#desarrolladores" class="site-button button-primary">Ver desarrolladores</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide nosotros-slide-4">
+          <div class="slide-cap">
+            <p class="kicker">Planificación</p>
+            <h2>Del wireframe al sitio web</h2>
+            <p>Mapa del sitio y wireframes validados antes de programar, con las necesidades levantadas con la empresa.</p>
             <div class="slide-actions">
               <a href="#metodologia" class="site-button button-primary">Ver metodología</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide nosotros-slide-5">
+          <div class="slide-cap">
+            <p class="kicker">Metodología Scrum</p>
+            <h2>Avanzamos sprint a sprint</h2>
+            <p>Historias de usuario en Jira, con un tablero de por hacer, en curso y finalizado.</p>
+            <div class="slide-actions">
+              <a href="#sprints" class="site-button button-primary">Ver sprints</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide nosotros-slide-6">
+          <div class="slide-cap">
+            <p class="kicker">Trabajo colaborativo</p>
+            <h2>Ramas, Pull Requests y revisiones</h2>
+            <p>Cada funcionalidad se integra con un Pull Request aprobado por otra persona del equipo.</p>
+            <div class="slide-actions">
+              <a href="#metodologia" class="site-button button-primary">Ver fases</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide nosotros-slide-7">
+          <div class="slide-cap">
+            <p class="kicker">Tecnología</p>
+            <h2>Del código al sitio en producción</h2>
+            <p>Spring Boot, Thymeleaf, Spring Security y PostgreSQL, trabajados en equipo con Git y GitHub.</p>
+            <div class="slide-actions">
+              <a href="#metodologia" class="site-button button-primary">Ver herramientas</a>
             </div>
           </div>
         </div>
@@ -142,14 +185,14 @@
               </div>
             </div>
             <h4>Programas</h4>
-            <ul class="dev-tags"><li>Oracle PL/SQL</li><li>MongoDB</li><li>MySQL</li><li>SQL Server</li><li>Docker</li><li>Apache Kafka</li><li>RabbitMQ</li><li>Spring LDAP</li><li>CI/CD</li></ul>
+            <ul class="dev-tags"><li>Oracle PL/SQL</li><li>PostgreSQL</li><li>MongoDB</li><li>Apache Kafka</li><li>Docker</li><li>Kubernetes</li><li>Azure / AKS</li><li>GitHub Actions</li><li>Jenkins</li><li>GitLab CI</li><li>Grafana</li><li>Azure Key Vault</li><li>HashiCorp Vault</li><li>SonarQube</li><li>Postman</li><li>n8n</li></ul>
             <h4>Lenguajes y frameworks</h4>
-            <ul class="dev-tags"><li>Java</li><li>TypeScript</li><li>JavaScript</li><li>Angular 11-16</li><li>Spring Boot</li><li>HTML5</li><li>CSS3</li><li>PHP</li></ul>
+            <ul class="dev-tags"><li>Java 8–21</li><li>Python</li><li>Spring Boot</li><li>Quarkus</li><li>Angular</li><li>Spring WebFlux</li><li>Spring Security / LDAP</li><li>React Native</li><li>JUnit 5</li><li>Mockito</li></ul>
             <h4>Habilidades blandas</h4>
-            <ul class="dev-tags dev-tags-blandas"><li>Aprendizaje continuo</li><li>Orientación a resultados</li><li>Trabajo en equipo</li><li>Proactividad</li><li>Análisis de requerimientos</li></ul>
+            <ul class="dev-tags dev-tags-blandas"><li>Capacidad de análisis</li><li>Trabajo en equipo</li><li>Aprendizaje continuo</li><li>Resolución de problemas</li><li>Orientación a resultados</li></ul>
             <details class="dev-certs">
-              <summary>Certificados <span>12</span></summary>
-              <ul class="dev-certs-lista"><li>Scrum Developer Professional – SDPC (Certiprof, Feb 2025)</li><li>ITIL V4 (New Horizons, Nov 2023)</li><li>Angular Avanzado (Platzi, Nov 2025)</li><li>Angular &amp; Spring 5 Full Stack (Udemy, Nov 2020)</li><li>Microservicios con Spring Boot (Udemy, Nov 2020)</li><li>Tutor STEM – Física (UTP, 2024)</li><li>Tutor STEM – Matemática (UTP, 2024)</li><li>Tutor STEM – Algorítmica (UTP, 2025)</li><li>Excel Intermedio (UTP, 2025)</li><li>Introducción a Ciberseguridad (Cisco – UTP, 2026)</li><li>Endpoint Security (Cisco – UTP, 2026)</li><li>Network Defense y Cyber Threat Management (Cisco – UTP, 2026)</li></ul>
+              <summary>Certificados <span>8</span></summary>
+              <ul class="dev-certs-lista"><li>Scrum Developer Professional (SDPC) · CertiProf 2025</li><li>ITIL v4 · New Horizons 2023</li><li>Cloud-native Microservices with Quarkus · Udemy 2026</li><li>Quarkus: microservicios, APIs y web apps · Udemy 2026</li><li>Apache Kafka con Java, Spring y AWS · Udemy 2026</li><li>Apache Kafka for Beginners v3 · Udemy 2026</li><li>DBA PostgreSQL · Udemy 2026</li><li>Angular Avanzado · Platzi 2025</li></ul>
             </details>
             <a class="site-button button-primary dev-cv" href="pdf/equipo/cv-enrique-prada.pdf" target="_blank" rel="noopener">
               <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Ver CV completo
@@ -258,14 +301,14 @@
               </div>
             </div>
             <h4>Programas</h4>
-            <ul class="dev-tags"><li>Git</li><li>PostgreSQL</li><li>SQL Server</li><li>MongoDB</li><li>Linux (Bash/CLI)</li><li>Supabase</li><li>Networking (TCP/IP)</li></ul>
+            <ul class="dev-tags"><li>Visual Studio Code</li><li>Git</li><li>GitHub</li><li>PostgreSQL</li><li>SQL Server</li><li>Supabase</li></ul>
             <h4>Lenguajes y frameworks</h4>
-            <ul class="dev-tags"><li>HTML5</li><li>CSS3</li><li>JavaScript ES6+</li><li>Java</li><li>Python</li><li>Bootstrap 5</li></ul>
+            <ul class="dev-tags"><li>JavaScript</li><li>HTML</li><li>CSS</li><li>SQL</li><li>Node.js</li><li>Angular</li><li>Spring Boot</li><li>TypeScript (en formación)</li><li>C# (en formación)</li></ul>
             <h4>Habilidades blandas</h4>
             <ul class="dev-tags dev-tags-blandas"><li>Adaptabilidad</li><li>Trabajo en equipo</li><li>Orientación a resultados</li><li>Resolución de problemas</li><li>Autodidacta</li><li>Aprendizaje continuo</li></ul>
             <details class="dev-certs">
-              <summary>Certificados <span>6</span></summary>
-              <ul class="dev-certs-lista"><li>Redes y Comunicación de Datos I (UTP, 2025)</li><li>Sistemas Operativos: Linux, Virtualización y Criptografía (UTP, 2025)</li><li>Python Básico (UNI, 2026)</li><li>Línea de Comandos (Bash) y Scripting (Codédex, 2026)</li><li>Excel Intermedio (UTP, 2025)</li><li>Inglés Básico/Intermedio - Lectura Técnica (UTP, 2025)</li></ul>
+              <summary>Certificados <span>10</span></summary>
+              <ul class="dev-certs-lista"><li>Microsoft: Foundations of Coding Full-Stack · Coursera 2026</li><li>IBM: Enterprise Design Thinking Practitioner · 2026</li><li>IBM: Enterprise Design Thinking Co-Creator · 2026</li><li>IBM: Team Essentials for Designing AI Solutions · 2026</li><li>Cisco Networking Academy: Introduction to Cybersecurity · 2026</li><li>Cisco Networking Academy: Seguridad de Terminales · UTP 2026</li><li>Programación en Python Básico + IA · UNI 2026</li><li>Especialista de Soporte Técnico · UTP 2026</li><li>Certificado Inglés A2 MCER · UTP 2026</li><li>Asesor en Excel Intermedio · UTP 2026</li></ul>
             </details>
             <a class="site-button button-primary dev-cv" href="pdf/equipo/cv-joel-saldana.pdf" target="_blank" rel="noopener">
               <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Ver CV completo
@@ -289,70 +332,87 @@
         <ol class="fases">
           <li class="content-card fase">
             <span class="fase-numero">1</span>
+            <span class="fase-icono"><i class="fa-solid fa-list-check" aria-hidden="true"></i></span>
             <h3>Planificación del producto</h3>
             <p>Las necesidades de la empresa se convierten en historias de usuario dentro del backlog de Jira.</p>
           </li>
           <li class="content-card fase">
             <span class="fase-numero">2</span>
+            <span class="fase-icono"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i></span>
             <h3>Planificación del sprint</h3>
             <p>El equipo elige las historias del sprint, las estima en puntos y asigna un responsable a cada una.</p>
           </li>
           <li class="content-card fase">
             <span class="fase-numero">3</span>
+            <span class="fase-icono"><i class="fa-solid fa-code" aria-hidden="true"></i></span>
             <h3>Desarrollo</h3>
             <p>Cada funcionalidad se trabaja en su rama <code>feature/*</code>, con seguimiento en el tablero del sprint.</p>
           </li>
           <li class="content-card fase">
             <span class="fase-numero">4</span>
+            <span class="fase-icono"><i class="fa-solid fa-code-pull-request" aria-hidden="true"></i></span>
             <h3>Revisión</h3>
             <p>Los cambios pasan por un Pull Request aprobado por otra persona antes de integrarse a <code>develop</code>.</p>
           </li>
           <li class="content-card fase">
             <span class="fase-numero">5</span>
+            <span class="fase-icono"><i class="fa-solid fa-rotate" aria-hidden="true"></i></span>
             <h3>Retrospectiva</h3>
             <p>Al cerrar el sprint, el equipo revisa los resultados y define qué mejorar en el siguiente.</p>
           </li>
         </ol>
 
-        <h3 class="sprints-titulo">Sprints del proyecto</h3>
-        <div class="sprints-tabla">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">Sprint</th>
-                <th scope="col">Periodo</th>
-                <th scope="col">Objetivo</th>
-                <th scope="col">Qué se cumple</th>
-                <th scope="col">Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">Sprint 1</th>
-                <td>16 – 29 sep. 2026</td>
-                <td>Página de inicio</td>
-                <td>Estructura del proyecto y layout, portada con carrusel, información de la empresa, misión y visión,
-                  clientes, video y pie de página.</td>
-                <td><span class="sprint-estado sprint-hecho">Completado</span></td>
-              </tr>
-              <tr>
-                <th scope="row">Sprint 2</th>
-                <td>30 sep. – 14 oct. 2026</td>
-                <td>Catálogo y panel administrativo</td>
-                <td>Arquitectura base (Spring Boot y base de datos), listado de cursos, búsqueda estática y dinámica,
-                  login con Spring Security y gestión de cursos (listar, crear, editar y eliminar).</td>
-                <td><span class="sprint-estado sprint-hecho">Completado</span></td>
-              </tr>
-              <tr>
-                <th scope="row">Sprint 3</th>
-                <td>28 oct. – 10 nov. 2026</td>
-                <td>Página Nosotros y nueva identidad</td>
-                <td>Mapa organizacional, desarrolladores con su CV, metodología del proyecto, catálogo ampliado a 30
-                  cursos y nueva identidad visual (colores, logo y tipografía).</td>
-                <td><span class="sprint-estado sprint-hecho">Completado</span></td>
-              </tr>
-            </tbody>
-          </table>
+        <h3 class="sprints-titulo" id="sprints">Sprints del proyecto</h3>
+        <div class="sprints-lista">
+          <article class="sprint-card">
+            <div class="sprint-cabecera">
+              <div>
+                <span class="sprint-num">Sprint 1</span>
+                <h4>Página de inicio</h4>
+                <span class="sprint-periodo"><i class="fa-regular fa-calendar" aria-hidden="true"></i> 16 – 29 sep. 2026</span>
+              </div>
+              <span class="sprint-estado sprint-hecho">Completado</span>
+            </div>
+            <ul class="sprint-lista">
+              <li>Estructura del proyecto y layout</li>
+              <li>Portada con carrusel</li>
+              <li>Información de la empresa, misión y visión</li>
+              <li>Clientes, video y pie de página</li>
+            </ul>
+          </article>
+          <article class="sprint-card">
+            <div class="sprint-cabecera">
+              <div>
+                <span class="sprint-num">Sprint 2</span>
+                <h4>Catálogo y panel administrativo</h4>
+                <span class="sprint-periodo"><i class="fa-regular fa-calendar" aria-hidden="true"></i> 30 sep. – 14 oct. 2026</span>
+              </div>
+              <span class="sprint-estado sprint-hecho">Completado</span>
+            </div>
+            <ul class="sprint-lista">
+              <li>Arquitectura base: Spring Boot y base de datos</li>
+              <li>Listado de cursos</li>
+              <li>Búsqueda estática y dinámica</li>
+              <li>Login con Spring Security</li>
+              <li>Gestión de cursos: listar, crear, editar y eliminar</li>
+            </ul>
+          </article>
+          <article class="sprint-card">
+            <div class="sprint-cabecera">
+              <div>
+                <span class="sprint-num">Sprint 3</span>
+                <h4>Página Nosotros y catálogo ampliado</h4>
+                <span class="sprint-periodo"><i class="fa-regular fa-calendar" aria-hidden="true"></i> 28 oct. – 10 nov. 2026</span>
+              </div>
+              <span class="sprint-estado sprint-hecho">Completado</span>
+            </div>
+            <ul class="sprint-lista">
+              <li>Mapa organizacional del equipo</li>
+              <li>Desarrolladores con su CV y certificados</li>
+              <li>Metodología del proyecto</li>
+              <li>Catálogo ampliado a 30 cursos</li>
+            </ul>
+          </article>
         </div>
       </div>
     </section>

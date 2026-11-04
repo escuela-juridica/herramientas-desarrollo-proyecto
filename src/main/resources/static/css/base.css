@@ -1,23 +1,21 @@
 /* BASE.CSS — estilos globales compartidos por todas las páginas. */
 
 :root {
-  /* Paleta ESEJUR (misma del sistema de diseno de la plataforma) */
-  --navy: #103860;
-  --navy-2: #164a73;
-  --navy-3: #0b1728;
-  --acento: #006f73;
-  --acento-2: #005a5e;
-  --acento-claro: #00d8d8;
-  --gold: #f4b740;
-  --ink: #101828;
-  --paper: #f8fafc;
+  --navy: #0f355d;
+  --navy-2: #17456f;
+  --navy-3: #0a2540;
+  --orange: #f58220;
+  --orange-2: #d96d12;
+  --gold: #e6a94a;
+  --ink: #11202f;
+  --paper: #faf8f5;
   --surface: #ffffff;
-  --line: #eaecf0;
-  --line-2: #f2f4f7;
-  --muted: #475467;
-  --red: #c83e4d;
-  --serif: "Merriweather", Georgia, "Times New Roman", Times, serif;
-  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --line: #e4e0d9;
+  --line-2: #f1ede6;
+  --muted: #6b7484;
+  --red: #c8102e;
+  --serif: Georgia, "Times New Roman", Times, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --wrap: 1140px;
   --radius: 10px;
   --space-xs: 8px;
@@ -31,13 +29,6 @@
 
 * {
   box-sizing: border-box;
-}
-
-button,
-input,
-select,
-textarea {
-  font-family: inherit;
 }
 
 html {
@@ -129,22 +120,22 @@ main,
 }
 
 .button-primary {
-  background: var(--acento);
-  border-color: var(--acento);
+  background: var(--orange);
+  border-color: var(--orange);
   color: #fff;
 }
 
 .button-primary:hover {
-  background: var(--acento-2);
-  border-color: var(--acento-2);
+  background: var(--orange-2);
+  border-color: var(--orange-2);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,111,115,.3);
+  box-shadow: 0 4px 12px rgba(245,130,32,.3);
 }
 
 .eyebrow {
   margin: 0 0 var(--space-xs);
-  color: var(--acento);
+  color: var(--orange);
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: .18em;
@@ -229,8 +220,8 @@ main,
   right: 0;
   width: 100%;
   z-index: 100;
-  border-bottom: 1px solid rgba(16,56,96,.16);
-  box-shadow: 0 6px 20px rgba(11,23,40,.16);
+  border-bottom: 1px solid rgba(15,53,93,.16);
+  box-shadow: 0 6px 20px rgba(10,20,35,.16);
 }
 
 .head-row {
@@ -249,7 +240,7 @@ main,
 }
 
 .logo {
-  height: 54px;
+  height: 44px;
   width: auto;
   flex: none;
 }
@@ -278,13 +269,13 @@ main,
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--acento);
+  background: var(--orange);
   transition: .25s;
 }
 
 .site-nav-link:hover,
 .site-nav-link.on {
-  color: var(--acento);
+  color: var(--orange);
 }
 
 .site-nav-link:hover::after,
@@ -354,7 +345,7 @@ main,
     padding-top: 40px;
     gap: 24px;
     transition: .3s;
-    box-shadow: 0 10px 20px rgba(16,56,96,.1);
+    box-shadow: 0 10px 20px rgba(15,53,93,.1);
     z-index: 99;
     overflow: auto;
   }
@@ -386,7 +377,7 @@ main,
   }
 
   .logo {
-    height: 44px;
+    height: 38px;
     max-width: calc(100vw - 82px);
     object-fit: contain;
   }
@@ -403,7 +394,7 @@ main,
   }
 
   .logo {
-    height: 40px;
+    height: 34px;
     max-width: calc(100vw - 66px);
   }
 
@@ -422,10 +413,10 @@ main,
 /* SECCIÓN: FOOTER */
 
 .footer {
-  background: var(--navy-3);
-  color: #d0d5dd;
+  background: #0B1E3B;
+  color: #CFD8DC;
   padding: 60px 0 20px;
-  border-top: 4px solid var(--acento-claro);
+  border-top: 4px solid var(--orange);
 }
 
 .footer-grid {
@@ -473,7 +464,7 @@ main,
 
 .footer-utp-project > span {
   max-width: 62px;
-  color: #98a2b3;
+  color: #90A4AE;
   font-size: 10px;
   line-height: 1.25;
   text-transform: uppercase;
@@ -519,7 +510,7 @@ main,
 }
 
 .social-links a:hover {
-  background: var(--acento);
+  background: var(--orange);
   color: #0B1E3B;
   transform: translateY(-3px);
 }
@@ -539,7 +530,7 @@ main,
 }
 
 .footer-contact-info li i {
-  color: var(--acento-claro);
+  color: var(--orange);
 }
 
 .footer-contact-info a {
@@ -550,7 +541,7 @@ main,
 }
 
 .footer-contact-info a:hover {
-  color: var(--acento-claro);
+  color: var(--orange);
 }
 
 .footer-staff-list {
@@ -571,7 +562,7 @@ main,
 }
 
 .footer-staff-list li i {
-  color: var(--acento-claro);
+  color: var(--orange);
 }
 
 .footer-sub-title {
@@ -579,7 +570,7 @@ main,
   font-size: 12px;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: #98a2b3;
+  color: #90A4AE;
   font-weight: 700;
   margin: 26px 0 12px;
 }
@@ -631,7 +622,7 @@ main,
 .footer-ally-label {
   flex: 1;
   font-size: 12.5px;
-  color: #d0d5dd;
+  color: #CFD8DC;
   line-height: 1.35;
   transition: .2s;
 }
@@ -645,7 +636,7 @@ main,
   padding-top: 20px;
   text-align: center;
   font-size: 12px;
-  color: #98a2b3;
+  color: #90A4AE;
 }
 
 @media (max-width: 900px) {
@@ -744,7 +735,7 @@ main,
   font-size: 11.5px;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: var(--acento-claro);
+  color: var(--gold);
   font-weight: 700;
   margin: 0 0 12px;
 }
@@ -793,7 +784,7 @@ main,
 }
 
 .hero-carousel .carousel-indicators .active {
-  background: var(--acento-claro);
+  background: var(--orange);
   width: 26px;
   border-radius: 99px;
 }
@@ -807,7 +798,7 @@ main,
   height: 42px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, .5);
-  background: rgba(11, 23, 40, .32);
+  background: rgba(8, 26, 45, .32);
   color: #fff;
   cursor: pointer;
   font-size: 17px;
@@ -815,7 +806,7 @@ main,
 }
 
 .cnav:hover {
-  background: rgba(11, 23, 40, .7);
+  background: rgba(8, 26, 45, .7);
 }
 
 .cprev {
