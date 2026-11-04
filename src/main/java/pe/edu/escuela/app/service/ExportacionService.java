@@ -387,8 +387,6 @@ public class ExportacionService {
       totales.setWidthPercentage(45);
       totales.setHorizontalAlignment(Element.ALIGN_RIGHT);
       totales.setSpacingBefore(12);
-      filaTotal(totales, "Subtotal (precio de lista)", monto(pedido.getSubtotal()), texto);
-      filaTotal(totales, "Descuentos", "- " + monto(pedido.getDescuentoTotal()), texto);
       filaTotal(totales, "Base imponible", monto(pedido.getBaseImponible()), texto);
       filaTotal(totales, "IGV (18 %)", monto(pedido.getIgv()), texto);
       filaTotal(totales, "TOTAL A PAGAR", monto(pedido.getTotal()), negrita);

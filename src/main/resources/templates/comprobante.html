@@ -74,10 +74,6 @@
           </table>
 
           <div class="boleta-totales">
-            <div class="resumen-fila"><span>Subtotal (precio de lista)</span>
-              <span th:text="'S/ ' + ${#numbers.formatDecimal(pedido.subtotal, 1, 2)}">S/ 450.00</span></div>
-            <div class="resumen-fila descuento" th:if="${pedido.descuentoTotal.signum() > 0}"><span>Descuentos</span>
-              <span th:text="'- S/ ' + ${#numbers.formatDecimal(pedido.descuentoTotal, 1, 2)}">- S/ 90.00</span></div>
             <div class="resumen-fila"><span>Base imponible</span>
               <span th:text="'S/ ' + ${#numbers.formatDecimal(pedido.baseImponible, 1, 2)}">S/ 305.08</span></div>
             <div class="resumen-fila"><span>IGV (18 %)</span>
