@@ -8,7 +8,6 @@
 DROP TABLE IF EXISTS comprobante;
 DROP TABLE IF EXISTS pedido_detalle;
 DROP TABLE IF EXISTS pedido;
-DROP TABLE IF EXISTS cliente;
 DROP TABLE IF EXISTS mensaje_contacto;
 DROP TABLE IF EXISTS curso;
 DROP TABLE IF EXISTS docente;
@@ -75,21 +74,18 @@ CREATE TABLE curso (
   id_docente         INT           NOT NULL REFERENCES docente(id_docente)
 );
 
--- Compras: el carrito vive en la sesion; al pagar se guarda cliente + pedido + detalle + comprobante (boleta).
-CREATE TABLE cliente (
-  id_cliente         SERIAL        PRIMARY KEY,
-  nombres            VARCHAR(100)  NOT NULL,
-  apellidos          VARCHAR(100)  NOT NULL,
-  documento          VARCHAR(8)    NOT NULL UNIQUE CHECK (documento ~ '^[0-9]{8}$'),
-  correo             VARCHAR(150)  NOT NULL,
-  telefono           VARCHAR(20),
-  fecha_creacion     TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
+-- Compras: el carrito vive en la sesion; al pagar se guarda pedido + detalle + comprobante (boleta).
+-- La compra es como invitado: no hay tabla de clientes ni inicio de sesion. Los datos del comprador se copian en
+-- cada pedido tal como se escribieron, asi cada boleta conserva lo que se declaro en esa compra y el mismo DNI puede
+-- repetirse en cualquier cantidad de pedidos sin chocar con nada.
 -- Los montos incluyen IGV: total = subtotal - descuento_total; igv es la parte del total que corresponde al 18 %.
 CREATE TABLE pedido (
   id_pedido          SERIAL        PRIMARY KEY,
-  id_cliente         INT           NOT NULL REFERENCES cliente(id_cliente),
+  comprador_nombres    VARCHAR(100) NOT NULL,
+  comprador_apellidos  VARCHAR(100) NOT NULL,
+  comprador_documento  VARCHAR(8)   NOT NULL CHECK (comprador_documento ~ '^[0-9]{8}$'),
+  comprador_correo     VARCHAR(150) NOT NULL,
+  comprador_telefono   VARCHAR(20),
   subtotal           NUMERIC(10,2) NOT NULL,
   descuento_total    NUMERIC(10,2) NOT NULL DEFAULT 0,
   total              NUMERIC(10,2) NOT NULL,
@@ -401,33 +397,34 @@ WHERE curso.codigo = v.codigo;
 
 -- ============================================================
 -- COMPRAS DE DEMOSTRACION (alimentan los reportes del panel administrativo)
--- 12 clientes y 70 pedidos repartidos en los ultimos 8 meses, con sus detalles y su boleta.
+-- 70 pedidos de 12 compradores distintos, repartidos en los ultimos 8 meses, con sus detalles y su boleta.
 -- Los cursos y las fechas salen de formulas fijas (no aleatorias), asi el resultado es el mismo en cada ejecucion.
 -- ============================================================
 
-INSERT INTO cliente (nombres, apellidos, documento, correo, telefono) VALUES
-  ('Carolina', 'Mendoza Ríos', '40125871', 'carolina.mendoza@example.com', '987654321'),
-  ('Luis Alberto', 'Quispe Huamán', '41236982', 'luis.quispe@example.com', '986543210'),
-  ('Daniela', 'Paredes Soto', '42347093', 'daniela.paredes@example.com', '985432109'),
-  ('Marco Antonio', 'Vega Torres', '43458104', 'marco.vega@example.com', '984321098'),
-  ('Rosa Elena', 'Cárdenas Pinto', '44569215', 'rosa.cardenas@example.com', '983210987'),
-  ('Jorge Luis', 'Ramírez Salas', '45670326', 'jorge.ramirez@example.com', '982109876'),
-  ('Patricia', 'Flores Medina', '46781437', 'patricia.flores@example.com', '981098765'),
-  ('Andrés', 'Salazar Rojas', '47892548', 'andres.salazar@example.com', '980987654'),
-  ('Milagros', 'Ortiz Vargas', '48903659', 'milagros.ortiz@example.com', '979876543'),
-  ('Renzo', 'Huamán Castillo', '49014760', 'renzo.huaman@example.com', '978765432'),
-  ('Fiorella', 'Navarro León', '40125872', 'fiorella.navarro@example.com', NULL),
-  ('Diego', 'Campos Ledesma', '41236983', 'diego.campos@example.com', '976543210');
-
 -- Los pedidos se crean con montos en cero; se calculan despues a partir de su detalle.
 -- Fechas: mas pedidos en los meses recientes (campaña de fin de año).
-INSERT INTO pedido (id_pedido, id_cliente, subtotal, descuento_total, total, igv, medio_pago, fecha_pedido)
+INSERT INTO pedido (id_pedido, comprador_nombres, comprador_apellidos, comprador_documento, comprador_correo,
+                    comprador_telefono, subtotal, descuento_total, total, igv, medio_pago, fecha_pedido)
 SELECT p.g,
-       ((p.g * 5) % 12) + 1,
+       c.nombres, c.apellidos, c.documento, c.correo, c.telefono,
        0, 0, 0, 0,
        (ARRAY['TARJETA','YAPE','TRANSFERENCIA'])[(p.g % 3) + 1],
        CURRENT_DATE - ((((p.g * 37) % 230) * ((p.g * 37) % 230)) / 230) + (8 + p.g % 11) * INTERVAL '1 hour'
-FROM generate_series(1, 70) AS p(g);
+FROM generate_series(1, 70) AS p(g)
+JOIN (VALUES
+  (1,  'Carolina',      'Mendoza Ríos',    '40125871', 'carolina.mendoza@example.com', '987654321'),
+  (2,  'Luis Alberto',  'Quispe Huamán',   '41236982', 'luis.quispe@example.com',      '986543210'),
+  (3,  'Daniela',       'Paredes Soto',    '42347093', 'daniela.paredes@example.com',  '985432109'),
+  (4,  'Marco Antonio', 'Vega Torres',     '43458104', 'marco.vega@example.com',       '984321098'),
+  (5,  'Rosa Elena',    'Cárdenas Pinto',  '44569215', 'rosa.cardenas@example.com',    '983210987'),
+  (6,  'Jorge Luis',    'Ramírez Salas',   '45670326', 'jorge.ramirez@example.com',    '982109876'),
+  (7,  'Patricia',      'Flores Medina',   '46781437', 'patricia.flores@example.com',  '981098765'),
+  (8,  'Andrés',        'Salazar Rojas',   '47892548', 'andres.salazar@example.com',   '980987654'),
+  (9,  'Milagros',      'Ortiz Vargas',    '48903659', 'milagros.ortiz@example.com',   '979876543'),
+  (10, 'Renzo',         'Huamán Castillo', '49014760', 'renzo.huaman@example.com',     '978765432'),
+  (11, 'Fiorella',      'Navarro León',    '40125872', 'fiorella.navarro@example.com', NULL),
+  (12, 'Diego',         'Campos Ledesma',  '41236983', 'diego.campos@example.com',     '976543210')
+) AS c(n, nombres, apellidos, documento, correo, telefono) ON c.n = ((p.g * 5) % 12) + 1;
 
 SELECT setval(pg_get_serial_sequence('pedido', 'id_pedido'), 70);
 

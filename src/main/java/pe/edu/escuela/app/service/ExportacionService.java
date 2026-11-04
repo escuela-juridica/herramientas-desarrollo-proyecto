@@ -355,9 +355,9 @@ public class ExportacionService {
       PdfPTable cliente = new PdfPTable(new float[] {1f, 3f});
       cliente.setWidthPercentage(100);
       filaDato(cliente, "Fecha de emisión", FECHA_HORA.format(comprobante.getFechaEmision()), etiqueta, texto);
-      filaDato(cliente, "Cliente", pedido.getCliente().getNombreCompleto(), etiqueta, texto);
-      filaDato(cliente, "DNI", pedido.getCliente().getDocumento(), etiqueta, texto);
-      filaDato(cliente, "Correo", pedido.getCliente().getCorreo(), etiqueta, texto);
+      filaDato(cliente, "Cliente", pedido.getCompradorNombreCompleto(), etiqueta, texto);
+      filaDato(cliente, "DNI", pedido.getCompradorDocumento(), etiqueta, texto);
+      filaDato(cliente, "Correo", pedido.getCompradorCorreo(), etiqueta, texto);
       filaDato(cliente, "Medio de pago", nombreMedioPago(pedido.getMedioPago()), etiqueta, texto);
       documento.add(cliente);
 

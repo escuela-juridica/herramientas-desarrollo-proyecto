@@ -7,19 +7,17 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.edu.escuela.app.dto.DatosCompra;
-import pe.edu.escuela.app.model.Cliente;
 import pe.edu.escuela.app.model.Comprobante;
 import pe.edu.escuela.app.model.Curso;
 import pe.edu.escuela.app.model.Pedido;
 import pe.edu.escuela.app.model.PedidoDetalle;
-import pe.edu.escuela.app.repository.ClienteRepository;
 import pe.edu.escuela.app.repository.ComprobanteRepository;
 import pe.edu.escuela.app.repository.CursoRepository;
 import pe.edu.escuela.app.repository.PedidoRepository;
 import pe.edu.escuela.app.util.Constantes;
 
 /**
- * Confirma la compra: valida los cupos de cada curso (con la fila bloqueada), registra cliente, pedido y detalle,
+ * Confirma la compra: valida los cupos de cada curso (con la fila bloqueada), registra el pedido (con los datos del comprador) y su detalle,
  * descuenta los cupos y emite la boleta. Todo en una transaccion: si algo falla no queda nada a medias.
  */
 @Service
@@ -27,17 +25,14 @@ public class VentaService {
 
   private static final BigDecimal FACTOR_IGV = new BigDecimal("1.18");
 
-  private final ClienteRepository clienteRepository;
   private final CursoRepository cursoRepository;
   private final PedidoRepository pedidoRepository;
   private final ComprobanteRepository comprobanteRepository;
 
   public VentaService(
-      ClienteRepository clienteRepository,
       CursoRepository cursoRepository,
       PedidoRepository pedidoRepository,
       ComprobanteRepository comprobanteRepository) {
-    this.clienteRepository = clienteRepository;
     this.cursoRepository = cursoRepository;
     this.pedidoRepository = pedidoRepository;
     this.comprobanteRepository = comprobanteRepository;
@@ -86,17 +81,14 @@ public class VentaService {
       }
     }
 
-    Cliente cliente = clienteRepository.findByDocumento(datos.getDocumento().trim())
-        .orElseGet(Cliente::new);
-    cliente.setDocumento(datos.getDocumento().trim());
-    cliente.setNombres(datos.getNombres().trim());
-    cliente.setApellidos(datos.getApellidos().trim());
-    cliente.setCorreo(datos.getCorreo().trim());
-    cliente.setTelefono(datos.getTelefono() == null || datos.getTelefono().isBlank()
+    // Compra como invitado: los datos del comprador se copian al pedido tal como se escribieron
+    pedido.setCompradorNombres(datos.getNombres().trim());
+    pedido.setCompradorApellidos(datos.getApellidos().trim());
+    pedido.setCompradorDocumento(datos.getDocumento().trim());
+    pedido.setCompradorCorreo(datos.getCorreo().trim());
+    pedido.setCompradorTelefono(datos.getTelefono() == null || datos.getTelefono().isBlank()
         ? null
         : datos.getTelefono().trim());
-
-    pedido.setCliente(clienteRepository.save(cliente));
     pedido.setMedioPago(datos.getMedioPago());
     pedido.setSubtotal(subtotal);
     pedido.setDescuentoTotal(subtotal.subtract(total));

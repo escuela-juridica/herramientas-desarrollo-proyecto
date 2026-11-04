@@ -8,6 +8,6 @@ import pe.edu.escuela.app.model.Comprobante;
 
 public interface ComprobanteRepository extends JpaRepository<Comprobante, Integer> {
 
-  @Query("SELECT c FROM Comprobante c JOIN FETCH c.pedido p JOIN FETCH p.cliente WHERE c.codigoAcceso = :codigo")
+  @Query("SELECT c FROM Comprobante c JOIN FETCH c.pedido p WHERE c.codigoAcceso = :codigo")
   Optional<Comprobante> buscarPorCodigoAcceso(@Param("codigo") String codigo);
 }

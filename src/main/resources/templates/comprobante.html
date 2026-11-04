@@ -46,9 +46,9 @@
             <div><dt>Fecha de emisión:</dt><dd th:text="${#temporals.format(comprobante.fechaEmision, 'dd/MM/yyyy HH:mm')}">04/11/2026 10:30</dd></div>
             <div><dt>Medio de pago:</dt>
               <dd th:text="${pedido.medioPago == 'TARJETA'} ? 'Tarjeta de crédito o débito' : (${pedido.medioPago == 'YAPE'} ? 'Yape' : 'Transferencia bancaria')">Tarjeta</dd></div>
-            <div><dt>Cliente:</dt><dd th:text="${pedido.cliente.nombreCompleto}">Nombre Apellido</dd></div>
-            <div><dt>DNI:</dt><dd th:text="${pedido.cliente.documento}">12345678</dd></div>
-            <div><dt>Correo:</dt><dd th:text="${pedido.cliente.correo}">correo@example.com</dd></div>
+            <div><dt>Cliente:</dt><dd th:text="${pedido.compradorNombreCompleto}">Nombre Apellido</dd></div>
+            <div><dt>DNI:</dt><dd th:text="${pedido.compradorDocumento}">12345678</dd></div>
+            <div><dt>Correo:</dt><dd th:text="${pedido.compradorCorreo}">correo@example.com</dd></div>
           </dl>
 
           <table class="boleta-tabla">
