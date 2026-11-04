@@ -137,6 +137,8 @@ public class CursoService {
     existente.setFechaInicio(datos.getFechaInicio());
     existente.setFechaFin(datos.getFechaFin());
     existente.setPrecio(datos.getPrecio());
+    existente.setDescuentoPorcentaje(datos.getDescuentoPorcentaje());
+    existente.setOfertaHasta(datos.getOfertaHasta());
     existente.setDestacado(datos.isDestacado());
     existente.setTipoCurso(tipo);
     existente.setDocente(docente);

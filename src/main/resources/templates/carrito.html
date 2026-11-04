@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+  <title>Carrito de compras</title>
+</head>
+
+<body>
+  <main layout:fragment="content">
+    <section class="band tienda-band">
+      <div class="wrap">
+        <div class="section-heading">
+          <p class="eyebrow">Tu compra</p>
+          <h1 class="tit">Mi carrito (<span th:text="${carrito.cantidad}">0</span>)</h1>
+          <p class="section-lead">Revisa los cursos elegidos, ajusta la cantidad de cupos y confirma tu compra para recibir la boleta.</p>
+        </div>
+
+        <!-- Mensaje de una sola vez (éxito, error o info) -->
+        <p class="mensaje" role="status" th:if="${mensajeTexto != null}"
+           th:classappend="${mensajeTipo}" th:text="${mensajeTexto}">Mensaje</p>
+
+        <div class="mensaje error" role="alert" th:if="${errores != null and abrirPago == null and !#lists.isEmpty(errores)}">
+          <ul>
+            <li th:each="error : ${errores}" th:text="${error}">Error</li>
+          </ul>
+        </div>
+
+        <!-- Carrito vacío -->
+        <div class="carrito-vacio" th:if="${carrito.vacio}">
+          <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+          <h3>Tu carrito está vacío</h3>
+          <p>Explora el catálogo y agrega los cursos que te interesen. Revisa también las ofertas de Navidad.</p>
+          <a href="/catalogo" class="site-button button-primary">Ver cursos</a>
+        </div>
+
+        <!-- Carrito con cursos -->
+        <th:block th:unless="${carrito.vacio}">
+          <div class="tabla-carrito-wrap">
+            <table class="tabla-carrito">
+              <thead>
+                <tr>
+                  <th scope="col">Curso</th>
+                  <th scope="col" class="num">Precio</th>
+                  <th scope="col" class="centro">Cantidad</th>
+                  <th scope="col" class="num">Subtotal</th>
+                  <th scope="col"><span class="visually-hidden">Eliminar</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="linea : ${carrito.lineas}">
+                  <td data-label="Curso">
+                    <div class="tc-curso">
+                      <img th:src="@{${linea.curso.imagen}}" alt="Portada del curso">
+                      <div>
+                        <strong th:text="${linea.curso.nombre}">Nombre del curso</strong>
+                        <span class="oferta-etiqueta" th:if="${linea.curso.enOferta}"
+                              th:text="'Oferta -' + ${#numbers.formatDecimal(linea.curso.descuentoPorcentaje, 1, 0)} + '%'">Oferta -20%</span>
+                        <span class="tc-meta">
+                          <span th:text="${linea.curso.codigo}">EJ-2026-001</span> ·
+                          <span th:text="${linea.curso.duracionHoras} + ' hrs'">120 hrs</span>
+                          <th:block th:if="${linea.curso.modalidad != null}"> ·
+                            <span th:text="${linea.curso.modalidad == 'V'} ? 'Virtual' : 'Presencial'">Virtual</span>
+                          </th:block>
+                        </span>
+                        <span class="tc-cupos" th:if="${linea.curso.cupos != null}"
+                              th:text="'Cupos disponibles: ' + ${linea.curso.cupos}">Cupos disponibles: 40</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td data-label="Precio" class="num">
+                    <span class="precio-anterior" th:if="${linea.curso.enOferta}"
+                          th:text="'S/ ' + ${#numbers.formatDecimal(linea.curso.precio, 1, 2)}">S/ 450.00</span>
+                    <span class="precio-final" th:classappend="${linea.curso.enOferta} ? 'con-oferta'"
+                          th:text="'S/ ' + ${#numbers.formatDecimal(linea.precioUnitario, 1, 2)}">S/ 360.00</span>
+                  </td>
+                  <td data-label="Cantidad" class="centro">
+                    <form th:action="@{/carrito/accion}" method="post" class="tc-cantidad">
+                      <input type="hidden" name="idCurso" th:value="${linea.curso.idCurso}">
+                      <button name="accion" value="disminuir" class="boton-mini" aria-label="Quitar un cupo">−</button>
+                      <span th:text="${linea.cantidad}">1</span>
+                      <button name="accion" value="aumentar" class="boton-mini" aria-label="Agregar un cupo"
+                              th:disabled="${!linea.puedeAumentar}">+</button>
+                    </form>
+                  </td>
+                  <td data-label="Subtotal" class="num">
+                    <strong th:text="'S/ ' + ${#numbers.formatDecimal(linea.subtotal, 1, 2)}">S/ 360.00</strong>
+                  </td>
+                  <td class="accion">
+                    <form th:action="@{/carrito/accion}" method="post">
+                      <input type="hidden" name="idCurso" th:value="${linea.curso.idCurso}">
+                      <button name="accion" value="eliminar" class="boton-peligro">
+                        <i class="fa-regular fa-trash-can" aria-hidden="true"></i> Eliminar
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="total-fila">
+                  <td colspan="3" class="total-etiqueta">Total</td>
+                  <td colspan="2" class="num total" th:text="'S/ ' + ${#numbers.formatDecimal(carrito.total, 1, 2)}">S/ 420.00</td>
+                </tr>
+                <tr>
+                  <td colspan="5" class="nota-igv"
+                      th:text="'Los precios incluyen IGV (18 %): S/ ' + ${#numbers.formatDecimal(carrito.igv, 1, 2)}">IGV</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- Acciones del carrito -->
+          <div class="acciones-carrito">
+            <form th:action="@{/carrito/vaciar}" method="post">
+              <button type="submit" class="boton-secundario"><i class="fa-regular fa-trash-can"></i> Vaciar carrito</button>
+            </form>
+            <a href="/catalogo" class="site-button button-ghost"><i class="fa-solid fa-arrow-left"></i> Seguir comprando</a>
+            <button type="button" class="site-button button-primary" id="btnConfirmar" data-bs-toggle="modal"
+                    data-bs-target="#modalPago">
+              <i class="fa-solid fa-lock"></i> Confirmar compra
+            </button>
+          </div>
+
+          <!-- Modal de pago (estilo checkout de pasarela, pago simulado) -->
+          <div class="modal fade cq-modal" id="modalPago" tabindex="-1" aria-labelledby="pagoTitulo" aria-hidden="true"
+               th:attr="data-abrir=${abrirPago == true}">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <form th:action="@{/carrito/comprar}" method="post" th:object="${datos}" id="formCompra" class="cq-form"
+                      novalidate>
+                  <header class="cq-cabecera">
+                    <span class="cq-logo"><img src="img/identidad/favicon.png" alt="Logo de Escuela Jurídica"></span>
+                    <div class="cq-comercio">
+                      <p id="pagoTitulo">Escuela Jurídica</p>
+                      <small th:text="${carrito.cantidad} + (${carrito.cantidad == 1} ? ' cupo' : ' cupos') + ' · Pago seguro simulado'">2 cupos</small>
+                    </div>
+                    <div class="cq-monto">
+                      <span>Total a pagar</span>
+                      <strong th:text="'S/ ' + ${#numbers.formatDecimal(carrito.total, 1, 2)}">S/ 310.00</strong>
+                    </div>
+                    <button type="button" class="cq-cerrar" data-bs-dismiss="modal" aria-label="Cerrar">&times;</button>
+                  </header>
+
+                  <div class="cq-cuerpo">
+                    <div class="cq-errores" role="alert" id="cqErrores" th:hidden="${abrirPago != true}">
+                      <strong><i class="fa-solid fa-circle-exclamation"></i> Revisa los datos:</strong>
+                      <ul id="cqErroresLista">
+                        <th:block th:if="${abrirPago == true and errores != null}">
+                          <li th:each="error : ${errores}" th:text="${error}">Error</li>
+                        </th:block>
+                      </ul>
+                    </div>
+
+                    <h3 class="cq-seccion"><span>1</span> Tus datos</h3>
+                    <div class="cq-fila">
+                      <div class="cq-campo">
+                        <label for="nombres">Nombres</label>
+                        <input id="nombres" type="text" th:field="*{nombres}" maxlength="100" autocomplete="given-name">
+                      </div>
+                      <div class="cq-campo">
+                        <label for="apellidos">Apellidos</label>
+                        <input id="apellidos" type="text" th:field="*{apellidos}" maxlength="100" autocomplete="family-name">
+                      </div>
+                    </div>
+                    <div class="cq-fila">
+                      <div class="cq-campo">
+                        <label for="documento">DNI</label>
+                        <input id="documento" type="text" th:field="*{documento}" inputmode="numeric" maxlength="8"
+                               autocomplete="off" placeholder="8 dígitos">
+                      </div>
+                      <div class="cq-campo">
+                        <label for="telefono">Teléfono <small>(opcional)</small></label>
+                        <input id="telefono" type="tel" th:field="*{telefono}" maxlength="20" autocomplete="tel">
+                      </div>
+                    </div>
+                    <div class="cq-campo">
+                      <label for="correo">Correo electrónico</label>
+                      <input id="correo" type="email" th:field="*{correo}" maxlength="150" autocomplete="email"
+                             placeholder="Aquí te enviamos tu boleta">
+                    </div>
+
+                    <h3 class="cq-seccion"><span>2</span> Medio de pago</h3>
+                    <div class="cq-medios" role="radiogroup" aria-label="Medio de pago">
+                      <label class="cq-medio">
+                        <input type="radio" name="medioPago" value="TARJETA" th:checked="${datos.medioPago == 'TARJETA'}">
+                        <span><i class="fa-regular fa-credit-card"></i> Tarjeta</span>
+                      </label>
+                      <label class="cq-medio">
+                        <input type="radio" name="medioPago" value="YAPE" th:checked="${datos.medioPago == 'YAPE'}">
+                        <span><i class="fa-solid fa-mobile-screen"></i> Yape</span>
+                      </label>
+                      <label class="cq-medio">
+                        <input type="radio" name="medioPago" value="TRANSFERENCIA" th:checked="${datos.medioPago == 'TRANSFERENCIA'}">
+                        <span><i class="fa-solid fa-building-columns"></i> Transferencia</span>
+                      </label>
+                    </div>
+
+                    <!-- Los datos de tarjeta, Yape y operación son solo de demostración: no tienen name, no se envían ni se guardan -->
+                    <div class="cq-panel" data-panel="TARJETA">
+                      <div class="cq-campo">
+                        <label for="tarjNumero">Número de tarjeta</label>
+                        <div class="cq-con-icono">
+                          <input id="tarjNumero" type="text" inputmode="numeric" autocomplete="off" maxlength="19"
+                                 placeholder="0000 0000 0000 0000">
+                          <i class="fa-regular fa-credit-card" id="tarjMarca" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <div class="cq-fila">
+                        <div class="cq-campo">
+                          <label for="tarjVence">Vencimiento</label>
+                          <input id="tarjVence" type="text" inputmode="numeric" autocomplete="off" maxlength="5" placeholder="MM/AA">
+                        </div>
+                        <div class="cq-campo">
+                          <label for="tarjCvv">CVV</label>
+                          <input id="tarjCvv" type="password" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="123">
+                        </div>
+                      </div>
+                      <p class="cq-ayuda"><i class="fa-solid fa-circle-info"></i> Tarjeta de prueba: 4111 1111 1111 1111, cualquier
+                        fecha futura y CVV 123. Con 4000 0000 0000 0002 se simula un rechazo.</p>
+                    </div>
+
+                    <div class="cq-panel" data-panel="YAPE" hidden>
+                      <div class="cq-fila">
+                        <div class="cq-campo">
+                          <label for="yapeCelular">Celular con Yape</label>
+                          <input id="yapeCelular" type="text" inputmode="numeric" autocomplete="off" maxlength="9" placeholder="9XXXXXXXX">
+                        </div>
+                        <div class="cq-campo">
+                          <label for="yapeCodigo">Código de aprobación</label>
+                          <input id="yapeCodigo" type="text" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="6 dígitos">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="cq-panel" data-panel="TRANSFERENCIA" hidden>
+                      <div class="cq-campo">
+                        <label for="transOperacion">Número de operación</label>
+                        <input id="transOperacion" type="text" inputmode="numeric" autocomplete="off" maxlength="12"
+                               placeholder="Entre 6 y 12 dígitos">
+                      </div>
+                      <p class="cq-ayuda"><i class="fa-solid fa-circle-info"></i> Realiza la transferencia desde tu banca por internet y
+                        registra aquí el número de operación. Es una simulación: no se verifica con ningún banco.</p>
+                    </div>
+                  </div>
+
+                  <footer class="cq-pie">
+                    <button type="submit" class="cq-pagar" id="btnPagar">
+                      <i class="fa-solid fa-lock"></i>
+                      <span th:text="'Pagar S/ ' + ${#numbers.formatDecimal(carrito.total, 1, 2)}">Pagar S/ 310.00</span>
+                    </button>
+                  </footer>
+
+                  <div class="cq-procesando" id="cqProcesando" hidden aria-live="polite">
+                    <div class="cq-spinner" id="cqSpinner"></div>
+                    <i class="fa-solid fa-circle-check cq-ok" id="cqOk" hidden></i>
+                    <p id="cqProcesandoTexto">Procesando tu pago…</p>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </th:block>
+      </div>
+    </section>
+  </main>
+
+  <th:block layout:fragment="js">
+    <script src="js/pago-modal.js" defer></script>
+  </th:block>
+</body>
+
+</html>

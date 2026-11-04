@@ -120,8 +120,11 @@
 
               <td data-label="Precio"
                   class="curso-price"
-                  th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 2)}">
-                S/ 0.00
+                  >
+                <span th:class="${curso.enOferta} ? 'precio-tachado'"
+                      th:text="'S/ ' + ${#numbers.formatDecimal(curso.precio, 1, 2)}">S/ 0.00</span>
+                <span class="curso-oferta-admin" th:if="${curso.enOferta}"
+                      th:text="'-' + ${#numbers.formatDecimal(curso.descuentoPorcentaje, 1, 0)} + '% · S/ ' + ${#numbers.formatDecimal(curso.precioFinal, 1, 2)}">-20% · S/ 360.00</span>
               </td>
 
               <td data-label="Estado">

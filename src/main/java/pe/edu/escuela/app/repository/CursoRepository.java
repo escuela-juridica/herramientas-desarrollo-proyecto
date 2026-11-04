@@ -1,8 +1,11 @@
 package pe.edu.escuela.app.repository;
 
+import jakarta.persistence.LockModeType;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import pe.edu.escuela.app.model.Curso;
@@ -34,4 +37,9 @@ public interface CursoRepository extends JpaRepository<Curso, Integer> {
   @EntityGraph(attributePaths = {"tipoCurso", "docente"})
   List<Curso> findByNombreContainingIgnoreCaseAndCodigoContainingIgnoreCaseOrderByIdCursoAsc(
       String nombre, String codigo);
+
+  /** Busca el curso bloqueando su fila hasta terminar la transaccion, para validar y descontar cupos sin carreras. */
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  @Query("SELECT c FROM Curso c WHERE c.idCurso = :idCurso")
+  Optional<Curso> buscarParaActualizar(@Param("idCurso") Integer idCurso);
 }

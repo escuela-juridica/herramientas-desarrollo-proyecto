@@ -207,16 +207,15 @@
                 <span class="curso-hours"><i class="fa-regular fa-clock"></i> <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
               </div>
             </div>
-            <div class="curso-cover"><img th:src="@{${curso.imagen}}" alt="Portada del curso"></div>
+            <div class="curso-cover"><img th:src="@{${curso.imagen}}" alt="Portada del curso">
+                <th:block th:replace="~{fragments/curso :: etiqueta(${curso})}"></th:block></div>
             <div class="curso-body">
               <h3 th:text="${curso.nombre}"></h3>
               <p th:text="${curso.descripcion}"></p>
             </div>
             <div class="curso-foot">
-              <div class="curso-precio">
-                S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}"></span>
-              </div>
-              <a href="#" class="curso-button" data-bs-toggle="modal" th:data-bs-target="'#modalCurso' + ${curso.idCurso}">Más Información</a>
+              <div th:replace="~{fragments/curso :: precio(${curso})}"></div>
+              <a href="#" class="curso-button" data-bs-toggle="modal" th:data-bs-target="'#modalCurso' + ${curso.idCurso}"><i class="fa-solid fa-cart-plus" aria-hidden="true"></i> Ver y agregar al carrito</a>
             </div>
           </article>
         </div>
@@ -248,14 +247,12 @@
                   <span><i class="fa-solid fa-hashtag"></i> Código: <span th:text="${curso.codigo}"></span></span>
                   <span><i class="fa-regular fa-clock"></i> Duración: <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
                 </div>
-                <div class="curso-modal-precio">
-                  Precio: S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}"></span>
-                </div>
+                <div th:replace="~{fragments/curso :: precioModal(${curso})}"></div>
               </div>
             </div>
             <div class="modal-footer curso-modal-footer">
               <button type="button" class="btn curso-modal-cancelar" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn curso-modal-comprar" onclick="alert('¡Curso comprado exitosamente!')">Confirmar Compra</button>
+              <th:block th:replace="~{fragments/curso :: botonAgregar(${curso})}"></th:block>
             </div>
           </div>
         </div>

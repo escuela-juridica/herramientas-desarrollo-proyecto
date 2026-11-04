@@ -12,6 +12,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -59,6 +60,13 @@ public class Curso {
 
   @Column(name = "precio", nullable = false, precision = 10, scale = 2)
   private BigDecimal precio;
+
+  @Column(name = "descuento_porcentaje", nullable = false, precision = 5, scale = 2)
+  private BigDecimal descuentoPorcentaje = BigDecimal.ZERO;
+
+  @Column(name = "oferta_hasta")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate ofertaHasta;
 
   @Column(name = "imagen", nullable = false, length = 255)
   private String imagen;
@@ -184,6 +192,43 @@ public class Curso {
 
   public void setPrecio(BigDecimal precio) {
     this.precio = precio;
+  }
+
+  public BigDecimal getDescuentoPorcentaje() {
+    return descuentoPorcentaje;
+  }
+
+  public void setDescuentoPorcentaje(BigDecimal descuentoPorcentaje) {
+    this.descuentoPorcentaje = descuentoPorcentaje == null ? BigDecimal.ZERO : descuentoPorcentaje;
+  }
+
+  public LocalDate getOfertaHasta() {
+    return ofertaHasta;
+  }
+
+  public void setOfertaHasta(LocalDate ofertaHasta) {
+    this.ofertaHasta = ofertaHasta;
+  }
+
+  /** Un curso esta en oferta si tiene descuento y la fecha limite (si existe) no ha pasado. */
+  public boolean isEnOferta() {
+    return descuentoPorcentaje != null
+        && descuentoPorcentaje.signum() > 0
+        && (ofertaHasta == null || !ofertaHasta.isBefore(LocalDate.now()));
+  }
+
+  /** Descuento que se aplica hoy: el configurado si hay oferta vigente, cero si no. */
+  public BigDecimal getDescuentoVigente() {
+    return isEnOferta() ? descuentoPorcentaje : BigDecimal.ZERO;
+  }
+
+  /** Precio que paga el cliente hoy (precio de lista menos el descuento vigente). */
+  public BigDecimal getPrecioFinal() {
+    if (!isEnOferta()) {
+      return precio;
+    }
+    return precio.multiply(BigDecimal.valueOf(100).subtract(descuentoPorcentaje))
+        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
   }
 
   public String getImagen() {

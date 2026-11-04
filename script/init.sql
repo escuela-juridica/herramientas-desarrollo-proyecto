@@ -5,6 +5,11 @@
 -- SECCIÓN 1: ELIMINAR TABLAS (si existen)
 -- ============================================================
 
+DROP TABLE IF EXISTS comprobante;
+DROP TABLE IF EXISTS pedido_detalle;
+DROP TABLE IF EXISTS pedido;
+DROP TABLE IF EXISTS cliente;
+DROP TABLE IF EXISTS mensaje_contacto;
 DROP TABLE IF EXISTS curso;
 DROP TABLE IF EXISTS docente;
 DROP TABLE IF EXISTS tipo_curso;
@@ -58,6 +63,8 @@ CREATE TABLE curso (
   fecha_inicio       DATE         NOT NULL,
   fecha_fin          DATE         NOT NULL,
   precio             NUMERIC(10,2) NOT NULL,
+  descuento_porcentaje NUMERIC(5,2) NOT NULL DEFAULT 0 CHECK (descuento_porcentaje >= 0 AND descuento_porcentaje <= 90),
+  oferta_hasta       DATE          NULL,
   imagen             VARCHAR(255)  NOT NULL,
   destacado          BOOLEAN       NOT NULL DEFAULT false,
   estado             CHAR(1)       NOT NULL DEFAULT 'A' CHECK (estado IN ('A','I')),
@@ -66,6 +73,66 @@ CREATE TABLE curso (
   id_tipo_curso      INT           NOT NULL REFERENCES tipo_curso(id_tipo_curso),
   id_admin           INT           NOT NULL REFERENCES administrador(id_admin),
   id_docente         INT           NOT NULL REFERENCES docente(id_docente)
+);
+
+-- Compras: el carrito vive en la sesion; al pagar se guarda cliente + pedido + detalle + comprobante (boleta).
+CREATE TABLE cliente (
+  id_cliente         SERIAL        PRIMARY KEY,
+  nombres            VARCHAR(100)  NOT NULL,
+  apellidos          VARCHAR(100)  NOT NULL,
+  documento          VARCHAR(8)    NOT NULL UNIQUE CHECK (documento ~ '^[0-9]{8}$'),
+  correo             VARCHAR(150)  NOT NULL,
+  telefono           VARCHAR(20),
+  fecha_creacion     TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Los montos incluyen IGV: total = subtotal - descuento_total; igv es la parte del total que corresponde al 18 %.
+CREATE TABLE pedido (
+  id_pedido          SERIAL        PRIMARY KEY,
+  id_cliente         INT           NOT NULL REFERENCES cliente(id_cliente),
+  subtotal           NUMERIC(10,2) NOT NULL,
+  descuento_total    NUMERIC(10,2) NOT NULL DEFAULT 0,
+  total              NUMERIC(10,2) NOT NULL,
+  igv                NUMERIC(10,2) NOT NULL,
+  medio_pago         VARCHAR(20)   NOT NULL CHECK (medio_pago IN ('TARJETA','YAPE','TRANSFERENCIA')),
+  fecha_pedido       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Guarda el nombre y los precios del curso al momento de la compra, para que la boleta no cambie si luego se edita el curso.
+-- cantidad = cupos comprados del curso; precio_lista y precio_final son por cupo; subtotal = precio_final * cantidad.
+CREATE TABLE pedido_detalle (
+  id_detalle           SERIAL        PRIMARY KEY,
+  id_pedido            INT           NOT NULL REFERENCES pedido(id_pedido),
+  id_curso             INT           NOT NULL REFERENCES curso(id_curso),
+  nombre_curso         VARCHAR(150)  NOT NULL,
+  cantidad             INT           NOT NULL DEFAULT 1 CHECK (cantidad > 0),
+  precio_lista         NUMERIC(10,2) NOT NULL,
+  descuento_porcentaje NUMERIC(5,2)  NOT NULL DEFAULT 0,
+  precio_final         NUMERIC(10,2) NOT NULL,
+  subtotal             NUMERIC(10,2) NOT NULL,
+  UNIQUE (id_pedido, id_curso)
+);
+
+-- Boleta de venta: el numero visible es serie + id_comprobante (B001-00000001).
+-- codigo_acceso es el token del enlace para ver o descargar la boleta, asi nadie la abre adivinando numeros.
+CREATE TABLE comprobante (
+  id_comprobante     SERIAL        PRIMARY KEY,
+  id_pedido          INT           NOT NULL UNIQUE REFERENCES pedido(id_pedido),
+  serie              CHAR(4)       NOT NULL DEFAULT 'B001',
+  codigo_acceso      VARCHAR(32)   NOT NULL UNIQUE,
+  fecha_emision      TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Formulario de la pagina Contacto (pedidos, opiniones y consultas). estado: N = nuevo, L = leido.
+CREATE TABLE mensaje_contacto (
+  id_mensaje         SERIAL        PRIMARY KEY,
+  nombres            VARCHAR(100)  NOT NULL,
+  correo             VARCHAR(150)  NOT NULL,
+  telefono           VARCHAR(20),
+  tipo               VARCHAR(10)   NOT NULL CHECK (tipo IN ('PEDIDO','OPINION','CONSULTA')),
+  mensaje            VARCHAR(1000) NOT NULL,
+  estado             CHAR(1)       NOT NULL DEFAULT 'N' CHECK (estado IN ('N','L')),
+  fecha_envio        TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ============================================================
@@ -311,3 +378,95 @@ INSERT INTO curso (codigo, nombre, descripcion, institucion, modalidad, duracion
  (SELECT id_tipo_curso FROM tipo_curso WHERE nombre = 'Seminario'),
  (SELECT id_admin FROM administrador LIMIT 1),
  (SELECT id_docente FROM docente WHERE nombres = 'Yourka' AND apellidos = 'Lucich Berrío'));
+
+-- ============================================================
+-- OFERTAS DE NAVIDAD
+-- 8 cursos del catalogo con descuento, vigentes hasta el 31 de diciembre del año en curso.
+-- ============================================================
+
+UPDATE curso SET
+  descuento_porcentaje = v.dto,
+  oferta_hasta = make_date(EXTRACT(YEAR FROM CURRENT_DATE)::int, 12, 31)
+FROM (VALUES
+  ('EJ-2026-001', 20),
+  ('EJ-2026-003', 30),
+  ('EJ-2026-007', 15),
+  ('EJ-2026-010', 25),
+  ('EJ-2026-016', 40),
+  ('EJ-2026-021', 50),
+  ('EJ-2026-027', 10),
+  ('EJ-2026-029', 35)
+) AS v(codigo, dto)
+WHERE curso.codigo = v.codigo;
+
+-- ============================================================
+-- COMPRAS DE DEMOSTRACION (alimentan los reportes del panel administrativo)
+-- 12 clientes y 70 pedidos repartidos en los ultimos 8 meses, con sus detalles y su boleta.
+-- Los cursos y las fechas salen de formulas fijas (no aleatorias), asi el resultado es el mismo en cada ejecucion.
+-- ============================================================
+
+INSERT INTO cliente (nombres, apellidos, documento, correo, telefono) VALUES
+  ('Carolina', 'Mendoza Ríos', '40125871', 'carolina.mendoza@example.com', '987654321'),
+  ('Luis Alberto', 'Quispe Huamán', '41236982', 'luis.quispe@example.com', '986543210'),
+  ('Daniela', 'Paredes Soto', '42347093', 'daniela.paredes@example.com', '985432109'),
+  ('Marco Antonio', 'Vega Torres', '43458104', 'marco.vega@example.com', '984321098'),
+  ('Rosa Elena', 'Cárdenas Pinto', '44569215', 'rosa.cardenas@example.com', '983210987'),
+  ('Jorge Luis', 'Ramírez Salas', '45670326', 'jorge.ramirez@example.com', '982109876'),
+  ('Patricia', 'Flores Medina', '46781437', 'patricia.flores@example.com', '981098765'),
+  ('Andrés', 'Salazar Rojas', '47892548', 'andres.salazar@example.com', '980987654'),
+  ('Milagros', 'Ortiz Vargas', '48903659', 'milagros.ortiz@example.com', '979876543'),
+  ('Renzo', 'Huamán Castillo', '49014760', 'renzo.huaman@example.com', '978765432'),
+  ('Fiorella', 'Navarro León', '40125872', 'fiorella.navarro@example.com', NULL),
+  ('Diego', 'Campos Ledesma', '41236983', 'diego.campos@example.com', '976543210');
+
+-- Los pedidos se crean con montos en cero; se calculan despues a partir de su detalle.
+-- Fechas: mas pedidos en los meses recientes (campaña de fin de año).
+INSERT INTO pedido (id_pedido, id_cliente, subtotal, descuento_total, total, igv, medio_pago, fecha_pedido)
+SELECT p.g,
+       ((p.g * 5) % 12) + 1,
+       0, 0, 0, 0,
+       (ARRAY['TARJETA','YAPE','TRANSFERENCIA'])[(p.g % 3) + 1],
+       CURRENT_DATE - ((((p.g * 37) % 230) * ((p.g * 37) % 230)) / 230) + (8 + p.g % 11) * INTERVAL '1 hour'
+FROM generate_series(1, 70) AS p(g);
+
+SELECT setval(pg_get_serial_sequence('pedido', 'id_pedido'), 70);
+
+-- Cada pedido tiene de 1 a 3 cursos (solo cursos con precio) y algunos llevan 2 cupos. El descuento de la oferta se aplica en los pedidos pares.
+INSERT INTO pedido_detalle (id_pedido, id_curso, nombre_curso, cantidad, precio_lista, descuento_porcentaje, precio_final, subtotal)
+SELECT x.g, x.id_curso, x.nombre, x.cantidad, x.precio, x.dto, ROUND(x.precio * (100 - x.dto) / 100, 2),
+       ROUND(x.precio * (100 - x.dto) / 100, 2) * x.cantidad
+FROM (
+  SELECT s.g, c.id_curso, c.nombre, c.precio, s.cantidad,
+         CASE WHEN c.descuento_porcentaje > 0 AND s.g % 2 = 0 THEN c.descuento_porcentaje ELSE 0 END AS dto
+  FROM (
+    SELECT t.g, CASE WHEN (t.g + t.n) % 4 = 0 THEN 2 ELSE 1 END AS cantidad,
+           ((t.h * t.h + 600 * t.h) * 24) / 1600000 + 1 AS rn
+    FROM (
+      SELECT p.g, i.n, (p.g * 131 + i.n * 337) % 1000 AS h
+      FROM generate_series(1, 70) AS p(g), generate_series(0, 2) AS i(n)
+      WHERE i.n <= p.g % 3
+    ) t
+  ) s
+  JOIN (
+    SELECT id_curso, nombre, precio, descuento_porcentaje, row_number() OVER (ORDER BY id_curso) AS rn
+    FROM curso
+    WHERE precio > 0
+  ) c ON c.rn = s.rn
+) x;
+
+UPDATE pedido p SET
+  subtotal = t.sub,
+  descuento_total = t.sub - t.tot,
+  total = t.tot,
+  igv = ROUND(t.tot - t.tot / 1.18, 2)
+FROM (
+  SELECT id_pedido, SUM(precio_lista * cantidad) AS sub, SUM(subtotal) AS tot
+  FROM pedido_detalle
+  GROUP BY id_pedido
+) t
+WHERE p.id_pedido = t.id_pedido;
+
+INSERT INTO comprobante (id_pedido, serie, codigo_acceso, fecha_emision)
+SELECT id_pedido, 'B001', md5(id_pedido::text || clock_timestamp()::text || random()::text), fecha_pedido
+FROM pedido
+ORDER BY id_pedido;

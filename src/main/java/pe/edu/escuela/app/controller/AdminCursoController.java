@@ -155,6 +155,12 @@ public class AdminCursoController {
     if (curso.getPrecio() == null || curso.getPrecio().signum() < 0) {
       bindingResult.rejectValue("precio", "curso.precio.invalido", "Ingresa un precio válido.");
     }
+    if (curso.getDescuentoPorcentaje() == null
+            || curso.getDescuentoPorcentaje().signum() < 0
+            || curso.getDescuentoPorcentaje().compareTo(java.math.BigDecimal.valueOf(90)) > 0) {
+      bindingResult.rejectValue(
+              "descuentoPorcentaje", "curso.descuento.invalido", "El descuento debe estar entre 0 y 90 %.");
+    }
     if (curso.getTipoCurso() == null || curso.getTipoCurso().getIdTipoCurso() == null) {
       bindingResult.rejectValue(
               "tipoCurso.idTipoCurso", "curso.tipo.vacio", "Selecciona un tipo de curso.");

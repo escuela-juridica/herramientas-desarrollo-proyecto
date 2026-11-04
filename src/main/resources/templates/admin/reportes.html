@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+
+<head>
+  <title>Reportes</title>
+  <th:block layout:fragment="css">
+    <link rel="stylesheet" href="/css/admin/admin-reportes.css">
+  </th:block>
+</head>
+
+<body>
+  <div layout:fragment="content">
+
+    <div class="reportes-intro">
+      <p>Estadísticas de las ventas de cursos. Cada reporte incluye su gráfico, la descripción de lo que muestra y una
+        conclusión, y se puede descargar como informe en Word, Excel o PDF.</p>
+    </div>
+
+    <!-- Totales generales -->
+    <section class="reportes-kpis" aria-label="Totales generales">
+      <div class="kpi">
+        <span class="kpi-icono"><i class="fa-solid fa-sack-dollar"></i></span>
+        <div>
+          <span class="kpi-etiqueta">Ingresos totales</span>
+          <strong class="kpi-valor" th:text="'S/ ' + ${#numbers.formatDecimal(totales.ingresos, 1, 'COMMA', 2, 'POINT')}">S/ 0.00</strong>
+        </div>
+      </div>
+      <div class="kpi">
+        <span class="kpi-icono"><i class="fa-solid fa-receipt"></i></span>
+        <div>
+          <span class="kpi-etiqueta">Pedidos</span>
+          <strong class="kpi-valor" th:text="${totales.pedidos}">0</strong>
+        </div>
+      </div>
+      <div class="kpi">
+        <span class="kpi-icono"><i class="fa-solid fa-tags"></i></span>
+        <div>
+          <span class="kpi-etiqueta">Descuentos otorgados</span>
+          <strong class="kpi-valor" th:text="'S/ ' + ${#numbers.formatDecimal(totales.descuentos, 1, 'COMMA', 2, 'POINT')}">S/ 0.00</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- Los 6 reportes -->
+    <div class="reportes-grid">
+      <article class="reporte-card" th:each="reporte : ${reportes}" th:id="'reporte-' + ${reporte.numero}">
+        <header class="reporte-cabecera">
+          <span class="reporte-numero" th:text="${reporte.numero}">1</span>
+          <h2 th:text="${reporte.titulo}">Título</h2>
+        </header>
+
+        <p class="reporte-descripcion" th:text="${reporte.descripcion}">Descripción</p>
+
+        <div class="reporte-grafico" th:attr="data-reporte=${reporte.numero}">
+          <canvas th:id="'grafico-' + ${reporte.numero}" role="img"
+                  th:attr="aria-label='Gráfico: ' + ${reporte.titulo}"></canvas>
+          <p class="reporte-sin-datos" th:if="${reporte.sinDatos}" hidden>Todavía no hay datos para este reporte.</p>
+        </div>
+
+        <div class="reporte-conclusion">
+          <strong><i class="fa-solid fa-lightbulb"></i> Conclusión</strong>
+          <p th:text="${reporte.conclusion}">Conclusión</p>
+        </div>
+
+        <details class="reporte-tabla">
+          <summary>Ver tabla de datos</summary>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col" th:text="${reporte.columnaEtiqueta}">Etiqueta</th>
+                <th scope="col" class="num" th:text="${reporte.columnaValor}">Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="etiqueta, fila : ${reporte.etiquetas}">
+                <td th:text="${etiqueta}">Etiqueta</td>
+                <td class="num"
+                    th:text="${reporte.monetario} ? 'S/ ' + ${#numbers.formatDecimal(reporte.valores[fila.index], 1, 'COMMA', 2, 'POINT')} : ${#numbers.formatInteger(reporte.valores[fila.index], 1, 'COMMA')}">0</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th scope="row">Total</th>
+                <th class="num"
+                    th:text="${reporte.monetario} ? 'S/ ' + ${#numbers.formatDecimal(reporte.total, 1, 'COMMA', 2, 'POINT')} : ${#numbers.formatInteger(reporte.total, 1, 'COMMA')}">0</th>
+              </tr>
+            </tfoot>
+          </table>
+        </details>
+
+        <form class="reporte-descargas" method="post" th:action="@{/admin/reportes/{n}/descargar(n=${reporte.numero})}"
+              data-descarga>
+          <input type="hidden" name="imagen" value="">
+          <span class="reporte-descargas-titulo">Descargar informe:</span>
+          <button type="submit" name="formato" value="word" class="descarga descarga-word">
+            <i class="fa-solid fa-file-word"></i> Word
+          </button>
+          <button type="submit" name="formato" value="excel" class="descarga descarga-excel">
+            <i class="fa-solid fa-file-excel"></i> Excel
+          </button>
+          <button type="submit" name="formato" value="pdf" class="descarga descarga-pdf">
+            <i class="fa-solid fa-file-pdf"></i> PDF
+          </button>
+        </form>
+      </article>
+    </div>
+
+  </div>
+
+  <th:block layout:fragment="js">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script th:inline="javascript">
+      window.REPORTES = /*[[${reportes}]]*/ [];
+    </script>
+    <script src="/js/admin/admin-reportes.js" defer></script>
+  </th:block>
+
+</body>
+</html>

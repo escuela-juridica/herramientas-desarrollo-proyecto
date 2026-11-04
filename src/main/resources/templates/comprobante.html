@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+  <title>Boleta de venta</title>
+</head>
+
+<body>
+  <main layout:fragment="content">
+    <section class="band tienda-band">
+      <div class="wrap">
+
+        <div class="boleta-exito">
+          <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+          <h1 style="font-size:26px">¡Compra confirmada!</h1>
+          <p class="mensaje exito" style="display:inline-block">Tu pedido N.° <strong th:text="${comprobante.pedido.idPedido}">1</strong> fue registrado correctamente.</p>
+          <p>Esta es tu boleta. Guarda el enlace de esta página o descárgala en PDF.</p>
+        </div>
+
+        <div class="boleta-acciones">
+          <a class="site-button button-primary" th:href="@{/comprobante/pdf(codigo=${comprobante.codigoAcceso})}">
+            <i class="fa-solid fa-file-pdf"></i> Descargar PDF
+          </a>
+          <button type="button" class="site-button button-ghost" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> Imprimir
+          </button>
+          <a class="site-button button-ghost" href="/catalogo"><i class="fa-solid fa-graduation-cap"></i> Seguir viendo cursos</a>
+        </div>
+
+        <article class="boleta" th:with="pedido=${comprobante.pedido}">
+          <div class="boleta-cabecera">
+            <div class="boleta-empresa">
+              <h2>Escuela Jurídica</h2>
+              <p>Calle Las Codornices 145, Surquillo, Lima</p>
+              <p>eventos@escuelajuridica.edu.pe · WhatsApp 926 812 819</p>
+            </div>
+            <div class="boleta-numero">
+              <span>BOLETA DE VENTA</span>
+              <strong th:text="${comprobante.numero}">B001-00000001</strong>
+            </div>
+          </div>
+
+          <dl class="boleta-datos">
+            <div><dt>Fecha de emisión:</dt><dd th:text="${#temporals.format(comprobante.fechaEmision, 'dd/MM/yyyy HH:mm')}">04/11/2026 10:30</dd></div>
+            <div><dt>Medio de pago:</dt>
+              <dd th:text="${pedido.medioPago == 'TARJETA'} ? 'Tarjeta de crédito o débito' : (${pedido.medioPago == 'YAPE'} ? 'Yape' : 'Transferencia bancaria')">Tarjeta</dd></div>
+            <div><dt>Cliente:</dt><dd th:text="${pedido.cliente.nombreCompleto}">Nombre Apellido</dd></div>
+            <div><dt>DNI:</dt><dd th:text="${pedido.cliente.documento}">12345678</dd></div>
+            <div><dt>Correo:</dt><dd th:text="${pedido.cliente.correo}">correo@example.com</dd></div>
+          </dl>
+
+          <table class="boleta-tabla">
+            <thead>
+              <tr>
+                <th>Curso</th>
+                <th class="num">P. lista</th>
+                <th class="num">Dscto.</th>
+                <th class="num">Cant.</th>
+                <th class="num">Importe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="detalle : ${pedido.detalles}">
+                <td th:text="${detalle.nombreCurso}">Curso</td>
+                <td class="num" th:text="'S/ ' + ${#numbers.formatDecimal(detalle.precioLista, 1, 2)}">S/ 450.00</td>
+                <td class="num"
+                    th:text="${detalle.descuentoPorcentaje.signum() > 0} ? ${#numbers.formatDecimal(detalle.descuentoPorcentaje, 1, 0)} + '%' : '-'">20%</td>
+                <td class="num" th:text="${detalle.cantidad}">1</td>
+                <td class="num" th:text="'S/ ' + ${#numbers.formatDecimal(detalle.subtotal, 1, 2)}">S/ 360.00</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="boleta-totales">
+            <div class="resumen-fila"><span>Subtotal (precio de lista)</span>
+              <span th:text="'S/ ' + ${#numbers.formatDecimal(pedido.subtotal, 1, 2)}">S/ 450.00</span></div>
+            <div class="resumen-fila descuento" th:if="${pedido.descuentoTotal.signum() > 0}"><span>Descuentos</span>
+              <span th:text="'- S/ ' + ${#numbers.formatDecimal(pedido.descuentoTotal, 1, 2)}">- S/ 90.00</span></div>
+            <div class="resumen-fila"><span>Base imponible</span>
+              <span th:text="'S/ ' + ${#numbers.formatDecimal(pedido.baseImponible, 1, 2)}">S/ 305.08</span></div>
+            <div class="resumen-fila"><span>IGV (18 %)</span>
+              <span th:text="'S/ ' + ${#numbers.formatDecimal(pedido.igv, 1, 2)}">S/ 54.92</span></div>
+            <div class="resumen-fila total"><span>Total pagado</span>
+              <span th:text="'S/ ' + ${#numbers.formatDecimal(pedido.total, 1, 2)}">S/ 360.00</span></div>
+          </div>
+
+          <p class="boleta-nota">Documento de demostración del proyecto académico UTP, sin validez tributaria. Los precios incluyen IGV.</p>
+        </article>
+
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

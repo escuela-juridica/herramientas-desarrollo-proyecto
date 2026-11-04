@@ -135,6 +135,19 @@ th:action="${curso.idCurso == null} ? @{/admin/cursos/crear} : @{/admin/cursos/e
           </div>
 
           <div class="form-field">
+            <label for="descuentoPorcentaje">Descuento de oferta (%)</label>
+            <input id="descuentoPorcentaje" type="number" th:field="*{descuentoPorcentaje}" min="0" max="90"
+                   step="0.01" placeholder="0">
+            <small>0 = sin oferta. Máximo 90 %.</small>
+          </div>
+
+          <div class="form-field">
+            <label for="ofertaHasta">Oferta válida hasta</label>
+            <input id="ofertaHasta" type="date" th:field="*{ofertaHasta}">
+            <small>Opcional. Vacío = sin fecha límite.</small>
+          </div>
+
+          <div class="form-field">
             <label for="fechaInicio">Fecha de inicio <em>*</em></label>
             <input id="fechaInicio" type="date" th:field="*{fechaInicio}" required>
           </div>
