@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
+import pe.edu.escuela.app.config.DatosEmisor;
 import pe.edu.escuela.app.model.Comprobante;
 import pe.edu.escuela.app.service.ExportacionService;
 import pe.edu.escuela.app.service.VentaService;
@@ -24,15 +25,19 @@ public class ComprobanteController {
 
   private final VentaService ventaService;
   private final ExportacionService exportacionService;
+  private final DatosEmisor emisor;
 
-  public ComprobanteController(VentaService ventaService, ExportacionService exportacionService) {
+  public ComprobanteController(
+      VentaService ventaService, ExportacionService exportacionService, DatosEmisor emisor) {
     this.ventaService = ventaService;
     this.exportacionService = exportacionService;
+    this.emisor = emisor;
   }
 
   @GetMapping("/comprobante")
   public String ver(@RequestParam("codigo") String codigo, Model model) {
     model.addAttribute("comprobante", buscar(codigo));
+    model.addAttribute("emisor", emisor);
     return "comprobante";
   }
 

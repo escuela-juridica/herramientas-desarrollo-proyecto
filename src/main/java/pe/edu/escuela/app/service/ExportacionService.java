@@ -47,6 +47,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.springframework.stereotype.Service;
+import pe.edu.escuela.app.config.DatosEmisor;
 import pe.edu.escuela.app.dto.Reporte;
 import pe.edu.escuela.app.model.Comprobante;
 import pe.edu.escuela.app.model.Pedido;
@@ -58,6 +59,12 @@ import pe.edu.escuela.app.model.PedidoDetalle;
  */
 @Service
 public class ExportacionService {
+
+  private final DatosEmisor emisor;
+
+  public ExportacionService(DatosEmisor emisor) {
+    this.emisor = emisor;
+  }
 
   private static final DateTimeFormatter FECHA_HORA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
   private static final String COLOR_AZUL = "0F355D";
@@ -319,7 +326,7 @@ public class ExportacionService {
       PdfWriter.getInstance(documento, salida);
       documento.open();
 
-      Font marca = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, PDF_AZUL);
+      Font marca = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, PDF_AZUL);
       Font menor = FontFactory.getFont(FontFactory.HELVETICA, 9, Color.GRAY);
       Font numero = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13, PDF_NARANJA);
       Font etiqueta = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, PDF_AZUL);
@@ -331,13 +338,19 @@ public class ExportacionService {
       encabezado.setWidthPercentage(100);
       PdfPCell izquierda = new PdfPCell();
       izquierda.setBorder(Rectangle.NO_BORDER);
-      izquierda.addElement(new Paragraph("ESCUELA JURÍDICA", marca));
-      izquierda.addElement(new Paragraph("Calle Las Codornices 145, Surquillo, Lima", menor));
+      Paragraph razon = new Paragraph(emisor.getRazonSocial(), marca);
+      razon.setSpacingAfter(4);
+      izquierda.addElement(razon);
+      izquierda.addElement(new Paragraph("Nombre comercial: " + emisor.getNombreComercial(), menor));
+      izquierda.addElement(new Paragraph("Domicilio fiscal: " + emisor.getDomicilioFiscal(), menor));
       izquierda.addElement(new Paragraph("eventos@escuelajuridica.edu.pe · WhatsApp 926 812 819", menor));
       encabezado.addCell(izquierda);
       PdfPCell derecha = new PdfPCell();
       derecha.setBorderColor(PDF_AZUL);
       derecha.setPadding(8);
+      Paragraph rucEmisor = new Paragraph("RUC " + emisor.getRuc(), etiqueta);
+      rucEmisor.setAlignment(Element.ALIGN_CENTER);
+      derecha.addElement(rucEmisor);
       Paragraph tipo = new Paragraph("BOLETA DE VENTA", etiqueta);
       tipo.setAlignment(Element.ALIGN_CENTER);
       Paragraph nro = new Paragraph(comprobante.getNumero(), numero);
