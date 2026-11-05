@@ -355,12 +355,17 @@
   text-align: right !important;
 }
 
+/* La celda sigue siendo de tabla (no flex) para que su borde inferior quede alineado con el resto de la fila */
 .curso-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
   white-space: nowrap;
+}
+
+.curso-actions > * {
+  vertical-align: middle;
+}
+
+.curso-actions > * + * {
+  margin-left: 8px;
 }
 
 /* Botones de acción solo con icono (el nombre sale en el tooltip y en aria-label) */
@@ -418,6 +423,7 @@
 }
 
 .curso-action-form {
+  display: inline-block;
   margin: 0;
 }
 
