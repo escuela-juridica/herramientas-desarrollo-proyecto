@@ -76,7 +76,8 @@
               <img src="img/identidad/utp-logo.svg" alt="Logo de la Universidad Tecnológica del Perú">
             </a>
           </div>
-          <div class="social-links">
+          <!-- En /contacto las redes y los datos de contacto ya están en la página: no se repiten en el pie -->
+          <div class="social-links" th:unless="${active == 'contacto'}">
             <a href="https://www.facebook.com/escuela.juridica.esejur" target="_blank" rel="noopener noreferrer"
               aria-label="Facebook de Escuela Jurídica"><i class="fa-brands fa-facebook-f"></i></a>
             <a href="https://www.instagram.com/escuela_juridica_esejurce/" target="_blank" rel="noopener noreferrer"
@@ -87,8 +88,8 @@
         </div>
 
         <div class="footer-col footer-personal">
-          <h4 class="footer-title">Contacto</h4>
-          <ul class="footer-contact-info">
+          <h4 class="footer-title" th:unless="${active == 'contacto'}">Contacto</h4>
+          <ul class="footer-contact-info" th:unless="${active == 'contacto'}">
             <li><i class="fa-brands fa-whatsapp"></i> <a href="https://wa.me/51926812819" target="_blank"
                 rel="noopener noreferrer">WhatsApp 926 812 819</a></li>
             <li><i class="fa-solid fa-envelope"></i> <a

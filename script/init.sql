@@ -219,7 +219,7 @@ INSERT INTO curso (codigo, nombre, descripcion, institucion, modalidad, duracion
 
 ('EJ-2026-005', 'Procedimiento Administrativo General',
  'Principios, validez del acto administrativo, recursos y silencio administrativo, con casos de la gestión pública.',
- 'Escuela Jurídica', 'V', 16, 100, CURRENT_DATE+6, CURRENT_DATE+7, 0.00, '/uploads/cursos/curso-05.jpg', false, 'A',
+ 'Escuela Jurídica', 'V', 16, 100, CURRENT_DATE+6, CURRENT_DATE+7, 160.00, '/uploads/cursos/curso-05.jpg', false, 'A',
  (SELECT id_tipo_curso FROM tipo_curso WHERE nombre = 'Seminario'),
  (SELECT id_admin FROM administrador LIMIT 1),
  (SELECT id_docente FROM docente WHERE nombres = 'Milagros del Pilar' AND apellidos = 'Cárdenas Vega')),
@@ -247,7 +247,7 @@ INSERT INTO curso (codigo, nombre, descripcion, institucion, modalidad, duracion
 
 ('EJ-2026-009', 'Redacción Jurídica Profesional',
  'Escribe con claridad y precisión: estructura de escritos y resoluciones, corrección de estilo y errores frecuentes.',
- 'Escuela Jurídica', 'V', 20, NULL, CURRENT_DATE-15, CURRENT_DATE+105, 0.00, '/uploads/cursos/curso-09.jpg', false, 'A',
+ 'Escuela Jurídica', 'V', 20, NULL, CURRENT_DATE-15, CURRENT_DATE+105, 240.00, '/uploads/cursos/curso-09.jpg', false, 'A',
  (SELECT id_tipo_curso FROM tipo_curso WHERE nombre = 'Curso Corto'),
  (SELECT id_admin FROM administrador LIMIT 1),
  (SELECT id_docente FROM docente WHERE nombres = 'Ximena' AND apellidos = 'Góngora Guerra')),
@@ -275,7 +275,7 @@ INSERT INTO curso (codigo, nombre, descripcion, institucion, modalidad, duracion
 
 ('EJ-2026-013', 'Argumentación Jurídica',
  'Construye y evalúa argumentos jurídicos: falacias frecuentes, argumentación en escritos y audiencias, y refutación.',
- 'Escuela Jurídica', 'V', 18, NULL, CURRENT_DATE-10, CURRENT_DATE+30, 0.00, '/uploads/cursos/curso-13.jpg', false, 'A',
+ 'Escuela Jurídica', 'V', 18, NULL, CURRENT_DATE-10, CURRENT_DATE+30, 200.00, '/uploads/cursos/curso-13.jpg', false, 'A',
  (SELECT id_tipo_curso FROM tipo_curso WHERE nombre = 'Seminario'),
  (SELECT id_admin FROM administrador LIMIT 1),
  (SELECT id_docente FROM docente WHERE nombres = 'Ximena' AND apellidos = 'Góngora Guerra')),
@@ -317,7 +317,7 @@ INSERT INTO curso (codigo, nombre, descripcion, institucion, modalidad, duracion
 
 ('EJ-2026-019', 'Procesos Constitucionales: Amparo y Hábeas Corpus',
  'Hábeas corpus, amparo, hábeas data y cumplimiento: requisitos de procedencia y jurisprudencia del Tribunal Constitucional.',
- 'Escuela Jurídica', 'V', 16, 120, CURRENT_DATE+12, CURRENT_DATE+13, 0.00, '/uploads/cursos/curso-19.jpg', false, 'A',
+ 'Escuela Jurídica', 'V', 16, 120, CURRENT_DATE+12, CURRENT_DATE+13, 170.00, '/uploads/cursos/curso-19.jpg', false, 'A',
  (SELECT id_tipo_curso FROM tipo_curso WHERE nombre = 'Seminario'),
  (SELECT id_admin FROM administrador LIMIT 1),
  (SELECT id_docente FROM docente WHERE nombres = 'Milagros del Pilar' AND apellidos = 'Cárdenas Vega')),
@@ -366,7 +366,7 @@ INSERT INTO curso (codigo, nombre, descripcion, institucion, modalidad, duracion
 
 ('EJ-2026-026', 'Conciliación Extrajudicial y Mediación',
  'Conciliación extrajudicial: rol del conciliador, técnicas de comunicación y negociación, y redacción del acta de acuerdo.',
- 'Escuela Jurídica', 'V', 16, NULL, CURRENT_DATE-5, CURRENT_DATE+25, 0.00, '/uploads/cursos/curso-26.jpg', false, 'A',
+ 'Escuela Jurídica', 'V', 16, NULL, CURRENT_DATE-5, CURRENT_DATE+25, 220.00, '/uploads/cursos/curso-26.jpg', false, 'A',
  (SELECT id_tipo_curso FROM tipo_curso WHERE nombre = 'Curso Corto'),
  (SELECT id_admin FROM administrador LIMIT 1),
  (SELECT id_docente FROM docente WHERE nombres = 'Ximena' AND apellidos = 'Góngora Guerra')),
