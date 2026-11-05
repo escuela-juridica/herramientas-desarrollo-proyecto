@@ -355,25 +355,31 @@
   text-align: right !important;
 }
 
+/* La celda sigue siendo de tabla (no flex) para que su borde inferior quede alineado con el resto de la fila */
 .curso-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
   white-space: nowrap;
 }
 
+.curso-actions > * {
+  vertical-align: middle;
+}
+
+.curso-actions > * + * {
+  margin-left: 8px;
+}
+
+/* Botones de acción solo con icono (el nombre sale en el tooltip y en aria-label) */
 .curso-action {
-  min-height: 34px;
+  width: 34px;
+  height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 7px 10px;
+  padding: 0;
   border: 1px solid transparent;
   border-radius: 7px;
   font: inherit;
-  font-size: 11.5px;
+  font-size: 13px;
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
@@ -417,6 +423,7 @@
 }
 
 .curso-action-form {
+  display: inline-block;
   margin: 0;
 }
 
@@ -842,4 +849,126 @@
   .form-actions .admin-button {
     width: 100%;
   }
+}
+
+/* OFERTAS EN LA TABLA */
+.precio-tachado {
+  color: #6b7484;
+  text-decoration: line-through;
+}
+
+.curso-oferta-admin {
+  display: block;
+  margin-top: 2px;
+  color: #c8102e;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+/* SECCIÓN OFERTA DEL FORMULARIO */
+.oferta-campos {
+  margin-top: 18px;
+}
+
+.oferta-campos[hidden] {
+  display: none;
+}
+
+.form-field .campo-error {
+  display: block;
+  margin-top: 6px;
+  color: #c8102e;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.form-field .campo-error[hidden] {
+  display: none;
+}
+
+.form-field select.invalido,
+.form-field input.invalido {
+  background: #fff6f7;
+  border-color: #c8102e;
+  box-shadow: 0 0 0 4px rgba(200, 16, 46, .12);
+}
+
+/* Temática de la oferta bajo el precio en la tabla */
+.curso-oferta-tema {
+  display: block;
+  color: #6b7484;
+  font-size: 12px;
+}
+
+.curso-oferta-tema.vencida {
+  color: #b54708;
+  font-weight: 600;
+}
+
+/* Aviso cuando no se puede activar la oferta y resumen del precio final */
+.campo-aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  color: #93370d;
+  background: #fffaeb;
+  border: 1px solid #fedf89;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.campo-aviso[hidden] {
+  display: none;
+}
+
+.featured-option > input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+}
+
+.featured-option:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+.oferta-resumen {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, #fff6ee 0%, #fffaf5 100%);
+  border: 1px dashed #f58220;
+  border-radius: 12px;
+}
+
+.oferta-resumen-etiqueta {
+  color: #6b7484;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+
+.oferta-resumen-precios {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+
+.oferta-resumen-precios s {
+  color: #6b7484;
+  font-size: 16px;
+}
+
+.oferta-resumen-precios strong {
+  color: #c8102e;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.oferta-resumen small {
+  color: #475467;
+  font-size: 13px;
 }

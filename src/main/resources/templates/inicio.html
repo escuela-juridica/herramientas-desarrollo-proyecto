@@ -22,6 +22,8 @@
         <button type="button" data-bs-target="#inicio" data-bs-slide-to="2" aria-label="Imagen 3"></button>
         <button type="button" data-bs-target="#inicio" data-bs-slide-to="3" aria-label="Imagen 4"></button>
         <button type="button" data-bs-target="#inicio" data-bs-slide-to="4" aria-label="Imagen 5"></button>
+        <button type="button" data-bs-target="#inicio" data-bs-slide-to="5" aria-label="Imagen 6"></button>
+        <button type="button" data-bs-target="#inicio" data-bs-slide-to="6" aria-label="Imagen 7"></button>
       </div>
       <div class="carousel-inner">
         <div class="carousel-item hero-slide slide-1 active">
@@ -80,6 +82,28 @@
               y entidades públicas.</p>
             <div class="slide-actions">
               <a href="#servicios" class="site-button button-primary">Ver Cursos</a>
+              <a href="#contacto" class="button-light">Escríbenos</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide slide-6">
+          <div class="slide-cap">
+            <p class="kicker">Aula Virtual</p>
+            <h2>Estudia desde cualquier lugar</h2>
+            <p>Conéctate a tus clases desde tu computadora o celular, con sesiones grabadas para repasar cuando quieras.</p>
+            <div class="slide-actions">
+              <a href="#servicios" class="site-button button-primary">Ver Cursos</a>
+              <a href="#contacto" class="button-light">Solicitar Información</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide slide-7">
+          <div class="slide-cap">
+            <p class="kicker">Ceremonia de Egreso</p>
+            <h2>Tu certificado, tu siguiente paso</h2>
+            <p>Al terminar tu programa recibes un certificado respaldado por instituciones del sector jurídico.</p>
+            <div class="slide-actions">
+              <a href="#servicios" class="site-button button-primary">Ver Diplomados</a>
               <a href="#contacto" class="button-light">Escríbenos</a>
             </div>
           </div>
@@ -183,16 +207,15 @@
                 <span class="curso-hours"><i class="fa-regular fa-clock"></i> <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
               </div>
             </div>
-            <div class="curso-cover"><img th:src="@{${curso.imagen}}" alt="Portada del curso"></div>
+            <div class="curso-cover"><img th:src="@{${curso.imagen}}" alt="Portada del curso">
+                <th:block th:replace="~{fragments/curso :: etiqueta(${curso})}"></th:block></div>
             <div class="curso-body">
               <h3 th:text="${curso.nombre}"></h3>
               <p th:text="${curso.descripcion}"></p>
             </div>
             <div class="curso-foot">
-              <div class="curso-precio">
-                S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}"></span>
-              </div>
-              <a href="#" class="curso-button" data-bs-toggle="modal" th:data-bs-target="'#modalCurso' + ${curso.idCurso}">Más Información</a>
+              <div th:replace="~{fragments/curso :: precio(${curso})}"></div>
+              <a href="#" class="curso-button" data-bs-toggle="modal" th:data-bs-target="'#modalCurso' + ${curso.idCurso}"><i class="fa-solid fa-cart-plus" aria-hidden="true"></i> Ver y agregar al carrito</a>
             </div>
           </article>
         </div>
@@ -224,14 +247,12 @@
                   <span><i class="fa-solid fa-hashtag"></i> Código: <span th:text="${curso.codigo}"></span></span>
                   <span><i class="fa-regular fa-clock"></i> Duración: <span th:text="${curso.duracionHoras} + ' hrs'"></span></span>
                 </div>
-                <div class="curso-modal-precio">
-                  Precio: S/ <span th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}"></span>
-                </div>
+                <div th:replace="~{fragments/curso :: precioModal(${curso})}"></div>
               </div>
             </div>
             <div class="modal-footer curso-modal-footer">
               <button type="button" class="btn curso-modal-cancelar" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn curso-modal-comprar" onclick="alert('¡Curso comprado exitosamente!')">Confirmar Compra</button>
+              <th:block th:replace="~{fragments/curso :: botonAgregar(${curso})}"></th:block>
             </div>
           </div>
         </div>

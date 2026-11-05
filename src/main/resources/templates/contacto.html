@@ -12,16 +12,319 @@
 
 <body>
   <main layout:fragment="content">
-    <section class="band">
+
+    <!-- SECCIÓN: BANNER / HERO -->
+    <div class="hero-carousel carousel slide band" id="contacto-hero" data-bs-ride="carousel" data-bs-interval="4500">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#contacto-hero" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Imagen 1"></button>
+        <button type="button" data-bs-target="#contacto-hero" data-bs-slide-to="1" aria-label="Imagen 2"></button>
+        <button type="button" data-bs-target="#contacto-hero" data-bs-slide-to="2" aria-label="Imagen 3"></button>
+        <button type="button" data-bs-target="#contacto-hero" data-bs-slide-to="3" aria-label="Imagen 4"></button>
+        <button type="button" data-bs-target="#contacto-hero" data-bs-slide-to="4" aria-label="Imagen 5"></button>
+        <button type="button" data-bs-target="#contacto-hero" data-bs-slide-to="5" aria-label="Imagen 6"></button>
+        <button type="button" data-bs-target="#contacto-hero" data-bs-slide-to="6" aria-label="Imagen 7"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item hero-slide contacto-slide-1 active">
+          <div class="slide-cap">
+            <p class="kicker">Contáctanos</p>
+            <h2>Estamos para ayudarte</h2>
+            <p>Escríbenos o llámanos y te orientamos sobre el curso que mejor se adapta a tu trabajo y a tus tiempos.</p>
+            <div class="slide-actions">
+              <a href="#formulario" class="site-button button-primary">Escribir un mensaje</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide contacto-slide-2">
+          <div class="slide-cap">
+            <p class="kicker">Atención personalizada</p>
+            <h2>Resolvemos tus dudas</h2>
+            <p>Consulta por fechas, modalidades, costos y certificados. Respondemos por WhatsApp y por correo.</p>
+            <div class="slide-actions">
+              <a href="https://wa.me/51926812819" target="_blank" rel="noopener noreferrer"
+                 class="site-button button-primary"><i class="fa-brands fa-whatsapp"></i> Escribir por WhatsApp</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide contacto-slide-3">
+          <div class="slide-cap">
+            <p class="kicker">Visítanos</p>
+            <h2>Te recibimos en Surquillo</h2>
+            <p>Nuestra sede está en Calle Las Codornices 145. Pasa a conocernos y a resolver tus dudas en persona.</p>
+            <div class="slide-actions">
+              <a href="#ubicacion" class="site-button button-primary">Ver el mapa</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide contacto-slide-4">
+          <div class="slide-cap">
+            <p class="kicker">Nuestra sede</p>
+            <h2>Un espacio pensado para ti</h2>
+            <p>Atendemos a estudiantes, abogados, notarios y servidores públicos que buscan especializarse.</p>
+            <div class="slide-actions">
+              <a href="#ubicacion" class="site-button button-primary">Cómo llegar</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide contacto-slide-5">
+          <div class="slide-cap">
+            <p class="kicker">Pedidos y consultas</p>
+            <h2>Cuéntanos qué necesitas</h2>
+            <p>¿Buscas un curso a medida para tu equipo o una nueva capacitación? Envíanos tu pedido.</p>
+            <div class="slide-actions">
+              <a href="#formulario" class="site-button button-primary">Enviar un pedido</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide contacto-slide-6">
+          <div class="slide-cap">
+            <p class="kicker">Matrículas abiertas</p>
+            <h2>Inscríbete con asesoría</h2>
+            <p>Elige tu curso en el catálogo, agrégalo al carrito y recibe tu boleta al instante.</p>
+            <div class="slide-actions">
+              <a href="/catalogo" class="site-button button-primary">Ver cursos</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide contacto-slide-7">
+          <div class="slide-cap">
+            <p class="kicker">Tu opinión importa</p>
+            <h2>Lo que dicen nuestros alumnos</h2>
+            <p>Conoce las experiencias de quienes ya se capacitaron con nosotros y cuéntanos la tuya.</p>
+            <div class="slide-actions">
+              <a href="#opiniones" class="site-button button-primary">Leer opiniones</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="cnav cprev" type="button" data-bs-target="#contacto-hero" data-bs-slide="prev"
+        aria-label="Imagen anterior">&#10094;</button>
+      <button class="cnav cnext" type="button" data-bs-target="#contacto-hero" data-bs-slide="next"
+        aria-label="Imagen siguiente">&#10095;</button>
+    </div>
+    <!-- FIN SECCIÓN: BANNER / HERO -->
+
+    <!-- ACCESOS RÁPIDOS: tarjetas que se montan sobre el borde inferior del banner -->
+    <section class="contacto-rapido" aria-label="Medios de contacto directo">
       <div class="wrap">
-        <div class="section-heading">
-          <p class="eyebrow">Escríbenos</p>
-          <h2 class="tit">Contacto</h2>
-          <p class="section-lead">Página en construcción — próximamente el formulario de contacto.</p>
+        <div class="rapido-grid">
+          <a class="rapido-card" href="https://wa.me/51926812819" target="_blank" rel="noopener noreferrer">
+            <span class="rapido-icono rapido-wa"><i class="fa-brands fa-whatsapp"></i></span>
+            <span class="rapido-texto"><small>Escríbenos por WhatsApp</small><strong>926 812 819</strong></span>
+            <i class="fa-solid fa-arrow-right rapido-flecha" aria-hidden="true"></i>
+          </a>
+          <a class="rapido-card" href="mailto:eventos@escuelajuridica.edu.pe">
+            <span class="rapido-icono"><i class="fa-solid fa-envelope"></i></span>
+            <span class="rapido-texto"><small>Correo electrónico</small><strong>eventos@<wbr>escuelajuridica.edu.pe</strong></span>
+            <i class="fa-solid fa-arrow-right rapido-flecha" aria-hidden="true"></i>
+          </a>
+          <a class="rapido-card" href="#ubicacion">
+            <span class="rapido-icono"><i class="fa-solid fa-location-dot"></i></span>
+            <span class="rapido-texto"><small>Visítanos en Surquillo</small><strong>Calle Las Codornices 145</strong></span>
+            <i class="fa-solid fa-arrow-right rapido-flecha" aria-hidden="true"></i>
+          </a>
         </div>
       </div>
     </section>
+
+    <!-- SECCIÓN: FORMULARIO (pedidos, opiniones y consultas) -->
+    <section class="band contacto-form-band" id="formulario">
+      <div class="wrap">
+        <div class="formulario-grid">
+
+          <aside class="formulario-panel">
+            <p class="eyebrow">Escríbenos</p>
+            <h2>Cuéntanos qué necesitas</h2>
+            <p class="formulario-lead">Completa el formulario y te respondemos al correo que nos indiques.</p>
+            <ul class="formulario-motivos">
+              <li><i class="fa-solid fa-cart-shopping"></i>
+                <span><strong>Pedidos</strong> Solicita un curso a medida para ti o para tu equipo.</span></li>
+              <li><i class="fa-solid fa-star"></i>
+                <span><strong>Opiniones</strong> Cuéntanos tu experiencia y cómo podemos mejorar.</span></li>
+              <li><i class="fa-solid fa-circle-question"></i>
+                <span><strong>Consultas</strong> Fechas, modalidades, costos y certificados.</span></li>
+            </ul>
+            <div class="formulario-redes">
+              <span>Síguenos</span>
+              <a href="https://www.facebook.com/escuela.juridica.esejur" target="_blank" rel="noopener noreferrer"
+                 aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="https://www.instagram.com/escuela_juridica_esejurce/" target="_blank" rel="noopener noreferrer"
+                 aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.tiktok.com/@escuelajuridica_esejurce" target="_blank" rel="noopener noreferrer"
+                 aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+          </aside>
+
+          <form th:action="@{/contacto}" method="post" th:object="${contacto}" class="contacto-form" id="formContacto"
+                novalidate>
+            <div class="contacto-exito" role="status" th:if="${mensajeEnviado}">
+              <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+              <div>
+                <strong>¡Mensaje enviado!</strong>
+                <span>Gracias por escribirnos. Te responderemos a la brevedad.</span>
+              </div>
+            </div>
+
+            <div class="aviso-errores" role="alert" th:if="${errores != null and !#lists.isEmpty(errores)}">
+              <strong><i class="fa-solid fa-circle-exclamation"></i> Revisa los datos:</strong>
+              <ul>
+                <li th:each="error : ${errores}" th:text="${error}">Error</li>
+              </ul>
+            </div>
+
+            <fieldset class="motivos">
+              <legend>¿Qué quieres enviarnos?</legend>
+              <label class="motivo">
+                <input type="radio" th:field="*{tipo}" value="CONSULTA">
+                <span><i class="fa-solid fa-circle-question"></i> Consulta</span>
+              </label>
+              <label class="motivo">
+                <input type="radio" th:field="*{tipo}" value="PEDIDO">
+                <span><i class="fa-solid fa-cart-shopping"></i> Pedido</span>
+              </label>
+              <label class="motivo">
+                <input type="radio" th:field="*{tipo}" value="OPINION">
+                <span><i class="fa-solid fa-star"></i> Opinión</span>
+              </label>
+            </fieldset>
+
+            <div class="contacto-fila">
+              <div class="contacto-campo">
+                <label for="nombres">Nombre completo <em>*</em></label>
+                <input id="nombres" type="text" th:field="*{nombres}" maxlength="100" autocomplete="name"
+                       placeholder="Tu nombre y apellidos" required aria-describedby="error-nombres">
+                <small class="campo-error" id="error-nombres" hidden></small>
+              </div>
+              <div class="contacto-campo">
+                <label for="telefono">Teléfono <small>(opcional)</small></label>
+                <input id="telefono" type="tel" th:field="*{telefono}" maxlength="20" autocomplete="tel"
+                       placeholder="Para llamarte si hace falta" aria-describedby="error-telefono">
+                <small class="campo-error" id="error-telefono" hidden></small>
+              </div>
+            </div>
+            <div class="contacto-campo">
+              <label for="correo">Correo electrónico <em>*</em></label>
+              <input id="correo" type="email" th:field="*{correo}" maxlength="150" autocomplete="email"
+                     placeholder="Aquí te enviamos la respuesta" required aria-describedby="error-correo">
+              <small class="campo-error" id="error-correo" hidden></small>
+            </div>
+            <div class="contacto-campo">
+              <label for="mensaje">Mensaje <em>*</em></label>
+              <textarea id="mensaje" th:field="*{mensaje}" rows="5" maxlength="1000" required
+                        aria-describedby="error-mensaje"></textarea>
+              <div class="campo-pie">
+                <small class="campo-error" id="error-mensaje" hidden></small>
+                <small class="contador" id="contadorMensaje">0 / 1000</small>
+              </div>
+            </div>
+            <button type="submit" class="site-button button-primary contacto-enviar">
+              <i class="fa-solid fa-paper-plane"></i> Enviar mensaje
+            </button>
+          </form>
+
+        </div>
+      </div>
+    </section>
+    <!-- FIN SECCIÓN: FORMULARIO -->
+
+    <!-- SECCIÓN: MAPA DE LA SUCURSAL -->
+    <section class="contacto-mapa-band" id="ubicacion" aria-label="Mapa de la sucursal">
+      <iframe title="Mapa de la sucursal de Escuela Jurídica en Surquillo, Lima"
+              src="https://www.google.com/maps?q=Calle+Las+Codornices+145,+Surquillo,+Lima&amp;output=embed"
+              loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      <div class="wrap mapa-capa">
+        <div class="mapa-tarjeta">
+          <p class="eyebrow">Nuestra sucursal</p>
+          <h2>Visítanos en Surquillo</h2>
+          <ul>
+            <li><i class="fa-solid fa-location-dot"></i> Calle Las Codornices 145, Surquillo, Lima</li>
+            <li><i class="fa-brands fa-whatsapp"></i> WhatsApp 926 812 819</li>
+            <li><i class="fa-solid fa-envelope"></i> eventos@escuelajuridica.edu.pe</li>
+          </ul>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Calle+Las+Codornices+145+Surquillo+Lima"
+             target="_blank" rel="noopener noreferrer" class="site-button button-primary">
+            <i class="fa-solid fa-diamond-turn-right"></i> Cómo llegar
+          </a>
+        </div>
+      </div>
+    </section>
+    <!-- FIN SECCIÓN: MAPA -->
+
+    <!-- SECCIÓN: OPINIONES DE CLIENTES (opiniones de demostración para el proyecto académico) -->
+    <section class="band contacto-opiniones-band" id="opiniones">
+      <div class="wrap">
+        <div class="section-heading">
+          <p class="eyebrow">Opiniones</p>
+          <h2 class="tit">Lo que dicen nuestros clientes</h2>
+          <p class="section-lead">Experiencias de quienes ya se capacitaron con Escuela Jurídica.</p>
+          <p class="opiniones-resumen">
+            <span class="opiniones-nota">4.7</span>
+            <span class="opiniones-estrellas" aria-hidden="true">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+            </span>
+            <span class="opiniones-total">6 opiniones de clientes</span>
+          </p>
+        </div>
+
+        <div class="opiniones-grid">
+          <figure class="opinion">
+            <i class="fa-solid fa-quote-left opinion-comillas" aria-hidden="true"></i>
+            <div class="opinion-estrellas" role="img" aria-label="5 de 5 estrellas">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <blockquote>El diplomado de Derecho Registral me ayudó a calificar títulos con mucha más seguridad. Los casos prácticos fueron lo mejor.</blockquote>
+            <figcaption><span class="opinion-avatar">CM</span><span><strong>Carolina Mendoza</strong><small>Abogada, Lima</small></span></figcaption>
+          </figure>
+          <figure class="opinion">
+            <i class="fa-solid fa-quote-left opinion-comillas" aria-hidden="true"></i>
+            <div class="opinion-estrellas" role="img" aria-label="5 de 5 estrellas">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <blockquote>Clases claras y docentes que ejercen la profesión. Pude aplicar lo aprendido en mi trabajo desde la primera semana.</blockquote>
+            <figcaption><span class="opinion-avatar">LQ</span><span><strong>Luis Alberto Quispe</strong><small>Asistente notarial</small></span></figcaption>
+          </figure>
+          <figure class="opinion">
+            <i class="fa-solid fa-quote-left opinion-comillas" aria-hidden="true"></i>
+            <div class="opinion-estrellas" role="img" aria-label="4 de 5 estrellas">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+            </div>
+            <blockquote>Llevé Contrataciones del Estado de forma virtual y las sesiones grabadas me permitieron estudiar a mi ritmo.</blockquote>
+            <figcaption><span class="opinion-avatar">DP</span><span><strong>Daniela Paredes</strong><small>Servidora pública, Arequipa</small></span></figcaption>
+          </figure>
+          <figure class="opinion">
+            <i class="fa-solid fa-quote-left opinion-comillas" aria-hidden="true"></i>
+            <div class="opinion-estrellas" role="img" aria-label="5 de 5 estrellas">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <blockquote>Los seminarios son cortos y directos. El certificado, respaldado por el colegio de abogados, fue un plus para mi CV.</blockquote>
+            <figcaption><span class="opinion-avatar">MV</span><span><strong>Marco Antonio Vega</strong><small>Estudiante de Derecho</small></span></figcaption>
+          </figure>
+          <figure class="opinion">
+            <i class="fa-solid fa-quote-left opinion-comillas" aria-hidden="true"></i>
+            <div class="opinion-estrellas" role="img" aria-label="4 de 5 estrellas">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+            </div>
+            <blockquote>Inscribí a todo mi equipo. La atención por WhatsApp fue rápida y la boleta llegó al instante.</blockquote>
+            <figcaption><span class="opinion-avatar">RC</span><span><strong>Rosa Elena Cárdenas</strong><small>Jefa de asesoría legal</small></span></figcaption>
+          </figure>
+          <figure class="opinion">
+            <i class="fa-solid fa-quote-left opinion-comillas" aria-hidden="true"></i>
+            <div class="opinion-estrellas" role="img" aria-label="5 de 5 estrellas">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <blockquote>Contenido actualizado y bien estructurado. Recomiendo la escuela a quien quiera especializarse en el área notarial.</blockquote>
+            <figcaption><span class="opinion-avatar">JR</span><span><strong>Jorge Luis Ramírez</strong><small>Notario público</small></span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+    <!-- FIN SECCIÓN: OPINIONES -->
+
   </main>
+
+  <th:block layout:fragment="js">
+    <script src="js/contacto.js" defer></script>
+  </th:block>
 </body>
 
 </html>

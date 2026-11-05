@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <form class="curso-form" th:object="${curso}" method="post" enctype="multipart/form-data"
+    <form class="curso-form" id="formCurso" th:object="${curso}" method="post" enctype="multipart/form-data"
           
 th:action="${curso.idCurso == null} ? @{/admin/cursos/crear} : @{/admin/cursos/editar/{idCurso}(idCurso=${curso.idCurso})}">
       <input th:if="${curso.idCurso != null}" type="hidden" th:field="*{idCurso}">
@@ -146,6 +146,71 @@ th:action="${curso.idCurso == null} ? @{/admin/cursos/crear} : @{/admin/cursos/e
         </div>
       </section>
 
+      <section class="form-card" id="seccionOferta">
+        <div class="form-card-heading">
+          <span><i class="fa-solid fa-tags"></i></span>
+          <div>
+            <h3>Oferta</h3>
+            <p>Activa un descuento por temporada: el curso se muestra con su etiqueta de oferta.</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <label class="featured-option form-field-full">
+            <input type="checkbox" id="ofertaActiva"
+                   th:checked="${curso.descuentoPorcentaje != null and curso.descuentoPorcentaje.signum() > 0}">
+            <span class="featured-check"><i class="fa-solid fa-check"></i></span>
+            <span>
+              <strong>Activar oferta</strong>
+              <small>Elige el porcentaje, la temática y hasta cuándo dura.</small>
+            </span>
+          </label>
+          <small class="campo-aviso form-field-full" id="avisoPrecioOferta" hidden>
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            Para activar una oferta, primero ingresa un precio mayor a S/ 0 en «Programación y precio».
+          </small>
+        </div>
+
+        <div class="form-grid form-grid-balanced oferta-campos" id="ofertaCampos">
+          <div class="form-field">
+            <label for="descuentoPorcentaje">Descuento <em>*</em></label>
+            <select id="descuentoPorcentaje" name="descuentoPorcentaje">
+              <option value="">Selecciona un porcentaje</option>
+              <option th:each="porcentaje : ${#numbers.sequence(10, 50, 5)}" th:value="${porcentaje}"
+                      th:text="${porcentaje} + ' %'"
+                      th:selected="${curso.descuentoPorcentaje != null and curso.descuentoPorcentaje.signum() > 0 and curso.descuentoPorcentaje.intValue() == porcentaje}">20 %</option>
+            </select>
+            <small class="campo-error" id="error-descuentoPorcentaje" hidden></small>
+          </div>
+
+          <div class="form-field">
+            <label for="tematicaOferta">Temática <em>*</em></label>
+            <select id="tematicaOferta" name="tematicaOferta.idTematicaOferta">
+              <option value="">Selecciona una temática</option>
+              <option th:each="tematica : ${tematicasOferta}" th:value="${tematica.idTematicaOferta}"
+                      th:text="${tematica.nombre}"
+                      th:selected="${curso.tematicaOferta != null and curso.tematicaOferta.idTematicaOferta == tematica.idTematicaOferta}">Navidad</option>
+            </select>
+            <small class="campo-error" id="error-tematicaOferta" hidden></small>
+          </div>
+
+          <div class="form-field">
+            <label for="ofertaHasta">Válida hasta <em>*</em></label>
+            <input id="ofertaHasta" type="date" name="ofertaHasta" th:value="${curso.ofertaHasta}">
+            <small class="campo-error" id="error-ofertaHasta" hidden></small>
+          </div>
+
+          <div class="oferta-resumen form-field-full" id="ofertaResumen" aria-live="polite">
+            <span class="oferta-resumen-etiqueta">Precio que verá el cliente</span>
+            <div class="oferta-resumen-precios">
+              <s id="resumenAnterior">S/ 0.00</s>
+              <strong id="resumenFinal">S/ 0.00</strong>
+            </div>
+            <small id="resumenAhorro">Elige un porcentaje para ver el precio con descuento.</small>
+          </div>
+        </div>
+      </section>
+
       <section class="form-card">
         <div class="form-card-heading">
           <span><i class="fa-regular fa-image"></i></span>
@@ -202,6 +267,7 @@ th:action="${curso.idCurso == null} ? @{/admin/cursos/crear} : @{/admin/cursos/e
   </div>
   <th:block layout:fragment="js">
     <script src="/js/admin/curso-imagen-preview.js" defer></script>
+    <script src="/js/admin/curso-oferta.js" defer></script>
   </th:block>
   
 </body>

@@ -38,11 +38,11 @@
       </div>
 
       <nav class="admin-nav" aria-label="Navegación del panel">
+        <a href="/admin/dashboard" class="admin-nav-link" th:classappend="${activeAdmin == 'dashboard'} ? ' on'">
+          <i class="fa-solid fa-chart-line"></i> Dashboard
+        </a>
         <a href="/admin/cursos" class="admin-nav-link" th:classappend="${activeAdmin == 'cursos'} ? ' on'">
           <i class="fa-solid fa-graduation-cap"></i> Cursos
-        </a>
-        <a href="#" class="admin-nav-link admin-nav-disabled">
-          <i class="fa-solid fa-chart-line"></i> Dashboard <span class="admin-tag">Pronto</span>
         </a>
       </nav>
 

@@ -12,15 +12,411 @@
 
 <body>
   <main layout:fragment="content">
-    <section class="band">
+
+    <!-- SECCIÓN: BANNER / HERO -->
+    <div class="hero-carousel carousel slide band" id="nosotros-hero" data-bs-ride="carousel" data-bs-interval="4500">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Imagen 1"></button>
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="1" aria-label="Imagen 2"></button>
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="2" aria-label="Imagen 3"></button>
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="3" aria-label="Imagen 4"></button>
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="4" aria-label="Imagen 5"></button>
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="5" aria-label="Imagen 6"></button>
+        <button type="button" data-bs-target="#nosotros-hero" data-bs-slide-to="6" aria-label="Imagen 7"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item hero-slide nosotros-slide-1 active">
+          <div class="slide-cap">
+            <p class="kicker">Nuestro equipo</p>
+            <h2>Las personas detrás del proyecto</h2>
+            <p>Seis desarrolladores de la Universidad Tecnológica del Perú construyen el sitio web de Escuela Jurídica.</p>
+            <div class="slide-actions">
+              <a href="#organigrama" class="site-button button-primary">Conoce al equipo</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide nosotros-slide-2">
+          <div class="slide-cap">
+            <p class="kicker">Escuela Jurídica</p>
+            <h2>Formación jurídica especializada desde 2015</h2>
+            <p>Capacitación y actualización profesional en Derecho Registral, Notarial e Inmobiliario, con propietaria y equipo de trabajo.</p>
+            <div class="slide-actions">
+              <a href="#organigrama" class="site-button button-primary">Ver organigrama</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide nosotros-slide-3">
+          <div class="slide-cap">
+            <p class="kicker">Universidad Tecnológica del Perú</p>
+            <h2>Un proyecto del curso Herramientas de Desarrollo</h2>
+            <p>Desarrollado por estudiantes de Ingeniería de la UTP, bajo la guía del docente del curso.</p>
+            <div class="slide-actions">
+              <a href="#desarrolladores" class="site-button button-primary">Ver desarrolladores</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide nosotros-slide-4">
+          <div class="slide-cap">
+            <p class="kicker">Planificación</p>
+            <h2>Del wireframe al sitio web</h2>
+            <p>Mapa del sitio y wireframes validados antes de programar, con las necesidades levantadas con la empresa.</p>
+            <div class="slide-actions">
+              <a href="#metodologia" class="site-button button-primary">Ver metodología</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide nosotros-slide-5">
+          <div class="slide-cap">
+            <p class="kicker">Metodología Scrum</p>
+            <h2>Avanzamos sprint a sprint</h2>
+            <p>Historias de usuario en Jira, con un tablero de por hacer, en curso y finalizado.</p>
+            <div class="slide-actions">
+              <a href="#sprints" class="site-button button-primary">Ver sprints</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide nosotros-slide-6">
+          <div class="slide-cap">
+            <p class="kicker">Trabajo colaborativo</p>
+            <h2>Ramas, Pull Requests y revisiones</h2>
+            <p>Cada funcionalidad se integra con un Pull Request aprobado por otra persona del equipo.</p>
+            <div class="slide-actions">
+              <a href="#metodologia" class="site-button button-primary">Ver fases</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item hero-slide nosotros-slide-7">
+          <div class="slide-cap">
+            <p class="kicker">Tecnología</p>
+            <h2>Del código al sitio en producción</h2>
+            <p>Spring Boot, Thymeleaf, Spring Security y PostgreSQL, trabajados en equipo con Git y GitHub.</p>
+            <div class="slide-actions">
+              <a href="#metodologia" class="site-button button-primary">Ver herramientas</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="cnav cprev" type="button" data-bs-target="#nosotros-hero" data-bs-slide="prev"
+        aria-label="Imagen anterior">&#10094;</button>
+      <button class="cnav cnext" type="button" data-bs-target="#nosotros-hero" data-bs-slide="next"
+        aria-label="Imagen siguiente">&#10095;</button>
+    </div>
+
+    <!-- SECCIÓN: MAPA ORGANIZACIONAL -->
+    <section class="band nosotros-band-org" id="organigrama">
       <div class="wrap">
         <div class="section-heading">
-          <p class="eyebrow">¿Quiénes somos?</p>
-          <h2 class="tit">Nosotros</h2>
-          <p class="section-lead">Página en construcción — próximamente la información institucional completa.</p>
+          <p class="eyebrow">Equipo del proyecto</p>
+          <h2 class="tit">Mapa organizacional</h2>
+          <p class="section-lead">Quién dirige la organización y qué función cumple cada integrante del proyecto.</p>
+        </div>
+
+        <div class="org">
+          <div class="org-nodo org-nodo-empresa">
+            <span class="org-foto"><img src="img/equipo/lilia-guerra.jpg" alt="Foto de Lilia Mercedes Guerra Macedo"></span>
+            <h3>Lilia Mercedes Guerra Macedo</h3>
+            <p>Propietaria de Escuela Jurídica y persona de contacto</p>
+          </div>
+
+          <span class="org-linea" aria-hidden="true"></span>
+
+          <div class="org-nodo org-nodo-coordinador">
+            <span class="org-foto"><img src="img/equipo/enrique-prada.jpg" alt="Foto de Ricardo Enrique Prada Guerra"></span>
+            <h3>Ricardo Enrique Prada Guerra</h3>
+            <p>Coordinador del proyecto</p>
+          </div>
+
+          <span class="org-linea" aria-hidden="true"></span>
+
+          <div class="org-equipo">
+            <div class="org-nodo">
+              <span class="org-foto"><img src="img/equipo/kelvin-acevedo.jpg" alt="Foto de Kelvin Jesús Acevedo Huarachi"></span>
+              <h3>Kelvin Jesús Acevedo Huarachi</h3>
+              <p>Desarrollador</p>
+            </div>
+            <div class="org-nodo">
+              <span class="org-foto"><img src="img/equipo/paolo-anorga.jpg" alt="Foto de Paolo Alexander Añorga Pinedo"></span>
+              <h3>Paolo Alexander Añorga Pinedo</h3>
+              <p>Desarrollador</p>
+            </div>
+            <div class="org-nodo">
+              <span class="org-foto"><img src="img/equipo/maykol-calle.jpg" alt="Foto de Maykol Adán Calle Paredes"></span>
+              <h3>Maykol Adán Calle Paredes</h3>
+              <p>Desarrollador</p>
+            </div>
+            <div class="org-nodo">
+              <span class="org-foto"><img src="img/equipo/juan-morales.jpg" alt="Foto de Juan José Morales Velásquez"></span>
+              <h3>Juan José Morales Velásquez</h3>
+              <p>Desarrollador</p>
+            </div>
+            <div class="org-nodo">
+              <span class="org-foto"><img src="img/equipo/joel-saldana.jpg" alt="Foto de Joel Anthony Saldaña Chávez"></span>
+              <h3>Joel Anthony Saldaña Chávez</h3>
+              <p>Desarrollador</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="org-agradecimiento">
+          <i class="fa-solid fa-heart" aria-hidden="true"></i>
+          Agradecemos a Lilia Mercedes Guerra Macedo y a Escuela Jurídica por brindarnos la información y la confianza
+          para desarrollar este proyecto.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECCIÓN: DESARROLLADORES -->
+    <section class="band nosotros-band-oscuro" id="desarrolladores">
+      <div class="wrap">
+        <div class="section-heading">
+          <p class="eyebrow">Currículum</p>
+          <h2 class="tit">Desarrolladores</h2>
+          <p class="section-lead">Programas, lenguajes y frameworks, habilidades blandas y certificados de cada integrante.</p>
+        </div>
+
+        <div class="dev-grid">
+
+          <article class="content-card dev-card">
+            <div class="dev-cabecera">
+              <span class="dev-foto"><img src="img/equipo/enrique-prada.jpg" alt="Foto de Ricardo Enrique Prada Guerra"></span>
+              <div>
+                <h3>Ricardo Enrique Prada Guerra</h3>
+                <p>Coordinador del proyecto</p>
+              </div>
+            </div>
+            <h4>Programas</h4>
+            <ul class="dev-tags"><li>Oracle PL/SQL</li><li>PostgreSQL</li><li>MongoDB</li><li>Apache Kafka</li><li>Docker</li><li>Kubernetes</li><li>Azure / AKS</li><li>GitHub Actions</li><li>Jenkins</li><li>GitLab CI</li><li>Grafana</li><li>Azure Key Vault</li><li>HashiCorp Vault</li><li>SonarQube</li><li>Postman</li><li>n8n</li></ul>
+            <h4>Lenguajes y frameworks</h4>
+            <ul class="dev-tags"><li>Java 8–21</li><li>Python</li><li>Spring Boot</li><li>Quarkus</li><li>Angular</li><li>Spring WebFlux</li><li>Spring Security / LDAP</li><li>React Native</li><li>JUnit 5</li><li>Mockito</li></ul>
+            <h4>Habilidades blandas</h4>
+            <ul class="dev-tags dev-tags-blandas"><li>Capacidad de análisis</li><li>Trabajo en equipo</li><li>Aprendizaje continuo</li><li>Resolución de problemas</li><li>Orientación a resultados</li></ul>
+            <details class="dev-certs">
+              <summary>Certificados <span>8</span></summary>
+              <ul class="dev-certs-lista"><li>Scrum Developer Professional (SDPC) · CertiProf 2025</li><li>ITIL v4 · New Horizons 2023</li><li>Cloud-native Microservices with Quarkus · Udemy 2026</li><li>Quarkus: microservicios, APIs y web apps · Udemy 2026</li><li>Apache Kafka con Java, Spring y AWS · Udemy 2026</li><li>Apache Kafka for Beginners v3 · Udemy 2026</li><li>DBA PostgreSQL · Udemy 2026</li><li>Angular Avanzado · Platzi 2025</li></ul>
+            </details>
+            <a class="site-button button-primary dev-cv" href="pdf/equipo/cv-enrique-prada.pdf" target="_blank" rel="noopener">
+              <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Ver CV completo
+            </a>
+          </article>
+
+          <article class="content-card dev-card">
+            <div class="dev-cabecera">
+              <span class="dev-foto"><img src="img/equipo/kelvin-acevedo.jpg" alt="Foto de Kelvin Jesús Acevedo Huarachi"></span>
+              <div>
+                <h3>Kelvin Jesús Acevedo Huarachi</h3>
+                <p>Desarrollador</p>
+              </div>
+            </div>
+            <h4>Programas</h4>
+            <ul class="dev-tags"><li>Git</li><li>GitHub</li><li>Visual Studio Code</li><li>Figma</li><li>Antigravity</li><li>Android Studio</li><li>Godot</li><li>Unity</li><li>MySQL</li><li>MongoDB</li><li>PostgreSQL</li></ul>
+            <h4>Lenguajes y frameworks</h4>
+            <ul class="dev-tags"><li>JavaScript</li><li>Python</li><li>Java</li><li>HTML5</li><li>CSS3</li><li>Dart</li></ul>
+            <h4>Habilidades blandas</h4>
+            <ul class="dev-tags dev-tags-blandas"><li>Liderazgo y proactividad</li><li>Trabajo en equipo</li><li>Comunicación asertiva</li></ul>
+            <details class="dev-certs">
+              <summary>Certificados <span>3</span></summary>
+              <ul class="dev-certs-lista"><li><a href="img/certificados/kelvin-html-css.png" target="_blank" rel="noopener">Udemy: La Web desde Cero. Aprende Diseño Web con HTML5 y CSS3 (2026)</a></li><li><a href="img/certificados/kelvin-git-github.png" target="_blank" rel="noopener">Udemy: Curso completo de Git y GitHub. Prepárate para el Desarrollo (2026)</a></li><li><a href="img/certificados/kelvin-python.png" target="_blank" rel="noopener">Udemy: Python Practicando. Desde 0 hasta Desarrollador en Python (2026)</a></li></ul>
+            </details>
+            <a class="site-button button-primary dev-cv" href="pdf/equipo/cv-kelvin-acevedo.pdf" target="_blank" rel="noopener">
+              <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Ver CV completo
+            </a>
+          </article>
+
+          <article class="content-card dev-card">
+            <div class="dev-cabecera">
+              <span class="dev-foto"><img src="img/equipo/paolo-anorga.jpg" alt="Foto de Paolo Alexander Añorga Pinedo"></span>
+              <div>
+                <h3>Paolo Alexander Añorga Pinedo</h3>
+                <p>Desarrollador</p>
+              </div>
+            </div>
+            <h4>Programas</h4>
+            <ul class="dev-tags"><li>Git</li><li>GitHub</li><li>Figma</li><li>SQL (relacionales)</li><li>MongoDB</li></ul>
+            <h4>Lenguajes y frameworks</h4>
+            <ul class="dev-tags"><li>Java</li><li>Python</li><li>JavaScript</li><li>HTML</li><li>CSS</li><li>Astro</li><li>Tailwind CSS</li><li>Bootstrap</li></ul>
+            <h4>Habilidades blandas</h4>
+            <ul class="dev-tags dev-tags-blandas"><li>Resolución de problemas</li><li>Comunicación efectiva</li><li>Atención al detalle</li><li>Aprendizaje continuo</li></ul>
+            
+            <details class="dev-certs dev-proyectos">
+              <summary>Proyectos <span>3</span></summary>
+              <ul class="dev-certs-lista"><li><a href="https://github.com/ieeecsutpdev/Egames" target="_blank" rel="noopener">Egames - Tienda de Videojuegos Digitales</a></li><li><a href="https://github.com/Paoloap630/app-finanzas-personales" target="_blank" rel="noopener">Aplicación de Finanzas Personales</a></li><li><a href="https://github.com/Paoloap630/adivina-el-numero" target="_blank" rel="noopener">Juego Lógico Adivina el Número</a></li></ul>
+            </details>
+            <a class="site-button button-primary dev-cv" href="pdf/equipo/cv-paolo-anorga.pdf" target="_blank" rel="noopener">
+              <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Ver CV completo
+            </a>
+          </article>
+
+          <article class="content-card dev-card">
+            <div class="dev-cabecera">
+              <span class="dev-foto"><img src="img/equipo/maykol-calle.jpg" alt="Foto de Maykol Adán Calle Paredes"></span>
+              <div>
+                <h3>Maykol Adán Calle Paredes</h3>
+                <p>Desarrollador</p>
+              </div>
+            </div>
+            <h4>Programas</h4>
+            <ul class="dev-tags"><li>Git</li><li>MongoDB</li><li>MySQL</li><li>SQL Server</li><li>PostgreSQL</li><li>Networking (TCP/IP)</li><li>Supabase</li></ul>
+            <h4>Lenguajes y frameworks</h4>
+            <ul class="dev-tags"><li>HTML5</li><li>CSS3</li><li>JavaScript ES6+</li><li>Bootstrap 5</li><li>Python</li><li>Java</li></ul>
+            <h4>Habilidades blandas</h4>
+            <ul class="dev-tags dev-tags-blandas"><li>Trabajo en equipo</li><li>Resolución de problemas</li><li>Comunicación efectiva</li><li>Adaptabilidad</li><li>Aprendizaje rápido</li><li>Pensamiento analítico</li></ul>
+            <details class="dev-certs">
+              <summary>Certificados <span>4</span></summary>
+              <ul class="dev-certs-lista"><li>Redes y Comunicación de Datos I (UTP, 2025)</li><li>Tutor STEM – Física (UTP, 2024)</li><li>Tutor STEM – Matemática (UTP, 2024)</li><li>Tutor STEM – Algorítmica (UTP, 2025)</li></ul>
+            </details>
+            <a class="site-button button-primary dev-cv" href="pdf/equipo/cv-maykol-calle.pdf" target="_blank" rel="noopener">
+              <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Ver CV completo
+            </a>
+          </article>
+
+          <article class="content-card dev-card">
+            <div class="dev-cabecera">
+              <span class="dev-foto"><img src="img/equipo/juan-morales.jpg" alt="Foto de Juan José Morales Velásquez"></span>
+              <div>
+                <h3>Juan José Morales Velásquez</h3>
+                <p>Desarrollador</p>
+              </div>
+            </div>
+            <h4>Programas</h4>
+            <ul class="dev-tags"><li>Git</li><li>GitHub</li><li>MySQL</li><li>PostgreSQL</li><li>SQL Server</li><li>Linux (Bash/CLI)</li><li>Windows Server</li><li>Apache</li></ul>
+            <h4>Lenguajes y frameworks</h4>
+            <ul class="dev-tags"><li>HTML5</li><li>CSS3</li><li>JavaScript</li><li>Bootstrap 5</li></ul>
+            <h4>Habilidades blandas</h4>
+            <ul class="dev-tags dev-tags-blandas"><li>Trabajo en equipo</li><li>Resolución de problemas</li><li>Comunicación efectiva</li></ul>
+            <details class="dev-certs">
+              <summary>Certificados <span>3</span></summary>
+              <ul class="dev-certs-lista"><li>Cisco Networking Basics</li><li>Fundamentos de Git y GitHub</li><li>Introducción a Linux</li></ul>
+            </details>
+            <a class="site-button button-primary dev-cv" href="pdf/equipo/cv-juan-morales.pdf" target="_blank" rel="noopener">
+              <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Ver CV completo
+            </a>
+          </article>
+
+          <article class="content-card dev-card">
+            <div class="dev-cabecera">
+              <span class="dev-foto"><img src="img/equipo/joel-saldana.jpg" alt="Foto de Joel Anthony Saldaña Chávez"></span>
+              <div>
+                <h3>Joel Anthony Saldaña Chávez</h3>
+                <p>Desarrollador</p>
+              </div>
+            </div>
+            <h4>Programas</h4>
+            <ul class="dev-tags"><li>Visual Studio Code</li><li>Git</li><li>GitHub</li><li>PostgreSQL</li><li>SQL Server</li><li>Supabase</li></ul>
+            <h4>Lenguajes y frameworks</h4>
+            <ul class="dev-tags"><li>JavaScript</li><li>HTML</li><li>CSS</li><li>SQL</li><li>Node.js</li><li>Angular</li><li>Spring Boot</li><li>TypeScript (en formación)</li><li>C# (en formación)</li></ul>
+            <h4>Habilidades blandas</h4>
+            <ul class="dev-tags dev-tags-blandas"><li>Adaptabilidad</li><li>Trabajo en equipo</li><li>Orientación a resultados</li><li>Resolución de problemas</li><li>Autodidacta</li><li>Aprendizaje continuo</li></ul>
+            <details class="dev-certs">
+              <summary>Certificados <span>10</span></summary>
+              <ul class="dev-certs-lista"><li>Microsoft: Foundations of Coding Full-Stack · Coursera 2026</li><li>IBM: Enterprise Design Thinking Practitioner · 2026</li><li>IBM: Enterprise Design Thinking Co-Creator · 2026</li><li>IBM: Team Essentials for Designing AI Solutions · 2026</li><li>Cisco Networking Academy: Introduction to Cybersecurity · 2026</li><li>Cisco Networking Academy: Seguridad de Terminales · UTP 2026</li><li>Programación en Python Básico + IA · UNI 2026</li><li>Especialista de Soporte Técnico · UTP 2026</li><li>Certificado Inglés A2 MCER · UTP 2026</li><li>Asesor en Excel Intermedio · UTP 2026</li></ul>
+            </details>
+            <a class="site-button button-primary dev-cv" href="pdf/equipo/cv-joel-saldana.pdf" target="_blank" rel="noopener">
+              <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Ver CV completo
+            </a>
+          </article>
+
         </div>
       </div>
     </section>
+
+    <!-- SECCIÓN: METODOLOGÍA DE PROGRAMACIÓN -->
+    <section class="band nosotros-band-met" id="metodologia">
+      <div class="wrap">
+        <div class="section-heading">
+          <p class="eyebrow">Cómo trabajamos</p>
+          <h2 class="tit">Metodología de programación</h2>
+          <p class="section-lead">Usamos Scrum: el trabajo se divide en sprints con un objetivo definido, y cada historia de
+            usuario tiene su estimación y su responsable.</p>
+        </div>
+
+        <ol class="fases">
+          <li class="content-card fase">
+            <span class="fase-numero">1</span>
+            <span class="fase-icono"><i class="fa-solid fa-list-check" aria-hidden="true"></i></span>
+            <h3>Planificación del producto</h3>
+            <p>Las necesidades de la empresa se convierten en historias de usuario dentro del backlog de Jira.</p>
+          </li>
+          <li class="content-card fase">
+            <span class="fase-numero">2</span>
+            <span class="fase-icono"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i></span>
+            <h3>Planificación del sprint</h3>
+            <p>El equipo elige las historias del sprint, las estima en puntos y asigna un responsable a cada una.</p>
+          </li>
+          <li class="content-card fase">
+            <span class="fase-numero">3</span>
+            <span class="fase-icono"><i class="fa-solid fa-code" aria-hidden="true"></i></span>
+            <h3>Desarrollo</h3>
+            <p>Cada funcionalidad se trabaja en su rama <code>feature/*</code>, con seguimiento en el tablero del sprint.</p>
+          </li>
+          <li class="content-card fase">
+            <span class="fase-numero">4</span>
+            <span class="fase-icono"><i class="fa-solid fa-code-pull-request" aria-hidden="true"></i></span>
+            <h3>Revisión</h3>
+            <p>Los cambios pasan por un Pull Request aprobado por otra persona antes de integrarse a <code>develop</code>.</p>
+          </li>
+          <li class="content-card fase">
+            <span class="fase-numero">5</span>
+            <span class="fase-icono"><i class="fa-solid fa-rotate" aria-hidden="true"></i></span>
+            <h3>Retrospectiva</h3>
+            <p>Al cerrar el sprint, el equipo revisa los resultados y define qué mejorar en el siguiente.</p>
+          </li>
+        </ol>
+
+        <h3 class="sprints-titulo" id="sprints">Sprints del proyecto</h3>
+        <div class="sprints-lista">
+          <article class="sprint-card">
+            <div class="sprint-cabecera">
+              <div>
+                <span class="sprint-num">Sprint 1</span>
+                <h4>Página de inicio</h4>
+                <span class="sprint-periodo"><i class="fa-regular fa-calendar" aria-hidden="true"></i> 16 – 29 sep. 2026</span>
+              </div>
+              <span class="sprint-estado sprint-hecho">Completado</span>
+            </div>
+            <ul class="sprint-lista">
+              <li>Estructura del proyecto y layout</li>
+              <li>Portada con carrusel</li>
+              <li>Información de la empresa, misión y visión</li>
+              <li>Clientes, video y pie de página</li>
+            </ul>
+          </article>
+          <article class="sprint-card">
+            <div class="sprint-cabecera">
+              <div>
+                <span class="sprint-num">Sprint 2</span>
+                <h4>Catálogo y panel administrativo</h4>
+                <span class="sprint-periodo"><i class="fa-regular fa-calendar" aria-hidden="true"></i> 30 sep. – 14 oct. 2026</span>
+              </div>
+              <span class="sprint-estado sprint-hecho">Completado</span>
+            </div>
+            <ul class="sprint-lista">
+              <li>Arquitectura base: Spring Boot y base de datos</li>
+              <li>Listado de cursos</li>
+              <li>Búsqueda estática y dinámica</li>
+              <li>Login con Spring Security</li>
+              <li>Gestión de cursos: listar, crear, editar y eliminar</li>
+            </ul>
+          </article>
+          <article class="sprint-card">
+            <div class="sprint-cabecera">
+              <div>
+                <span class="sprint-num">Sprint 3</span>
+                <h4>Página Nosotros y catálogo ampliado</h4>
+                <span class="sprint-periodo"><i class="fa-regular fa-calendar" aria-hidden="true"></i> 28 oct. – 10 nov. 2026</span>
+              </div>
+              <span class="sprint-estado sprint-hecho">Completado</span>
+            </div>
+            <ul class="sprint-lista">
+              <li>Mapa organizacional del equipo</li>
+              <li>Desarrolladores con su CV y certificados</li>
+              <li>Metodología del proyecto</li>
+              <li>Catálogo ampliado a 30 cursos</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
   </main>
 </body>
 

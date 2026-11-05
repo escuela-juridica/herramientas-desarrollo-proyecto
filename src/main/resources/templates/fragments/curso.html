@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+  <!-- Etiqueta sobre la portada del curso (solo si esta en oferta): la palabra Oferta con la tematica y el porcentaje, por ejemplo Oferta Navidad -20 % -->
+  <span th:fragment="etiqueta(curso)" th:if="${curso.enOferta}" class="curso-oferta-tag"
+        th:title="'Oferta ' + ${curso.nombreTematica != null ? 'de ' + curso.nombreTematica : ''} + ': ' + ${#numbers.formatDecimal(curso.descuentoPorcentaje, 1, 0)} + '% de descuento'">
+    <small class="tag-tema"
+           th:text="${curso.nombreTematica != null} ? 'Oferta ' + ${curso.nombreTematica} : 'Oferta'">Oferta Navidad</small>
+    <span class="tag-valor"><i class="fa-solid fa-tags" aria-hidden="true"></i>
+      -<span th:text="${#numbers.formatDecimal(curso.descuentoPorcentaje, 1, 0)}">20</span>%</span>
+  </span>
+
+  <!-- Precio de la tarjeta: con precio anterior tachado cuando hay oferta -->
+  <div th:fragment="precio(curso)" class="curso-precio" th:classappend="${curso.enOferta} ? 'curso-precio-oferta'">
+    <span th:if="${curso.enOferta}" class="precio-anterior">S/ <span
+        th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}">450.00</span></span>
+    <span class="precio-actual">S/ <span th:text="${#numbers.formatDecimal(curso.precioFinal, 1, 2)}">360.00</span></span>
+  </div>
+
+  <!-- Precio del modal de detalles -->
+  <div th:fragment="precioModal(curso)" class="curso-modal-precio">
+    <span th:if="${curso.enOferta}" class="curso-modal-oferta">
+      <i class="fa-solid fa-tags" aria-hidden="true"></i>
+      <span th:text="${curso.nombreTematica != null} ? 'Oferta de ' + ${curso.nombreTematica} : 'Oferta'">Oferta de Navidad</span>
+      <small th:if="${curso.ofertaHasta != null}"
+             th:text="'hasta el ' + ${#temporals.format(curso.ofertaHasta, 'dd/MM/yyyy')}">hasta el 31/12/2026</small>
+    </span>
+    <span th:if="${curso.enOferta}" class="precio-anterior">S/ <span
+        th:text="${#numbers.formatDecimal(curso.precio, 1, 2)}">450.00</span></span>
+    Precio: S/ <span th:text="${#numbers.formatDecimal(curso.precioFinal, 1, 2)}">360.00</span>
+  </div>
+
+  <!-- Boton del modal: suma el curso al carrito (lo atiende js/carrito.js) -->
+  <button th:fragment="botonAgregar(curso)" type="button" class="btn curso-modal-comprar" data-agregar-carrito
+          th:data-id="${curso.idCurso}">
+    <i class="fa-solid fa-cart-plus" aria-hidden="true"></i> Agregar al carrito
+  </button>
+
+</body>
+
+</html>
