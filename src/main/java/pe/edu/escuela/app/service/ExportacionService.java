@@ -334,16 +334,28 @@ public class ExportacionService {
       Font cabecera = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, Color.WHITE);
       Font negrita = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11, PDF_AZUL);
 
-      PdfPTable encabezado = new PdfPTable(new float[] {3f, 2f});
+      PdfPTable encabezado = new PdfPTable(new float[] {1.55f, 3.1f, 1.75f});
       encabezado.setWidthPercentage(100);
+      PdfPCell celdaLogo = new PdfPCell();
+      celdaLogo.setBorder(Rectangle.RIGHT);
+      celdaLogo.setVerticalAlignment(Element.ALIGN_MIDDLE);
+      celdaLogo.setBorderColor(new Color(220, 224, 230));
+      celdaLogo.setPaddingRight(10);
+      Image logo = cargarLogo();
+      if (logo != null) {
+        celdaLogo.addElement(logo);
+      }
+      encabezado.addCell(celdaLogo);
       PdfPCell izquierda = new PdfPCell();
       izquierda.setBorder(Rectangle.NO_BORDER);
+      izquierda.setPaddingLeft(12);
       Paragraph razon = new Paragraph(emisor.getRazonSocial(), marca);
       razon.setSpacingAfter(4);
       izquierda.addElement(razon);
       izquierda.addElement(new Paragraph("Nombre comercial: " + emisor.getNombreComercial(), menor));
       izquierda.addElement(new Paragraph("Domicilio fiscal: " + emisor.getDomicilioFiscal(), menor));
-      izquierda.addElement(new Paragraph("eventos@escuelajuridica.edu.pe · WhatsApp 926 812 819", menor));
+      izquierda.addElement(new Paragraph("eventos@escuelajuridica.edu.pe", menor));
+      izquierda.addElement(new Paragraph("WhatsApp 926 812 819", menor));
       encabezado.addCell(izquierda);
       PdfPCell derecha = new PdfPCell();
       derecha.setBorderColor(PDF_AZUL);
@@ -413,6 +425,18 @@ public class ExportacionService {
       return salida.toByteArray();
     } catch (DocumentException e) {
       throw new IOException("No se pudo generar el PDF de la boleta.", e);
+    }
+  }
+
+  /** Logo de la escuela para la boleta (esta en los recursos estaticos). Si no se encuentra, la boleta sale sin logo. */
+  private Image cargarLogo() {
+    try (java.io.InputStream entrada =
+        new org.springframework.core.io.ClassPathResource("static/img/identidad/logo.png").getInputStream()) {
+      Image logo = Image.getInstance(entrada.readAllBytes());
+      logo.scaleToFit(112f, 46f);
+      return logo;
+    } catch (IOException | com.lowagie.text.BadElementException e) {
+      return null;
     }
   }
 

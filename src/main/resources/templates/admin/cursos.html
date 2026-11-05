@@ -147,10 +147,9 @@
 
               <td data-label="Acciones" class="curso-actions">
 
-                <a class="curso-action curso-action-edit"
+                <a class="curso-action curso-action-edit" title="Editar" aria-label="Editar curso"
                    th:href="@{/admin/cursos/editar/{idCurso}(idCurso=${curso.idCurso})}">
-                  <i class="fa-solid fa-pen"></i>
-                  Editar
+                  <i class="fa-solid fa-pen" aria-hidden="true"></i>
                 </a>
       
 
@@ -160,9 +159,8 @@
       class="curso-action-form"
       onsubmit="return confirm('¿Deseas desactivar este curso?');">
 
-    <button type="submit" class="curso-action curso-action-delete">
-        <i class="fa-solid fa-ban"></i>
-        Desactivar
+    <button type="submit" class="curso-action curso-action-delete" title="Desactivar" aria-label="Desactivar curso">
+        <i class="fa-solid fa-ban" aria-hidden="true"></i>
     </button>
 
 </form>
@@ -170,8 +168,8 @@
                 <form th:if="${curso.estado == 'I'}"
                       th:action="@{/admin/cursos/reactivar/{idCurso}(idCurso=${curso.idCurso})}"
                       method="post" class="curso-action-form">
-                  <button type="submit" class="curso-action curso-action-reactivate">
-                    <i class="fa-solid fa-rotate-left"></i> Reactivar
+                  <button type="submit" class="curso-action curso-action-reactivate" title="Reactivar" aria-label="Reactivar curso">
+                    <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
                   </button>
                 </form>
 

@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS pedido_detalle;
 DROP TABLE IF EXISTS pedido;
 DROP TABLE IF EXISTS mensaje_contacto;
 DROP TABLE IF EXISTS curso;
+DROP TABLE IF EXISTS tematica_oferta;
 DROP TABLE IF EXISTS docente;
 DROP TABLE IF EXISTS tipo_curso;
 DROP TABLE IF EXISTS administrador;
@@ -50,6 +51,15 @@ CREATE TABLE docente (
   fecha_modificacion TIMESTAMP     NULL
 );
 
+-- Temporadas o motivos de las ofertas de los cursos (Navidad, Fiestas Patrias, Black Friday...).
+CREATE TABLE tematica_oferta (
+  id_tematica_oferta SERIAL        PRIMARY KEY,
+  nombre             VARCHAR(60)   NOT NULL UNIQUE,
+  estado             CHAR(1)       NOT NULL DEFAULT 'A' CHECK (estado IN ('A','I'))
+);
+
+-- Oferta del curso: sin descuento no hay tematica ni fecha limite; con descuento (de 10 a 50 %) se exigen las dos
+-- y el curso debe tener precio (un curso gratuito no puede tener oferta).
 CREATE TABLE curso (
   id_curso           SERIAL        PRIMARY KEY,
   codigo             VARCHAR(20)   NOT NULL UNIQUE,
@@ -62,8 +72,9 @@ CREATE TABLE curso (
   fecha_inicio       DATE         NOT NULL,
   fecha_fin          DATE         NOT NULL,
   precio             NUMERIC(10,2) NOT NULL,
-  descuento_porcentaje NUMERIC(5,2) NOT NULL DEFAULT 0 CHECK (descuento_porcentaje >= 0 AND descuento_porcentaje <= 90),
+  descuento_porcentaje NUMERIC(5,2) NOT NULL DEFAULT 0,
   oferta_hasta       DATE          NULL,
+  id_tematica_oferta INT           NULL REFERENCES tematica_oferta(id_tematica_oferta),
   imagen             VARCHAR(255)  NOT NULL,
   destacado          BOOLEAN       NOT NULL DEFAULT false,
   estado             CHAR(1)       NOT NULL DEFAULT 'A' CHECK (estado IN ('A','I')),
@@ -71,7 +82,11 @@ CREATE TABLE curso (
   fecha_modificacion TIMESTAMP     NULL,
   id_tipo_curso      INT           NOT NULL REFERENCES tipo_curso(id_tipo_curso),
   id_admin           INT           NOT NULL REFERENCES administrador(id_admin),
-  id_docente         INT           NOT NULL REFERENCES docente(id_docente)
+  id_docente         INT           NOT NULL REFERENCES docente(id_docente),
+  CONSTRAINT ck_curso_oferta CHECK (
+    (descuento_porcentaje = 0 AND id_tematica_oferta IS NULL AND oferta_hasta IS NULL)
+    OR (descuento_porcentaje BETWEEN 10 AND 50 AND id_tematica_oferta IS NOT NULL AND oferta_hasta IS NOT NULL
+        AND precio > 0))
 );
 
 -- Compras: el carrito vive en la sesion; al pagar se guarda pedido + detalle + comprobante (boleta).
@@ -158,6 +173,15 @@ INSERT INTO docente (nombres, apellidos, especialidad, cargo) VALUES
   ('Milagros del Pilar', 'Cárdenas Vega', 'Derecho Constitucional', 'Docente Especialista'),
   ('Renzo Gabriel', 'Huamán Paredes', 'Derecho Digital', 'Abogado Litigante'),
   ('Manuel Alejandro', 'Ortiz Piñella', 'Derecho Registral', 'Docente Titular');
+
+INSERT INTO tematica_oferta (nombre) VALUES
+  ('Navidad'),
+  ('Fiestas Patrias'),
+  ('Año Nuevo'),
+  ('Black Friday'),
+  ('Cyber Days'),
+  ('Día del Abogado'),
+  ('Aniversario');
 
 -- 30 cursos: son los mismos del catalogo de la plataforma ESEJUR (nombres, descripciones, horas, precios, instituciones y
 -- portadas), adaptados a las tablas de este sistema. Las fechas son relativas al dia en que se ejecuta el script.
@@ -376,23 +400,24 @@ INSERT INTO curso (codigo, nombre, descripcion, institucion, modalidad, duracion
  (SELECT id_docente FROM docente WHERE nombres = 'Yourka' AND apellidos = 'Lucich Berrío'));
 
 -- ============================================================
--- OFERTAS DE NAVIDAD
--- 8 cursos del catalogo con descuento, vigentes hasta el 31 de diciembre del año en curso.
+-- OFERTAS DE DEMOSTRACION
+-- 8 cursos con descuento de 10 a 50 %, cada uno con su tematica y su fecha limite (todas vigentes al ejecutar el script).
 -- ============================================================
 
 UPDATE curso SET
   descuento_porcentaje = v.dto,
-  oferta_hasta = make_date(EXTRACT(YEAR FROM CURRENT_DATE)::int, 12, 31)
+  id_tematica_oferta = (SELECT t.id_tematica_oferta FROM tematica_oferta t WHERE t.nombre = v.tematica),
+  oferta_hasta = v.hasta
 FROM (VALUES
-  ('EJ-2026-001', 20),
-  ('EJ-2026-003', 30),
-  ('EJ-2026-007', 15),
-  ('EJ-2026-010', 25),
-  ('EJ-2026-016', 40),
-  ('EJ-2026-021', 50),
-  ('EJ-2026-027', 10),
-  ('EJ-2026-029', 35)
-) AS v(codigo, dto)
+  ('EJ-2026-001', 20, 'Navidad',         make_date(EXTRACT(YEAR FROM CURRENT_DATE)::int, 12, 31)),
+  ('EJ-2026-003', 30, 'Navidad',         make_date(EXTRACT(YEAR FROM CURRENT_DATE)::int, 12, 31)),
+  ('EJ-2026-016', 40, 'Navidad',         make_date(EXTRACT(YEAR FROM CURRENT_DATE)::int, 12, 31)),
+  ('EJ-2026-007', 15, 'Black Friday',    CURRENT_DATE + 20),
+  ('EJ-2026-010', 25, 'Cyber Days',      CURRENT_DATE + 15),
+  ('EJ-2026-021', 50, 'Año Nuevo',       CURRENT_DATE + 60),
+  ('EJ-2026-027', 10, 'Día del Abogado', CURRENT_DATE + 30),
+  ('EJ-2026-029', 35, 'Aniversario',     CURRENT_DATE + 45)
+) AS v(codigo, dto, tematica, hasta)
 WHERE curso.codigo = v.codigo;
 
 -- ============================================================

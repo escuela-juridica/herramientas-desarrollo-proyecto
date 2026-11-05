@@ -33,10 +33,10 @@ public class AdminReporteController {
     this.exportacionService = exportacionService;
   }
 
-  @GetMapping("/admin/reportes")
+  @GetMapping("/admin/dashboard")
   public String ver(Model model) {
-    model.addAttribute("activeAdmin", "reportes");
-    model.addAttribute("tituloAdmin", "Reportes");
+    model.addAttribute("activeAdmin", "dashboard");
+    model.addAttribute("tituloAdmin", "Dashboard");
     model.addAttribute("reportes", reporteService.generarReportes());
     model.addAttribute("totales", reporteService.totales());
     return "admin/reportes";

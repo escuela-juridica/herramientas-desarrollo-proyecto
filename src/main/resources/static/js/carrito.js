@@ -74,6 +74,22 @@
       });
   }
 
+  // Mensaje que dejó el servidor tras una acción del carrito (quitar, vaciar...): sale como aviso y desaparece solo.
+  var ICONOS = { exito: 'fa-circle-check', info: 'fa-circle-info', error: 'fa-triangle-exclamation' };
+  var flash = document.querySelector('[data-aviso-flash]');
+  if (flash) {
+    var tipo = flash.getAttribute('data-tipo');
+    var icono = document.createElement('i');
+    icono.className = 'fa-solid ' + (ICONOS[tipo] || ICONOS.info);
+    var texto = document.createElement('span');
+    texto.appendChild(icono);
+    texto.appendChild(document.createTextNode(' ' + flash.textContent));
+    var contenedor = document.createElement('div');
+    contenedor.appendChild(texto);
+    aviso(contenedor.innerHTML, tipo === 'error');
+    flash.remove();
+  }
+
   // Delegación: los modales se renderizan una vez, pero así funciona con cualquier botón nuevo.
   document.addEventListener('click', function (evento) {
     var boton = evento.target.closest('[data-agregar-carrito]');

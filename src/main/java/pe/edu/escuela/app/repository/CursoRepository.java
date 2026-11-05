@@ -12,29 +12,29 @@ import pe.edu.escuela.app.model.Curso;
 
 public interface CursoRepository extends JpaRepository<Curso, Integer> {
 
-  @Query("SELECT c FROM Curso c JOIN FETCH c.tipoCurso WHERE c.destacado = true AND c.estado = :estado ORDER BY c.idCurso ASC")
+  @Query("SELECT c FROM Curso c JOIN FETCH c.tipoCurso LEFT JOIN FETCH c.tematicaOferta WHERE c.destacado = true AND c.estado = :estado ORDER BY c.idCurso ASC")
   List<Curso> findByDestacadoTrueAndEstadoOrderByIdCursoAsc(@Param("estado") String estado);
 
-  @Query("SELECT c FROM Curso c JOIN FETCH c.tipoCurso WHERE c.estado = :estado ORDER BY c.idCurso ASC")
+  @Query("SELECT c FROM Curso c JOIN FETCH c.tipoCurso LEFT JOIN FETCH c.tematicaOferta WHERE c.estado = :estado ORDER BY c.idCurso ASC")
   List<Curso> findByEstadoOrderByIdCursoAsc(@Param("estado") String estado);
 
-  @EntityGraph(attributePaths = {"tipoCurso", "docente"})
+  @EntityGraph(attributePaths = {"tipoCurso", "docente", "tematicaOferta"})
   List<Curso> findAllByOrderByIdCursoAsc();
 
-  @EntityGraph(attributePaths = {"tipoCurso", "docente"})
+  @EntityGraph(attributePaths = {"tipoCurso", "docente", "tematicaOferta"})
   List<Curso> findByNombreContainingIgnoreCaseOrderByIdCursoAsc(String nombre);
 
-  @Query("SELECT c FROM Curso c JOIN FETCH c.tipoCurso WHERE (:nombre IS NULL OR LOWER(c.nombre) LIKE LOWER(CONCAT('%', CAST(:nombre AS String), '%'))) AND (:codigo IS NULL OR LOWER(c.codigo) LIKE LOWER(CONCAT('%', CAST(:codigo AS String), '%'))) AND (:idTipoCurso IS NULL OR c.tipoCurso.idTipoCurso = :idTipoCurso) AND c.estado = :estado ORDER BY c.idCurso ASC")
+  @Query("SELECT c FROM Curso c JOIN FETCH c.tipoCurso LEFT JOIN FETCH c.tematicaOferta WHERE (:nombre IS NULL OR LOWER(c.nombre) LIKE LOWER(CONCAT('%', CAST(:nombre AS String), '%'))) AND (:codigo IS NULL OR LOWER(c.codigo) LIKE LOWER(CONCAT('%', CAST(:codigo AS String), '%'))) AND (:idTipoCurso IS NULL OR c.tipoCurso.idTipoCurso = :idTipoCurso) AND c.estado = :estado ORDER BY c.idCurso ASC")
   List<Curso> buscarConFiltros(
       @Param("nombre") String nombre,
       @Param("codigo") String codigo,
       @Param("idTipoCurso") Integer idTipoCurso,
       @Param("estado") String estado);
 
-  @EntityGraph(attributePaths = {"tipoCurso", "docente"})
+  @EntityGraph(attributePaths = {"tipoCurso", "docente", "tematicaOferta"})
   List<Curso> findByCodigoContainingIgnoreCaseOrderByIdCursoAsc(String codigo);
 
-  @EntityGraph(attributePaths = {"tipoCurso", "docente"})
+  @EntityGraph(attributePaths = {"tipoCurso", "docente", "tematicaOferta"})
   List<Curso> findByNombreContainingIgnoreCaseAndCodigoContainingIgnoreCaseOrderByIdCursoAsc(
       String nombre, String codigo);
 

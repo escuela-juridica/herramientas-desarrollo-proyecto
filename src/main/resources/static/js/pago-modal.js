@@ -44,7 +44,11 @@
   }
 
   formulario.querySelectorAll('input[name="medioPago"]').forEach(function (radio) {
-    radio.addEventListener('change', mostrarPanel);
+    radio.addEventListener('change', function () {
+      mostrarPanel();
+      // Para la demostración: cada medio de pago aparece con datos de prueba, sin pisar lo que ya se escribió
+      rellenarMedio(medioSeleccionado(), false);
+    });
   });
   mostrarPanel();
 
@@ -100,19 +104,32 @@
     poner('telefono', persona.telefono);
     poner('correo', persona.correo);
 
-    var medio = medioSeleccionado();
+    rellenarMedio(medioSeleccionado(), true);
+    mostrarErrores([]);
+  }
+
+  /**
+   * Rellena los campos del medio de pago indicado con datos de prueba.
+   * Con sobrescribir en false solo se llenan los campos que están vacíos.
+   */
+  function rellenarMedio(medio, sobrescribir) {
+    function ponerSiVacio(id, valor) {
+      if (sobrescribir || campo(id).value.trim() === '') poner(id, valor);
+    }
+
     if (medio === 'TARJETA') {
       var anio = String((new Date().getFullYear() + 3) % 100);
-      poner('tarjNumero', '4111111111111111');
-      poner('tarjVence', '12' + (anio.length < 2 ? '0' + anio : anio));
-      poner('tarjCvv', '123');
+      ponerSiVacio('tarjNumero', '4111111111111111');
+      ponerSiVacio('tarjVence', '12' + (anio.length < 2 ? '0' + anio : anio));
+      ponerSiVacio('tarjCvv', '123');
     } else if (medio === 'YAPE') {
-      poner('yapeCelular', persona.telefono);
-      poner('yapeCodigo', '123456');
+      // el celular de Yape es el teléfono ya escrito, si es un celular válido; si no, uno de prueba
+      var telefono = campo('telefono').value.replace(/\D/g, '');
+      ponerSiVacio('yapeCelular', /^9[0-9]{8}$/.test(telefono) ? telefono : '987654321');
+      ponerSiVacio('yapeCodigo', '123456');
     } else {
-      poner('transOperacion', '12345678');
+      ponerSiVacio('transOperacion', '12345678');
     }
-    mostrarErrores([]);
   }
 
   modal.addEventListener('keydown', function (evento) {

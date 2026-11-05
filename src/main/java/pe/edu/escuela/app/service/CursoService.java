@@ -1,13 +1,16 @@
 package pe.edu.escuela.app.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import pe.edu.escuela.app.model.Curso;
 import pe.edu.escuela.app.model.Docente;
+import pe.edu.escuela.app.model.TematicaOferta;
 import pe.edu.escuela.app.model.TipoCurso;
 import pe.edu.escuela.app.repository.AdministradorRepository;
 import pe.edu.escuela.app.repository.CursoRepository;
 import pe.edu.escuela.app.repository.DocenteRepository;
+import pe.edu.escuela.app.repository.TematicaOfertaRepository;
 import pe.edu.escuela.app.repository.TipoCursoRepository;
 import pe.edu.escuela.app.util.Constantes;
 
@@ -18,16 +21,19 @@ public class CursoService {
   private final TipoCursoRepository tipoCursoRepository;
   private final DocenteRepository docenteRepository;
   private final AdministradorRepository administradorRepository;
+  private final TematicaOfertaRepository tematicaOfertaRepository;
 
   public CursoService(
       CursoRepository cursoRepository,
       TipoCursoRepository tipoCursoRepository,
       DocenteRepository docenteRepository,
-      AdministradorRepository administradorRepository) {
+      AdministradorRepository administradorRepository,
+      TematicaOfertaRepository tematicaOfertaRepository) {
     this.cursoRepository = cursoRepository;
     this.tipoCursoRepository = tipoCursoRepository;
     this.docenteRepository = docenteRepository;
     this.administradorRepository = administradorRepository;
+    this.tematicaOfertaRepository = tematicaOfertaRepository;
   }
 
   public List<Curso> obtenerDestacados() {
@@ -85,6 +91,41 @@ public class CursoService {
     return tipoCursoRepository.findAll();
   }
 
+  public List<TematicaOferta> obtenerTematicasOferta() {
+    return tematicaOfertaRepository.findByEstadoOrderByIdTematicaOfertaAsc(Constantes.ESTADO_ACTIVO);
+  }
+
+  /**
+   * Deja la oferta del curso consistente. Sin descuento no hay tematica ni fecha limite; con descuento se exigen un
+   * porcentaje de 10 a 50 %, la tematica y la fecha limite.
+   */
+  private void aplicarOferta(Curso destino, Curso datos) {
+    BigDecimal descuento = datos.getDescuentoPorcentaje();
+    if (descuento == null || descuento.signum() == 0) {
+      destino.setDescuentoPorcentaje(BigDecimal.ZERO);
+      destino.setTematicaOferta(null);
+      destino.setOfertaHasta(null);
+      return;
+    }
+    if (descuento.compareTo(BigDecimal.TEN) < 0 || descuento.compareTo(BigDecimal.valueOf(50)) > 0) {
+      throw new IllegalArgumentException("El descuento de la oferta debe estar entre 10 y 50 %.");
+    }
+    if (datos.getPrecio() == null || datos.getPrecio().signum() <= 0) {
+      throw new IllegalArgumentException("Para activar una oferta el curso debe tener un precio mayor a S/ 0.");
+    }
+    Integer idTematica = datos.getTematicaOferta() == null ? null : datos.getTematicaOferta().getIdTematicaOferta();
+    if (idTematica == null) {
+      throw new IllegalArgumentException("Selecciona la temática de la oferta.");
+    }
+    if (datos.getOfertaHasta() == null) {
+      throw new IllegalArgumentException("Indica hasta cuándo es válida la oferta.");
+    }
+    destino.setDescuentoPorcentaje(descuento);
+    destino.setTematicaOferta(tematicaOfertaRepository.findById(idTematica)
+        .orElseThrow(() -> new IllegalArgumentException("La temática seleccionada no existe.")));
+    destino.setOfertaHasta(datos.getOfertaHasta());
+  }
+
   public List<Docente> obtenerDocentes() {
     return docenteRepository.findAll();
   }
@@ -110,6 +151,7 @@ public class CursoService {
         .orElseThrow(() -> new IllegalStateException(
             "No se encontró el administrador autenticado.")));
     curso.setEstado(Constantes.ESTADO_ACTIVO);
+    aplicarOferta(curso, curso);
 
     return cursoRepository.save(curso);
   }
@@ -137,8 +179,7 @@ public class CursoService {
     existente.setFechaInicio(datos.getFechaInicio());
     existente.setFechaFin(datos.getFechaFin());
     existente.setPrecio(datos.getPrecio());
-    existente.setDescuentoPorcentaje(datos.getDescuentoPorcentaje());
-    existente.setOfertaHasta(datos.getOfertaHasta());
+    aplicarOferta(existente, datos);
     existente.setDestacado(datos.isDestacado());
     existente.setTipoCurso(tipo);
     existente.setDocente(docente);

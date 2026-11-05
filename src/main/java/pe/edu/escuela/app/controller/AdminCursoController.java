@@ -129,6 +129,7 @@ public class AdminCursoController {
     model.addAttribute("tituloAdmin", "Nuevo curso");
     model.addAttribute("tiposCurso", cursoService.obtenerTiposCurso());
     model.addAttribute("docentes", cursoService.obtenerDocentes());
+    model.addAttribute("tematicasOferta", cursoService.obtenerTematicasOferta());
   }
 
   private void validarCurso(
@@ -155,12 +156,7 @@ public class AdminCursoController {
     if (curso.getPrecio() == null || curso.getPrecio().signum() < 0) {
       bindingResult.rejectValue("precio", "curso.precio.invalido", "Ingresa un precio válido.");
     }
-    if (curso.getDescuentoPorcentaje() == null
-            || curso.getDescuentoPorcentaje().signum() < 0
-            || curso.getDescuentoPorcentaje().compareTo(java.math.BigDecimal.valueOf(90)) > 0) {
-      bindingResult.rejectValue(
-              "descuentoPorcentaje", "curso.descuento.invalido", "El descuento debe estar entre 0 y 90 %.");
-    }
+    validarOferta(curso, bindingResult);
     if (curso.getTipoCurso() == null || curso.getTipoCurso().getIdTipoCurso() == null) {
       bindingResult.rejectValue(
               "tipoCurso.idTipoCurso", "curso.tipo.vacio", "Selecciona un tipo de curso.");
@@ -181,6 +177,30 @@ public class AdminCursoController {
             && curso.getFechaFin().isBefore(curso.getFechaInicio())) {
       bindingResult.rejectValue(
               "fechaFin", "curso.fechaFin.invalida", "La fecha de fin no puede ser anterior al inicio.");
+    }
+  }
+
+  /** Sin descuento no hay oferta; con descuento se exigen un porcentaje de 10 a 50 %, la tematica y la fecha limite. */
+  private void validarOferta(Curso curso, BindingResult bindingResult) {
+    java.math.BigDecimal descuento = curso.getDescuentoPorcentaje();
+    if (descuento == null || descuento.signum() == 0) {
+      return;
+    }
+    if (descuento.compareTo(java.math.BigDecimal.TEN) < 0
+            || descuento.compareTo(java.math.BigDecimal.valueOf(50)) > 0) {
+      bindingResult.rejectValue(
+              "descuentoPorcentaje", "curso.descuento.invalido", "El descuento debe estar entre 10 y 50 %.");
+    }
+    if (curso.getPrecio() == null || curso.getPrecio().signum() <= 0) {
+      bindingResult.rejectValue(
+              "precio", "curso.precio.sinMonto", "Para activar una oferta el curso debe tener un precio mayor a S/ 0.");
+    }
+    if (curso.getTematicaOferta() == null || curso.getTematicaOferta().getIdTematicaOferta() == null) {
+      bindingResult.reject("curso.tematica.vacia", "Selecciona la temática de la oferta.");
+    }
+    if (curso.getOfertaHasta() == null) {
+      bindingResult.rejectValue(
+              "ofertaHasta", "curso.ofertaHasta.vacia", "Indica hasta cuándo es válida la oferta.");
     }
   }
 
@@ -325,6 +345,7 @@ public class AdminCursoController {
     model.addAttribute("tituloAdmin", "Editar curso");
     model.addAttribute("tiposCurso", cursoService.obtenerTiposCurso());
     model.addAttribute("docentes", cursoService.obtenerDocentes());
+    model.addAttribute("tematicasOferta", cursoService.obtenerTematicasOferta());
   }
 
   @PostMapping("/admin/cursos/eliminar/{idCurso}")

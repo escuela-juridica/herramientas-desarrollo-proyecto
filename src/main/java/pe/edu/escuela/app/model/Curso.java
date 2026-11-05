@@ -85,6 +85,10 @@ public class Curso {
   private LocalDateTime fechaModificacion;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_tematica_oferta")
+  private TematicaOferta tematicaOferta;
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id_tipo_curso", nullable = false)
   private TipoCurso tipoCurso;
 
@@ -208,6 +212,19 @@ public class Curso {
 
   public void setOfertaHasta(LocalDate ofertaHasta) {
     this.ofertaHasta = ofertaHasta;
+  }
+
+  public TematicaOferta getTematicaOferta() {
+    return tematicaOferta;
+  }
+
+  public void setTematicaOferta(TematicaOferta tematicaOferta) {
+    this.tematicaOferta = tematicaOferta;
+  }
+
+  /** Nombre de la temporada de la oferta (por ejemplo Navidad), o null si el curso no tiene tematica. */
+  public String getNombreTematica() {
+    return tematicaOferta == null ? null : tematicaOferta.getNombre();
   }
 
   /** Un curso esta en oferta si tiene descuento y la fecha limite (si existe) no ha pasado. */

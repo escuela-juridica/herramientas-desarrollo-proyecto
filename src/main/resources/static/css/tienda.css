@@ -70,19 +70,34 @@
   top: 12px;
   right: 12px;
   z-index: 2;
-  display: inline-block;
-  padding: 5px 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 6px 13px 6px 14px;
   color: #fff;
   background: var(--red);
-  border-radius: 99px;
+  border-radius: 14px;
   box-shadow: 0 4px 12px rgba(200, 16, 46, .35);
   font-size: 13px;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 .curso-oferta-tag i {
   margin-right: 6px;
+}
+
+/* Temporada de la oferta (Navidad, Black Friday...) sobre el porcentaje */
+.curso-oferta-tag .tag-tema {
+  color: #ffe3b0;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.curso-oferta-tag .tag-valor {
+  font-size: 15px;
 }
 
 /* Boton de la tarjeta: abre el detalle del curso donde se agrega al carrito. a.curso-button gana a .curso-button de las hojas de cada pagina */
@@ -119,7 +134,7 @@ a.curso-button:hover {
 }
 
 .curso-precio-oferta .precio-actual {
-  color: var(--red);
+  color: var(--orange-2);
 }
 
 .curso-modal-precio .precio-anterior {
@@ -375,7 +390,7 @@ a.curso-button:hover {
 }
 
 .tabla-carrito .precio-final.con-oferta {
-  color: var(--red);
+  color: var(--orange-2);
   font-weight: 700;
 }
 
@@ -1033,10 +1048,29 @@ a.curso-button:hover {
 
 .boleta-cabecera {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  align-items: flex-start;
+  gap: 16px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--line);
+}
+
+.boleta-logo {
+  flex: none;
+  align-self: center;
+  width: 128px;
+}
+
+.boleta-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.boleta-empresa {
+  flex: 1;
+  min-width: 0;
+  padding-left: 16px;
+  border-left: 1px solid var(--line);
 }
 
 .boleta-empresa h2 {
@@ -1154,6 +1188,15 @@ a.curso-button:hover {
 
   .boleta-cabecera {
     flex-direction: column;
+  }
+
+  .boleta-logo {
+    width: 120px;
+  }
+
+  .boleta-empresa {
+    padding-left: 0;
+    border-left: 0;
   }
 
   .boleta-datos {

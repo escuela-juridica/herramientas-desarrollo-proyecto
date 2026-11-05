@@ -1,5 +1,5 @@
 /**
- * admin-reportes.js — Dibuja los 6 gráficos de /admin/reportes con Chart.js y prepara las descargas.
+ * admin-reportes.js — Dibuja los 6 gráficos de /admin/dashboard con Chart.js y prepara las descargas.
  *
  * Los datos llegan del servidor en window.REPORTES (lista de reportes: tipoGrafico, etiquetas, valores…).
  * Al descargar un informe (Word, Excel o PDF) se manda también la imagen del gráfico en PNG, porque el gráfico

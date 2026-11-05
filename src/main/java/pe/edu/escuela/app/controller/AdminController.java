@@ -8,6 +8,6 @@ public class AdminController {
 
   @GetMapping("/admin")
   public String panel() {
-    return "redirect:/admin/cursos";
+    return "redirect:/admin/dashboard";
   }
 }

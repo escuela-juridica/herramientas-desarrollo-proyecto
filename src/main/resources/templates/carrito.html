@@ -17,9 +17,9 @@
           <p class="section-lead">Revisa los cursos elegidos, ajusta la cantidad de cupos y confirma tu compra para recibir la boleta.</p>
         </div>
 
-        <!-- Mensaje de una sola vez (éxito, error o info) -->
-        <p class="mensaje" role="status" th:if="${mensajeTexto != null}"
-           th:classappend="${mensajeTipo}" th:text="${mensajeTexto}">Mensaje</p>
+        <!-- Mensaje de una sola vez (éxito, error o info): carrito.js lo muestra como aviso que se cierra solo -->
+        <p hidden data-aviso-flash th:if="${mensajeTexto != null}"
+           th:attr="data-tipo=${mensajeTipo}" th:text="${mensajeTexto}">Mensaje</p>
 
         <div class="mensaje error" role="alert" th:if="${errores != null and abrirPago == null and !#lists.isEmpty(errores)}">
           <ul>
@@ -31,7 +31,7 @@
         <div class="carrito-vacio" th:if="${carrito.vacio}">
           <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
           <h3>Tu carrito está vacío</h3>
-          <p>Explora el catálogo y agrega los cursos que te interesen. Revisa también las ofertas de Navidad.</p>
+          <p>Explora el catálogo y agrega los cursos que te interesen. Revisa también las ofertas de temporada.</p>
           <a href="/catalogo" class="site-button button-primary">Ver cursos</a>
         </div>
 
@@ -56,7 +56,7 @@
                       <div>
                         <strong th:text="${linea.curso.nombre}">Nombre del curso</strong>
                         <span class="oferta-etiqueta" th:if="${linea.curso.enOferta}"
-                              th:text="'Oferta -' + ${#numbers.formatDecimal(linea.curso.descuentoPorcentaje, 1, 0)} + '%'">Oferta -20%</span>
+                              th:text="(${linea.curso.nombreTematica} ?: 'Oferta') + ' -' + ${#numbers.formatDecimal(linea.curso.descuentoPorcentaje, 1, 0)} + '%'">Navidad -20%</span>
                         <span class="tc-meta">
                           <span th:text="${linea.curso.codigo}">EJ-2026-001</span> ·
                           <span th:text="${linea.curso.duracionHoras} + ' hrs'">120 hrs</span>

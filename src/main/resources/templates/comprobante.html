@@ -31,11 +31,15 @@
 
         <article class="boleta" th:with="pedido=${comprobante.pedido}">
           <div class="boleta-cabecera">
+            <div class="boleta-logo">
+              <img src="img/identidad/logo.png" alt="Logo de Escuela Jurídica">
+            </div>
             <div class="boleta-empresa">
               <h2 th:text="${emisor.razonSocial}">Razón social</h2>
               <p><strong>Nombre comercial:</strong> <span th:text="${emisor.nombreComercial}">Escuela Jurídica</span></p>
               <p><strong>Domicilio fiscal:</strong> <span th:text="${emisor.domicilioFiscal}">Domicilio</span></p>
-              <p>eventos@escuelajuridica.edu.pe · WhatsApp 926 812 819</p>
+              <p>eventos@escuelajuridica.edu.pe</p>
+              <p>WhatsApp 926 812 819</p>
             </div>
             <div class="boleta-numero">
               <small th:text="'RUC ' + ${emisor.ruc}">RUC 20000000000</small>
