@@ -24,7 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.edu.escuela.app.model.Curso;
 import pe.edu.escuela.app.model.Docente;
 import pe.edu.escuela.app.model.TipoCurso;
-import pe.edu.escuela.app.service.CursoService;
+import pe.edu.escuela.app.service.CursoService; 
 
 
 /**
