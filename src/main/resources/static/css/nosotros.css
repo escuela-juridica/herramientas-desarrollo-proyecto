@@ -550,6 +550,14 @@
   font-size: 11px;
 }
 
+.dev-certs-institucion {
+  margin: 10px 14px 4px;
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
 .dev-certs-lista {
   margin: 0;
   padding: 4px 14px 14px;
